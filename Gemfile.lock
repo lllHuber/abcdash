@@ -1,0 +1,21 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    breakpoint (2.7.0)
+      sass (~> 3.3)
+      sassy-maps (< 1.0.0)
+    sass (3.4.22)
+    sassy-maps (0.4.0)
+      sass (~> 3.3)
+    susy (2.2.12)
+      sass (>= 3.3.0, < 3.5)
+
+PLATFORMS
+  x64-mingw32
+
+DEPENDENCIES
+  breakpoint
+  susy
+
+BUNDLED WITH
+   1.13.2

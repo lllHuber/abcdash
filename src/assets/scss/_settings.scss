@@ -1,0 +1,91 @@
+// --------------------------------------------------
+// SETTINGS
+// --------------------------------------------------
+
+
+// GRID
+$maxWidth				:				60rem;
+$small					:				320px;
+$medium					:				768px;
+$large					:				1024px;
+$xlarge					:				1280px;
+
+
+// COLORS
+$darkblue				:				#1a446c;
+$lightblue				:				#648fb8;
+$airblue				:				#d2e3f2;
+$charcoal				:				#333333;
+$gray					:				#555555;
+$mediumgray				:				#888888;
+$lightgray				:				#cccccc;
+$airgray				:				#f1f1f1;
+$silver					:				#f3f3f3;
+$white					:				#ffffff;
+$leafgreen				:				#73c075;
+$cerise					:				#cb0065;
+$pink					:				#cb4d8c;
+$orange					:				#f08a24;
+$poison					:				#ccff00;
+$crimson				:				#e50101;
+
+$primary				:				$darkblue;
+$secondary				:				$lightblue;
+$complementary			:				$poison;
+$highlight				:				$orange;
+$success				:				$leafgreen;
+$alert					:				$cerise;
+$error					:				$cerise;
+$successLight			:				lighten($success, 40%);
+$errorLight				:				lighten($error, 55%);
+
+
+// DOCUMENT
+$documentBackground		:				$white;
+$contentPadding			:				2rem;
+$viewPadding			:				calc(#{$contentPadding} * 2);
+	
+
+// FONTS
+$bodyFontSize			:				1rem;
+$bodyFontWeight			:				400;
+$bodyFontColor			:				$charcoal;
+$fontSmall				:				.75rem;
+$fontMedium				:				1rem;
+$fontLarge				:				1.25rem;
+$fontXLarge				:				1.75rem;
+
+
+// TOP BAR
+$topBarHeight			:				3.5rem;
+$topBarPaddingTop		:				0rem;
+$topBarPaddingBottom	:				0rem;
+$topBarPaddingLeft		:				2rem;
+$topBarPaddingRight		:				2rem;
+	
+$topBarNavSpacing		:				1.25rem;
+$topBarNavOffsetTop		:				-0.125rem;
+$topBarNavOffsetLeft	:				.25rem;
+$topBarNavOffsetRight	:				0rem;
+
+$topBarFontSize			:				1rem;
+$topBarFontWeight		:				400;
+
+$topBarBackground		:				$primary;
+$topBarColor			:				$lightblue;
+$topBarHoverColor		:				$white;
+$topBarActiveColor		:				$white;
+
+
+// FOOTER
+$footerHeight			:				1.6rem;
+
+
+// TRANSITION
+$transition				:				.35s "ease-in-out";
+
+
+// MODAL
+$modalSmallWidth		:				25rem;
+$modalMediumWidth		:				35rem;
+$modalLargeWidth		:				45rem;

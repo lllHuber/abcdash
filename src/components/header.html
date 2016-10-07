@@ -1,0 +1,43 @@
+<template bindable="router, auth, functions">
+	
+	<div class="grid-block horizontal">
+		<!-- LOGO -->		
+		<!--<graphic class="grid-block middle shrink" src="application/assets/images/logo.png" width="2rem" height="2rem"></graphic>-->
+		<div class="grid-block middle shrink logo-type">HBR<span>Dash</span></div>
+		
+		<nav class="grid-block">
+			<ul>
+				<li repeat.for="row of router.navigation" class="${row.isActive ? 'active' : ''}">
+					<!-- Set Correct Content For Toolbar -->
+					${row.isActive ? functions.setToolbarContent(row.title) : ''}
+					<a href.bind="row.href" mousedown.delegate="functions.resetFilter()">${row.title}</a>
+				</li>
+			</ul>
+		</nav>
+		
+		<nav class="grid-block shrink navUi">
+			<ul>
+				<!-- EXAMPLE TOOLBAR -->
+				<!--
+				<li if.bind="auth.isAuthenticated">
+					<a href="#" click.delegate="functions.toggleToolbar('toolbar')" class="${functions.toolbar.toolbar ? 'active' : ''}">
+						<icon icon="funnel"></icon>Toolbar
+					</a>
+				</li>
+				-->
+				
+				<li if.bind="!auth.isAuthenticated">
+					<a href="#/login">Login</a>
+				</li>
+				<li if.bind="auth.isAuthenticated">
+					<a href="#" click.delegate="auth.logout()">
+						<icon icon="account-logout"></icon>Logout
+					</a>
+				</li>
+			</ul>
+		</nav>
+		<graphic if.bind="auth.isAuthenticated" class="grid-block middle shrink" src="${auth.user.image ? auth.user.image : ''}" width="2rem" height="2rem" border="50%"></graphic>
+		
+	</div>
+		
+</template>

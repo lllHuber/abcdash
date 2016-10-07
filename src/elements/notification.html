@@ -1,0 +1,11 @@
+<template bindable="status">
+	
+	<div class="hbrNotification hide">
+		<div class="content ${status}">
+			<icon icon="check-thin" if.bind="status == 'success'"></icon>
+			<icon icon="check-thin" if.bind="status == 'error'"></icon>
+			<slot></slot>
+		</div>
+	</div>	
+	
+</template>

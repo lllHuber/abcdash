@@ -1,0 +1,481 @@
+html {
+	height: 100%;
+}
+
+body {
+	margin: 0;
+	background: $documentBackground;
+	color: $bodyFontColor;
+}
+
+nav {
+	overflow: hidden !important;
+}
+
+h1, h2 {
+	text-transform: uppercase;
+	font-weight: 400;
+	font-size: $fontLarge;
+	color: $primary;
+	margin: calc( #{$contentPadding} / 2 ) 0;
+}
+.capitalize {
+	text-transform: capitalize !important;	
+}
+
+h2 {
+	font-weight: 400;
+	text-transform: capitalize;
+	color: $secondary;
+}
+
+.logo-type {
+	color: $white;
+	font-weight: 800;
+	font-size: $fontXLarge;
+	span {
+		font-weight: 100;
+		font-size: $fontLarge;
+		margin: .35rem 0 0 .2rem;
+	}
+}
+
+a:hover, a.active, a.highlight {
+	icon {
+		opacity: 1;
+	}
+}
+
+textarea {
+	height: 5rem;
+}
+
+label {
+	checkbox {
+		margin: 3px 5px 0 0;
+	}
+	padding: 0 .5rem 0 0;
+	&:hover {
+		cursor: pointer;
+	}
+	&.error {
+		color: $error !important;
+	}
+}
+
+small {
+	&.error {
+		color: $error !important;
+	}
+}
+
+.view {
+	position: relative;
+	top: calc(#{$topBarHeight} + #{$contentPadding});
+	padding: $viewPadding;
+}
+
+header.navMain {
+	position: relative;
+	background: $topBarBackground;
+	height: $topBarHeight;	
+	padding:
+		$topBarPaddingTop
+		$topBarPaddingRight
+		$topBarPaddingBottom
+		$topBarPaddingLeft;
+	.logo {
+		top: 10px;
+		bottom: 10px;
+		height: 60px;
+	}
+	nav {
+		position: relative;
+		height: 100%;
+		margin-left: $topBarNavOffsetLeft;
+		margin-right: $topBarNavOffsetRight;
+		ul, li {
+			height: 100%;
+			margin: 0;
+			padding: 0;
+		}
+		li {
+			display: inline-block;
+			position: relative;
+			height: $topBarHeight;
+			line-height: 100%;
+			&:hover ul {
+				display: block;
+			}
+			ul {
+				display: none;
+				position: absolute;
+				bottom: 0;
+				height: initial;
+				transition: all $transition;
+				li {
+					display: block;
+					padding: .25rem 0;
+				}
+			}
+		}
+		a {
+			display: block;
+			font-size: $topBarFontSize;
+			font-weight: $topBarFontWeight;
+			text-decoration: none;
+			color: $topBarColor;
+			transition: color .25s ease-in-out;
+			text-transform: uppercase;
+			margin:
+				calc( (#{$topBarHeight} - #{$topBarPaddingTop} - #{$topBarPaddingBottom}) / 2 - (#{$topBarFontSize} / 2) + #{$topBarNavOffsetTop} )
+				calc(#{$topBarNavSpacing} / 2)
+				0;
+			&:hover {
+				color: $topBarHoverColor;
+				cursor: pointer;
+			}
+		}
+	}
+}
+
+.active {
+	color: $topBarActiveColor !important;
+	a {
+		color: $topBarActiveColor !important;
+	}
+	&:after {
+		content: "";
+		position: absolute;
+		bottom: 0;
+		left: calc( 50% - 0.5rem );
+		border-color: transparent transparent lighten($lightgray, 15%) transparent;
+		border-width: 0.5rem;
+		border-style: solid;
+	}
+}
+
+.highlight {
+	color: $highlight !important;
+	a {
+		color: $highlight !important;
+	}
+}
+
+.footer {
+	height: $footerHeight;
+	line-height: $footerHeight;
+	padding: 0 2rem;
+	background: $primary;
+	color: $topBarColor;
+	text-align: center;
+	font-size: .75rem;
+}
+
+
+
+input[type="text"],
+input[type="number"],
+input[type="email"],
+input[type="password"],
+select,
+textarea,
+button {
+	display: block;
+	width: 100%;
+	padding: .5rem .5rem;
+	margin: .25rem 0;
+	border: 1px solid $lightgray;
+    box-shadow: none;
+	-webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;  
+	transition: all #{$transition};
+	&:focus {
+		outline:0;
+		border-bottom: 1px solid lighten($primary, 20%);
+		background: lighten($primary, 70%);
+	}
+	&.error {
+		border-bottom: 1px solid $error !important;
+		background: lighten($error, 55%) !important;
+		color: $error !important;
+	}
+}
+
+input.success {
+	border-bottom: 1px solid $success !important;
+	background: lighten($success, 35%) !important;
+	color: $success !important;		
+}
+
+input[type="checkbox"],
+input[type="radio"] {
+	margin: 3px 0 0 0;
+	box-shadow: none;
+	position: relative;
+	&::after {
+		content: "";
+		display: block;
+		positin: absolute;
+		width: 12px;
+		height: 12px;
+		border: 1px solid $mediumgray;
+		background: $white;
+	}
+	&:checked::after {
+		background: $primary;
+		box-shadow:
+			inset 0 2px 0 $white,
+			inset 0 -2px 0 $white,
+			inset 2px 0 0 $white,
+			inset -2px 0 0 $white,
+		}
+	&:focus {
+		outline:0;
+	}
+	&:hover {
+		cursor: pointer;
+	}
+}
+
+input[type="radio"]::after {
+	border-radius: 100%;	
+}
+
+a.button, button.button, .button {
+    display: inline-block;
+    color: $mediumgray;
+    font-weight: 300;
+    font-style: normal;
+	text-transform: capitalize;
+    text-decoration: none;
+    text-align: center;
+	text-shadow: rgba(0,0,0,0.1) 0 1px 1px;
+	text-indent: 0;
+    width: 100%;
+	background: $airgray;
+    border: 1px solid darken($airgray, 12%);
+    margin-top: calc(#{$contentPadding} / 2);
+    transition: all #{$transition};
+	&:not(.disabled):hover {
+		cursor: pointer;
+		background: darken($airgray, 12%);
+	}
+	&:not(.disabled):active {
+		cursor: pointer;
+		background: darken($airgray, 22%);
+	}
+	&.success {
+		background: $success;
+		border-color: darken($success, 12%);
+		color: $white;
+		&:not(.disabled):hover {
+			color: $white;
+			background: darken($success, 12%);
+			border-color: darken($success, 12%);
+		}
+		&:not(.disabled):active {
+			background: darken($success, 22%);
+			border-color: darken($success, 22%);
+		}
+		&.hollow {
+			background: transparent;
+			color: $success;
+			border-color: $success;
+			text-shadow: none;
+			&:hover {
+				background: lighten($success, 28%);
+				border-color: $success;
+				color: $success;
+			}
+		}
+	}
+	&.alert {
+		background: $alert;
+		border-color: darken($alert, 12%);
+		color: $white;
+		&:not(.disabled):hover {
+			color: $white;
+			background: darken($alert, 12%);
+			border-color: darken($alert, 12%);
+		}
+		&:not(.disabled):active {
+			background: darken($alert, 10%);
+			border-color: darken($alert, 10%);
+		}
+		&.hollow {
+			background: transparent;
+			color: $alert;
+			border-color: $alert;
+			text-shadow: none;
+			&:hover {
+				background: lighten($alert, 50%);
+				border-color: $alert;
+				color: $alert;
+			}
+		}
+	}
+	&.shrink {
+		width: initial;
+		margin-left: .25rem;
+		margin-right: .25rem;
+	}
+	&.small {
+		padding: .35rem 1rem;
+		font-size: $fontSmall;
+		text-shadow: none;
+		font-weight: 400;
+	}
+	&.medium {
+		padding: .6rem 1.25rem;
+		font-size: $fontMedium;
+	}
+	&.disabled:hover {
+		cursor: default;
+	}
+}
+
+icon {
+	position: relative;
+	color: inherit;
+	padding: 0 .25rem 0 0;
+	font-size: inherit;
+	.iconic[data-glyph]:before {
+		font-size: inherit;
+		top: .1rem;
+	}
+}
+
+nav icon {
+	opacity: 0.5;	
+}
+
+
+.login {
+	width: 25rem;
+}
+
+
+
+.arrowUpLight,
+.arrowUpDark,
+.arrowDownLight,
+.arrowDownDark {
+	position: relative;
+	padding-right: .75rem;
+	&:after {
+		content: "";
+		display: block;
+		position: absolute;
+		width: .6rem;
+		height: .6rem;
+		background-size: 100% 100%;
+		bottom: .1rem;
+		right: 0;
+	}
+}
+
+.arrowUpDark,
+.arrowDownDark {
+	color: $charcoal !important;
+}
+
+.arrowUpLight:after {
+	background-image: url("../images/arrow-up-lightgray.svg");
+}
+
+.arrowUpDark:after {
+	background-image: url("../images/arrow-up-darkgray.svg");
+}
+
+.arrowDownLight:after {
+	background-image: url("../images/arrow-down-lightgray.svg");
+}
+
+.arrowDownDark:after {
+	background-image: url("../images/arrow-down-darkgray.svg");
+}
+
+.hide {
+	display: none !important;
+}
+
+.divider {
+	border-bottom: 1px dashed $mediumgray;
+    margin: $contentPadding 0;
+}
+
+.equalizeFormElement {
+	margin-top: .25rem;
+	margin-bottom: .25rem;
+	padding-top: .5rem;
+	padding-bottom: .5rem;
+}
+
+
+
+.short_desc_max, .long_desc_max {
+	font-style: italic;
+	font-size: $fontSmall;
+}
+
+.ui-datepicker {
+	background: $white;
+	color: $mediumgray;
+	.ui-datepicker-header{
+		padding: calc( #{$contentPadding} / 2 );
+		position: relative !important;
+		.ui-datepicker-title {
+			text-align: center;
+			text-transform: uppercase;
+			font-size: $fontMedium;
+		}
+		a {
+			position: absolute;
+			font-weight: 300;
+			margin-top: -.15rem;
+			transition: color $transition;
+			span {
+				font-size: $fontLarge;
+				&:hover {
+					cursor: pointer;
+					color: $primary;
+				}
+			}
+			&.ui-datepicker-prev {
+				left: calc( #{$contentPadding} / 2 + .75rem );
+			}
+			&.ui-datepicker-next {
+				right: calc( #{$contentPadding} / 2 + .75rem );
+			}
+		}
+	}
+	table.ui-datepicker-calendar {
+		width: calc( 100% - #{$contentPadding} ) !important;
+		padding: 0 calc( #{$contentPadding} / 2 ) calc( #{$contentPadding} / 2 );
+		thead {
+			color: $primary;
+		}
+		tbody {
+			td {
+				text-align: center;
+				&.ui-datepicker-unselectable {
+					opacity: .4;
+				}
+			}
+			a, a:visited {
+				text-decoration: none;
+				color: inherit;
+				padding: 0 .5rem;
+				&:hover {
+					color: $primary;
+				}
+				&.ui-state-active {
+					background: $primary;
+					color: $white;
+				}
+			}
+		}
+	}
+}
