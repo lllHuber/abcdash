@@ -12,15 +12,17 @@ $xlarge					:				1280px;
 
 
 // COLORS
-$darkblue				:				#1a446c;
-$lightblue				:				#648fb8;
-$airblue				:				#d2e3f2;
+$darkblue				:				#193d5c;
+$mediumblue				:				#1f4c73;
+$lightblue				:				#619fd4;
+$airblue				:				#d4e5f3;
+
 $charcoal				:				#333333;
-$gray					:				#555555;
-$mediumgray				:				#888888;
+$gray					:				#454545;
+$mediumgray				:				#777777;
 $lightgray				:				#cccccc;
 $airgray				:				#f1f1f1;
-$silver					:				#f3f3f3;
+$silver					:				#f5f5f5;
 $white					:				#ffffff;
 $leafgreen				:				#73c075;
 $cerise					:				#cb0065;
@@ -28,6 +30,7 @@ $pink					:				#cb4d8c;
 $orange					:				#f08a24;
 $poison					:				#ccff00;
 $crimson				:				#e50101;
+$abcred					:				#98000a;
 
 $primary				:				$darkblue;
 $secondary				:				$lightblue;
@@ -47,9 +50,9 @@ $viewPadding			:				calc(#{$contentPadding} * 2);
 	
 
 // FONTS
-$bodyFontSize			:				1rem;
+$bodyFontSize			:				.9rem;
 $bodyFontWeight			:				400;
-$bodyFontColor			:				$charcoal;
+$bodyFontColor			:				$mediumgray;
 $fontSmall				:				.75rem;
 $fontMedium				:				1rem;
 $fontLarge				:				1.25rem;
@@ -65,14 +68,14 @@ $topBarPaddingRight		:				2rem;
 	
 $topBarNavSpacing		:				1.25rem;
 $topBarNavOffsetTop		:				-0.125rem;
-$topBarNavOffsetLeft	:				.25rem;
-$topBarNavOffsetRight	:				0rem;
+$topBarNavOffsetLeft	:				0rem;
+$topBarNavOffsetRight	:				1rem;
 
 $topBarFontSize			:				1rem;
-$topBarFontWeight		:				400;
+$topBarFontWeight		:				300;
 
 $topBarBackground		:				$primary;
-$topBarColor			:				$lightblue;
+$topBarColor			:				$white;
 $topBarHoverColor		:				$white;
 $topBarActiveColor		:				$white;
 

@@ -19,6 +19,7 @@ h1, h2 {
 	color: $primary;
 	margin: calc( #{$contentPadding} / 2 ) 0;
 }
+
 .capitalize {
 	text-transform: capitalize !important;	
 }
@@ -125,18 +126,57 @@ header.navMain {
 			font-weight: $topBarFontWeight;
 			text-decoration: none;
 			color: $topBarColor;
-			transition: color .25s ease-in-out;
-			text-transform: uppercase;
+			transition: all .25s ease-in-out;
 			margin:
-				calc( (#{$topBarHeight} - #{$topBarPaddingTop} - #{$topBarPaddingBottom}) / 2 - (#{$topBarFontSize} / 2) + #{$topBarNavOffsetTop} )
+				calc( (#{$topBarHeight} - #{$topBarPaddingTop} - #{$topBarPaddingBottom}) / 2 - (#{$topBarFontSize} / 2) + #{$topBarNavOffsetTop} - .25rem )
 				calc(#{$topBarNavSpacing} / 2)
 				0;
 			&:hover {
 				color: $topBarHoverColor;
 				cursor: pointer;
 			}
+			&.main {
+				margin-top: calc( (#{$topBarHeight} - #{$topBarPaddingTop} - #{$topBarPaddingBottom}) / 2 - (#{$topBarFontSize} / 2) + #{$topBarNavOffsetTop} + .2rem );
+			}
 		}
 	}
+}
+
+li.spacer {
+	position: absolute;
+	&.horizontal:after {
+		content: "";
+		position: absolute;
+		border: 1px solid;
+		border-color: inherit;
+		top: 20%;
+		bottom:20%;
+		//margin-left: calc( #{$topBarNavSpacing} / 2 );
+		//margin-right: $topBarNavSpacing;
+	}
+}
+
+logo {
+	position: relative;
+	background: $topBarBackground;
+	height: $topBarHeight;	
+	padding:
+		$topBarPaddingTop
+		$topBarPaddingRight
+		$topBarPaddingBottom
+		$topBarPaddingLeft;
+	.logo {
+		top: 10px;
+		bottom: 10px;
+		height: 60px;
+	}
+}
+
+bottom {
+	height: $footerHeight;
+	padding: 0 2rem;
+	background: $primary;
+	font-size: .75rem;
 }
 
 .active {
@@ -183,9 +223,9 @@ textarea,
 button {
 	display: block;
 	width: 100%;
-	padding: .5rem .5rem;
+	padding: .25rem .5rem;
 	margin: .25rem 0;
-	border: 1px solid $lightgray;
+	border: 1px solid lighten($lightblue, 10%);
     box-shadow: none;
 	-webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
@@ -243,12 +283,12 @@ input[type="radio"]::after {
 	border-radius: 100%;	
 }
 
-a.button, button.button, .button {
+a.button, button.button, .button, button {
     display: inline-block;
     color: $mediumgray;
     font-weight: 300;
     font-style: normal;
-	text-transform: capitalize;
+	//text-transform: capitalize;
     text-decoration: none;
     text-align: center;
 	text-shadow: rgba(0,0,0,0.1) 0 1px 1px;
@@ -316,6 +356,56 @@ a.button, button.button, .button {
 			}
 		}
 	}
+	&.primary {
+		background: $primary;
+		border-color: darken($primary, 12%);
+		color: $white;
+		&:not(.disabled):hover {
+			color: $white;
+			background: darken($primary, 12%);
+			border-color: darken($primary, 12%);
+		}
+		&:not(.disabled):active {
+			background: darken($primary, 22%);
+			border-color: darken($primary, 22%);
+		}
+		&.hollow {
+			background: transparent;
+			color: $primary;
+			border-color: $primary;
+			text-shadow: none;
+			&:hover {
+				background: lighten($primary, 55%);
+				border-color: $primary;
+				color: $primary;
+			}
+		}
+	}
+	&.secondary {
+		background: $secondary;
+		border-color: darken($secondary, 12%);
+		color: $white;
+		&:not(.disabled):hover {
+			color: $white;
+			background: darken($secondary, 12%);
+			border-color: darken($secondary, 12%);
+		}
+		&:not(.disabled):active {
+			background: darken($secondary, 22%);
+			border-color: darken($secondary, 22%);
+		}
+		&.hollow {
+			background: transparent;
+			color: $secondary;
+			border-color: $secondary;
+			text-shadow: none;
+			&:hover {
+				background: lighten($secondary, 28%);
+				border-color: $secondary;
+				color: $secondary;
+			}
+		}
+	}
 	&.shrink {
 		width: initial;
 		margin-left: .25rem;
@@ -348,12 +438,20 @@ icon {
 }
 
 nav icon {
-	opacity: 0.5;	
+	opacity: 0.2;
+	padding: 0 .5rem 0 0;
+	.iconic[data-glyph]:before {
+		font-size: 1.25rem;
+		top: .25rem;
+	}
 }
 
 
 .login {
 	width: 25rem;
+	input {
+		padding: .5rem;
+	}
 }
 
 
@@ -363,15 +461,18 @@ nav icon {
 .arrowDownLight,
 .arrowDownDark {
 	position: relative;
-	padding-right: .75rem;
+	padding-right: 1rem;
+	&.align-right {
+		float: right;
+	}
 	&:after {
 		content: "";
 		display: block;
 		position: absolute;
-		width: .6rem;
-		height: .6rem;
+		width: .75rem;
+		height: .75rem;
 		background-size: 100% 100%;
-		bottom: .1rem;
+		bottom: 0;
 		right: 0;
 	}
 }
@@ -420,6 +521,15 @@ nav icon {
 	font-size: $fontSmall;
 }
 
+
+.datepicker {
+	color: $white;
+	font-size: $fontMedium;
+	position: relative;
+	background: none;
+	width: 6.25rem !important;
+	border: 0 !important;
+}
 .ui-datepicker {
 	background: $white;
 	color: $mediumgray;
@@ -478,4 +588,23 @@ nav icon {
 			}
 		}
 	}
+}
+
+.small-list {
+	list-style-type: none;
+	font-size: $fontSmall;
+	margin: 0;
+	padding: 0;
+}
+
+.align-right {
+	text-align: right;
+}
+
+.align-left {
+	text-align: left;
+}
+
+.align-center {
+	text-align: center;
 }

@@ -21,6 +21,8 @@ export class FilterValueConverter {
 
 		let tempArray = [];
 		let filteredArray = [];
+		let exemplare = 0;
+		let gesamtwert = 0;
 		let matchedFilters = 0;
 		let matchedSubFilters = 0;
 		
@@ -42,10 +44,24 @@ export class FilterValueConverter {
 		// No Filter Applied -> Return Array
 		let appliedFilters = Object.keys(filter.filter).length;
 		if(appliedFilters === 0) {
+			// gesamtwert, exemplare
+			$.each(tempArray, (index, item) => {
+				exemplare = exemplare + item.lagerbestand;
+				gesamtwert = gesamtwert + parseFloat(item.gesamtwert);
+			});
+			
 			let amount = tempArray.length;
 			if(filter.updateAmount) {
-				$(".itemCount").text(`${amount} items found`);
+				$(".itemCount").text(`${amount} Artikel gefunden`);
+				$(".amount").text(`${amount}`);
 			}
+			
+			gesamtwert = gesamtwert.toFixed(2);
+			$(".exemplare").text(exemplare);
+			$(".totalValue").text(gesamtwert);
+			$(".format").text('Alle Formate');	
+			$(".warehouse").text('Alle Lager');	
+			
 			return tempArray;		
 		}
 		
@@ -146,8 +162,24 @@ export class FilterValueConverter {
 			
 		});
 		if(filter.updateAmount) {
+			
+			// gesamtwert, exemplare
+			$.each(filteredArray, (index, item) => {
+				exemplare = exemplare + item.lagerbestand;
+				gesamtwert = gesamtwert + parseFloat(item.gesamtwert);
+			});
+			gesamtwert = gesamtwert.toFixed(2);
+			if(filter.filter.gruppe) {
+				$(".format").text(filter.filter.gruppe);	
+			}
+			if(filter.filter.lager) {
+				$(".warehouse").text(filter.filter.lager);	
+			}
 			let amount = filteredArray.length;
-			$(".itemCount").text(`${amount} items found`);
+			$(".itemCount").text(`${amount} Artikel gefunden`);
+			$(".amount").text(amount);
+			$(".exemplare").text(exemplare);
+			$(".totalValue").text(gesamtwert);
 		}
 		
 		return filteredArray;

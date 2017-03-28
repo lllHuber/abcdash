@@ -126,13 +126,12 @@
 	border-collapse: collapse;
 	width: 100%;
 	
-	.prstatus, .sestatus, .mlocation, .alocation {
+	.nowrap {
 		white-space: nowrap;
 	}
 	
 	.thead .tr {
 		border-bottom: 1px solid $gray;
-		text-transform: uppercase;
 		&:hover {
 			background: transparent !important;
 		}
@@ -156,7 +155,8 @@
 		text-align: left;
 		span {
 			color: $mediumgray;
-			font-weight: 500;
+			font-weight: 400;
+			font-size: $fontMedium;
 			transition: color #{$transition};
 		}
 		span:hover {
@@ -165,8 +165,8 @@
 		}
 	}
 	.td {
-		font-size: .7rem;
-		padding: .25rem .5rem;
+		font-size: calc( $fontSmall );
+		padding: .5rem .5rem;
 		overflow: hidden;
 	}
 	.td.edit {
@@ -191,9 +191,9 @@
 
 .hbrToolbar {
 	.content {
-		background: lighten($lightgray, 15%);
-		border-bottom: 1px solid $lightgray;
-		color: $gray;
+		background: $airblue;
+		border-bottom: 1px solid $lightblue;
+		color: $darkblue;
 		padding-bottom: calc( #{$contentPadding} / 2 );
 	}
 	label {
@@ -202,8 +202,8 @@
 		margin: .25rem 0;
 	}
 	input, select {
-		padding: .25rem .5rem;
-		color: $gray;
+		//padding: .25rem .5rem;
+		color: $darkblue;
 	}
 	h2 {
 		margin: 0;
@@ -289,5 +289,30 @@
 			min-width: $modalLargeWidth;
 		}
 		font-size: initial;
+	}
+}
+
+.hbrSidebar {
+	background: $gray;
+	border-right: 1px solid $charcoal;
+	width: 20rem;
+	h1 {
+		color: $lightgray;
+		font-weight: 300;
+	}
+	ul {
+		list-style-type: none;
+		padding: 0;
+		li {
+			margin: 1rem 0;
+			&:first-child {
+				margin-top: 0;
+			}
+			&:last-child {
+				border-top: 1px solid $mediumgray;
+				padding-top: 1rem;
+				margin-top: 2rem;
+			}
+		}
 	}
 }

@@ -81,7 +81,7 @@ function isUnique($database, $table, $column, $value) {
 }
 
 function getDatabaseResult($database, $table, $columns, $values) {
-    global $PDO;
+    global $PDOM;
     $match = '';
     for ($i = 0; $i < count($columns); $i++) {
         $match .= ' '.$columns[$i].' = ? ';
@@ -89,7 +89,7 @@ function getDatabaseResult($database, $table, $columns, $values) {
             $match .= ' AND ';            
         }
     }
-    $stmt = $PDO->prepare("SELECT * FROM {$database}.{$table} WHERE {$match}");
+    $stmt = $PDOM->prepare("SELECT * FROM {$database}.{$table} WHERE {$match}");
     foreach ($values as $key => $value) {
         $stmt->bindValue($key + 1, $value);
     }

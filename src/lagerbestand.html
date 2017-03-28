@@ -1,0 +1,57 @@
+<template>
+	
+		<!-- BOTTOM -->
+		<div class="grid-block padding vertical">
+			<div class="grid-block shrink">
+				<h1 class="left shrink">Artikel im Bestand</h1>
+				<!--<h2 class="left shrink">&nbsp;//&nbsp;${functions.dates.keydate}</h2>-->
+			</div>
+			
+			<div class="grid-block">
+				<div class="hbrList table">
+					<div class="thead">
+						<div class="tr">
+							<div class="th spacer"></div>
+							<div class="td checkbox"><input type="checkbox" if.bind="functions.toolbar.edit"></div>
+							<div class="th number"><span>#</span></div>
+							<div class="th navOrder artikelnr"><span class="arrowUpLight" click.delegate="functions.changeOrder('artikelnr', 'artikelnr')">Artikelnummer</span></div>
+							<div class="th navOrder bezeichnung"><span class="arrowUpLight" click.delegate="functions.changeOrder('bezeichnung', 'bezeichnung')">Bezeichnung</span></div>
+							<div class="th navOrder lagerbestand"><span class="arrowUpLight" click.delegate="functions.changeOrder('lagerbestand', 'lagerbestand')">Bestand</span></div>
+							<div class="th navOrder lager"><span class="arrowUpLight" click.delegate="functions.changeOrder('lager', 'lager')">Lager</span></div>
+							<div class="th navOrder letzterverkauf nowrap"><span class="arrowUpLight" click.delegate="functions.changeOrder('letzterverkauf', 'letzterverkauf')">Letzter Verkauf</span></div>
+							<div class="th"><span>Wareneingänge</span></div>
+							<div class="th navOrder netto nowrap"><span class="arrowUpLight align-right" click.delegate="functions.changeOrder('netto', 'vknetto')">Preis (netto)</span></div>
+							<div class="th navOrder brutto nowrap"><span class="arrowUpLight align-right" click.delegate="functions.changeOrder('brutto', 'vkbrutto')">Preis (brutto)</span></div>
+							<div class="th navOrder gesamtwert nowrap"><span class="arrowUpLight align-right" click.delegate="functions.changeOrder('gesamtwert', 'gesamtwert')">Gesamtwert €</span></div>
+							<div class="th navOrder spacer"></div>
+						</div>
+					</div>
+					<div class="tbody">
+						<div class="tr"
+							 virtual-repeat.for="item of functions.$D.allItems
+								| filter: { 'filter': functions.filter, 'trigger': functions.filterChange }
+								| orderBy: { 'property': functions.order, 'direction': functions.direction}">
+							<div class="td spacer"></div>
+							<div class="td checkbox"><input type="checkbox" if.bind="functions.toolbar.edit"></div>
+							<div class="td number">${$index + 1}</div>
+							<div class="td code">${item.artikelnr}</div>
+							<div class="td schcode">${item.bezeichnung}</div>
+							<div class="td series">${item.lagerbestand}</div>
+							<div class="td series nowrap">${item.lager}</div>
+							<div class="td series">${item.letzterverkauf}</div>
+							<div class="td title nowrap">
+								<ul class="small-list">
+									<li repeat.for="wareneingang of item.alter">${wareneingang}</li>
+								</ul>
+							</div>
+							<div class="td episode align-right">${item.vknetto}</div>
+							<div class="td episode align-right">${item.vkbrutto}</div>
+							<div class="td length align-right">${item.gesamtwert}</div>
+							<div class="td spacer"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+</template>

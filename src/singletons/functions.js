@@ -1,18 +1,29 @@
 import config from 'config/config';
 import { inject } from "aurelia-framework";
+import { BindingEngine } from 'aurelia-binding';
 import { Router } from 'aurelia-router';
 import { MultiObserver } from 'singletons/multiObserver';
 
-@inject(config, Router, MultiObserver)
+@inject(config, Router, MultiObserver, BindingEngine)
 export default class Functions {
  
-	constructor(config, Router, MultiObserver) {
+	constructor(config, Router, MultiObserver, BindingEngine) {
 		this.config = config;
 		this.router = Router;
 		this.observer = MultiObserver;
+		this.observe = BindingEngine;
 		this.$ui = {
 			"resizable": ""	
 		};
+		
+		this.dates = {
+			"keydate": this.today()
+		};
+		
+		// Observe Date Change
+		this.observe.propertyObserver(this.dates, "keydate").subscribe((newValue, oldValue) => {
+			this.allItems;
+		});
 		
 		// jQueryUI
 		//console.log($ui);
@@ -31,40 +42,26 @@ export default class Functions {
 		
 		// Toolbars
 		this.toolbar = {
-			"addProgram" 		: false,
 			"filter"			: false,
-			"edit"				: false,
+			"export"			: false,
 			
 			content				: {
-				"filterPrograms": true,
-				"filterSeasons" : false,
-				"filterSeries"	: false
+				"filterArticles": true
 			}
 		};
 
 		// Store Temp Data For Editing
 		this.$T = {
-			"program": {},
-			"season": {},
-			"series": {}
+			"article": {},
+			"amount": 0
 		};
 		this.resetObjects();
 		
 		// Store Data In $D
 		this.$D = {
-			"allCategories"			: this.allCategories,
-			"allSeries"				: this.allSeries,
-			"allSeasons"			: this.allSeasons,
-			"allPrograms"			: this.allPrograms,
-			"allSources"			: this.allSources,
-			"allLocations"			: this.allLocations,
-			"programStatus"			: this.programStatus,
-			"broadcastStatus"		: this.broadcastStatus,
-			"programStatusNames"	: {},
-			"broadcastStatusNames"	: {},
-			"locationNames"			: {},
-			"sourceNames"			: {},
-			"seriesNames"			: {}
+			"allItems"			: this.allItems,
+			"allWarehouses"		: this.allWarehouses,
+			"allCustomers"		: this.allCustomers
 		};
 		
 	}
@@ -74,111 +71,39 @@ export default class Functions {
 	// GET DATA
 	// --------------------------------------------------
 	
-	get allPrograms() {
-		this.url = this.config.serviceUrl + "?ws=get_all_programs";
-		$("#lstvLoader").show();
+	get allItems() {
+		this.url = this.config.serviceUrl + `?ws=get_all_items&keydate=${this.dates.keydate}`;
+		$("#hbrLoader").show();
 		$.get(this.url, response => {
-			$("#lstvLoader").hide();
-			if(response.success === true) {
-				this.$D.allPrograms = response.data;
+			$("#hbrLoader").hide();
+			if(response.status === 'success') {
+				this.$D.allItems = response.data;
 			}
 		}, "json");
 	}
 	
-	get allSeasons() {
-		this.url = this.config.serviceUrl + "?ws=get_all_seasons";
-		$("#lstvLoader").show();
+	get allWarehouses() {
+		this.url = this.config.serviceUrl + "?ws=get_all_warehouses";
+		$("#hbrLoader").show();
 		$.get(this.url, response => {
-			$("#lstvLoader").hide();
-			if(response.success === true) {
-				this.$D.allSeasons = response.data;
+			$("#hbrLoader").hide();
+			if(response.status === 'success') {
+				this.$D.allWarehouses = response.data;
 			}
 		}, "json");
 	}
 	
-	get allSeries() {
-		this.url = this.config.serviceUrl + "?ws=get_all_series";
-		$("#lstvLoader").show();
+	get allCustomers() {
+		this.url = this.config.serviceUrl + "?ws=get_all_customers";
+		$("#hbrLoader").show();
 		$.get(this.url, response => {
-			$("#lstvLoader").hide();
-			if(response.success === true) {
-				this.$D.allSeries = response.data;
-				$.each(this.$D.allSeries, (key, series) => {
-					this.$D.seriesNames[series.seriesID] = series.series_name;
-				});
+			$("#hbrLoader").hide();
+			if(response.status === 'success') {
+				this.$D.allCustomers = response.data;
+				console.log(this.$D.allCustomers);
 			}
 		}, "json");
 	}
-	
-	get allCategories() {
-		this.url = this.config.serviceUrl + "?ws=get_all_categories";
-		$("#lstvLoader").show();
-		$.get(this.url, response => {
-			$("#lstvLoader").hide();
-			if(response.success === true) {
-				this.$D.allCategories = response.data;
-			}
-		}, "json");
-	}
-	
-	get allSources() {
-		this.url = this.config.serviceUrl + "?ws=get_all_sources";
-		$("#lstvLoader").show();
-		$.get(this.url, response => {
-			$("#lstvLoader").hide();
-			if(response.success === true) {
-				this.$D.allSources = response.data;
-				$.each(this.$D.allSources, (key, source) => {
-					this.$D.sourceNames[source.sourceID] = source.source_name;
-				});
-			}
-		}, "json");
-	}
-	
-	get allLocations() {
-		this.url = this.config.serviceUrl + "?ws=get_all_locations";
-		$("#lstvLoader").show();
-		$.get(this.url, response => {
-			$("#lstvLoader").hide();
-			if(response.success === true) {
-				this.$D.allLocations = response.data;
-				$.each(this.$D.allLocations, (key, location) => {
-					this.$D.locationNames[location.program_locationID] = `${location.location_name} ${location.location_description ? '('+location.location_description+')' : ''}`;
-				});
-			}
-		}, "json");
-	}
-
-	get programStatus() {
-		this.url = this.config.serviceUrl + "?ws=get_program_status";
-		$("#lstvLoader").show();
-		$.get(this.url, response => {
-			$("#lstvLoader").hide();
-			if(response.success === true) {
-				this.$D.programStatus = response.data;
-				this.$D.programStatusNames = {};
-				$.each(this.$D.programStatus, (key, status) => {
-					this.$D.programStatusNames[status.program_status] = status.program_status_name;
-				});
-			}
-		}, "json");
-	}
-	
-	get broadcastStatus() {
-		this.url = this.config.serviceUrl + "?ws=get_broadcast_status";
-		$("#lstvLoader").show();
-		$.get(this.url, response => {
-			$("#lstvLoader").hide();
-			if(response.success === true) {
-				this.$D.broadcastStatus = response.data;
-				this.$D.broadcastStatusNames = {};
-				$.each(this.$D.broadcastStatus, (key, status) => {
-					this.$D.broadcastStatusNames[status.broadcast_status] = status.broadcast_status_name;
-				});
-			}
-		}, "json");
-	}
-
 	
 	// --------------------------------------------------
 	// TOOLBARS
@@ -197,7 +122,7 @@ export default class Functions {
 	}
 	
 	toggleToolbar(toolbar, focus) {
-		$(`.lstvToolbar .content:not(#${toolbar})`).addClass("hide");
+		$(`.hbrToolbar .content:not(#${toolbar})`).addClass("hide");
 		
 		if($(`#${toolbar}`).hasClass("hide")) {
 			// Show Toolbar
@@ -214,7 +139,7 @@ export default class Functions {
 	}
 	
 	hideAllToolbars() {
-		$(".lstvToolbar .content").addClass("hide");
+		$(".hbrToolbar .content").addClass("hide");
 		$.each(this.toolbar, (key) => {
 			if(key != "content") {
 				this.toolbar[key] = false;
@@ -290,6 +215,7 @@ export default class Functions {
 		}
 		this.updateForm(input, value);
 		this.removeErrorClass(id);
+		console.log(this.filter);
 	}
 	
 	triggerFilter() {
@@ -331,48 +257,14 @@ export default class Functions {
 	resetObjects() {
 		// Properties That Represent Groups Of Checkboxes Need To Be Initialized As Empty Arrays
 		$.each(this.$T, (key) => {
-			if(key === "program")
-				this.$T[key] = {
-					"crud": true,
-					"program_comments": "",
-					"program_aquired": "0",
-					"program_need_editing": "0",
-					"program_ondemand": "0",
-					"program_status": "03",
-					"broadcast_status": "00",
-					"program_languages": [],
-					"requirements": []
-				};
-				
-			else if(key === "season") 
-				this.$T[key] = {
-					"crud": true,
-					"season_comments": "",
-					"season_aquired": "0",
-					"season_is_ongoing": "0",
-					"season_ondemand": "0",
-					"season_status": "03",
-					"broadcast_status": "00",
-					"categoryIDs": []
-				};
-			
-			else if(key === "series") 
-				this.$T[key] = {
-					"crud": true,
-					"series_comments": "",
-					"series_aquired": "0",
-					"series_ondemand": "0",
-					"series_status": "03",
-					"broadcast_status": "00",
-					"categoryIDs": []
-				};
+			if(key === "amount")
+				this.$T[key] = 0;
 				
 			else
 				this.$T[key] = { "crud": true };
 		});
 		// ADD OBSERVERS
-		this.addProgramRequirementsObserver();
-		this.addSeasonSeriesChangeObserver();
+
 	}
 	
 	edit(type, object) {
@@ -477,32 +369,11 @@ export default class Functions {
 	// OBSERVERS
 	// --------------------------------------------------
 	
-	addProgramRequirementsObserver() {
-		this.observer.observe(this.$T.program, [
-			"program_aquired",
-			"program_need_editing",
-			"program_status",
-			"broadcast_status"
-		], this.checkProgramRequirements.bind(this));
-	}
 	
-	addSeasonSeriesChangeObserver() {
-		this.observer.observe(this.$T.season, [
-			"seriesID",
-		], this.generateSeasonFormData.bind(this));
-	}
 	
 	// --------------------------------------------------
 	// FUNCTIONS
 	// --------------------------------------------------
-	
-	getStatusName(statusID) {
-		$.each(this.$D.programStatus, (key, status) => {
-			if(status.program_status == statusID.toString()) {
-				return `${status.program_status_name}`;
-			}
-		});
-	}
 	
 	showNotification(status, message) {
 		if(status === "error")
@@ -526,63 +397,6 @@ export default class Functions {
 		$(".grid-block").scrollTop(0);
 	}
 	
-	characterLimit(id, limit) {
-		let length = $(id).val().length;
-		if(length >= limit) {
-			$(id).addClass("error");
-			$(id).closest(".row").find("small").addClass("error");
-			$(id).closest(".row").find("label").addClass("error");
-			return false;
-		} else {
-			$(id).removeClass("error");
-			$(id).closest(".row").find("small").removeClass("error");
-			$(id).closest(".row").find("label").removeClass("error");
-			return true;
-		}
-	}
-	
-	validateForm(form) {
-		let missingFields = {};
-		let valid = true;
-		$.each($(`${form} [required]`), (key, element) => {
-			// Input Group
-			if($(element).find("input").length > 0) {
-				let checked = 0;
-				$(element).find("input").each((key, input) => {
-					if(input.checked) {
-						checked = 1;
-					}
-				});
-				if(checked === 0) {
-					$(element).closest(".row").find("label").addClass("error");
-					valid = false;
-				}
-			}
-			// Individual Input
-			else {
-				if(element.value === "") {
-					missingFields[element.id] = element.value;
-					$(element).addClass("error");
-					$(element).closest(".row").find("label").addClass("error");
-					valid = false;
-				}
-			}
-		});
-		if(!this.characterLimit("#desc_short", 100) || !this.characterLimit("#desc_long", 235)) {
-			valid = false;
-		}
-		// Focus On First Missing Field
-		$.each(missingFields, (key) => {
-			$(`#${key}`).focus();
-			return false;
-		});
-		if(!valid) {
-			this.showNotification("error", "Validation errors occured!");
-		}
-		this.scrollTop();
-		return valid;
-	}
-	
 	removeErrorClass(id) {
 		// Input Group
 		if($(id).find("input").length > 0) {
@@ -599,148 +413,6 @@ export default class Functions {
 		$("form label").removeClass("error").removeClass("success");
 		$("form textarea").removeClass("error").removeClass("success");
 		$("form select").removeClass("error").removeClass("success");
-	}
-	
-	generateProgramFormData() {
-		let episodeNo = 0;
-		let seriesCode = "";
-		let seasonCode = "";
-		let programCode = "";
-		
-		// EPISODE NUMBER
-		$.each(this.$D.allPrograms, (index, program) => {
-			if(program.trashed != 1 && program.seasonID == this.$T.program.seasonID && parseInt(program.episode_no) > episodeNo) {
-				episodeNo = program.episode_no;
-			}
-		});
-		episodeNo++;
-		this.$T.program.episode_no = episodeNo;
-		if(episodeNo > 0 && episodeNo < 10) {
-			episodeNo = `0${episodeNo}`;
-		}
-		
-		// SEASON CODE / SCHEDULE CODE
-		$.each(this.$D.allSeasons, (key, season) => {
-			if(season.trashed != 1 &&season.seasonID == this.$T.program.seasonID) {
-				seasonCode = season.season_code;
-				return false;
-			}
-		});
-		
-		// Add Fill-Numbers To Match Code Pattern [seriescode][yy][mm][xx]
-		$.each(this.$D.allSeries, (key, series) => {
-			if(series.trashed != 1 && series.seriesID == this.$T.program.seriesID) {
-				seriesCode = series.series_code;
-				return false;
-			}
-		});
-		let seasonNumber = seasonCode.replace(seriesCode, "");
-		let addNumbers = 0;
-		let fillNumbers = "";
-		if(seasonNumber) { addNumbers = 4 - seasonNumber.length; }
-		for(var i = 0; i < addNumbers; i++) {
-			fillNumbers += "0";
-		}
-		programCode = `${seriesCode}${fillNumbers}${seasonNumber}${episodeNo}`;
-		this.$T.program.program_code = programCode;
-		this.$T.program.program_code_schedule = programCode;
-		
-		// STREAMING URLS
-		this.$T.program.video_url_sd = `xrtmp://stream1.lifestyletv.se/vod/$mp4:INT/${seriesCode}/${seasonCode}/${programCode}_mq.mp4`;
-		this.$T.program.video_url_hd = `xrtmp://stream1.lifestyletv.se/vod/$mp4:INT/${seriesCode}/${seasonCode}/${programCode}_hq.mp4`;
-		
-		// APPLY CSS CLASSES
-		$("#episode_no").addClass("success");
-		$("#program_code").addClass("success");
-		$("#program_code_schedule").addClass("success");
-		$("#video_url_sd").addClass("success");
-		$("#video_url_hd").addClass("success");
-		this.removeErrorClass("#seasonID");
-		this.removeErrorClass("#episode_no");
-		this.removeErrorClass("#program_code");
-		this.removeErrorClass("#program_code_schedule");
-		this.removeErrorClass("#video_url_hd");
-		this.removeErrorClass("#video_url_sd");
-	}
-	
-	generateSeasonFormData() {
-		let date = new Date();
-		let fullYear = date.getFullYear();
-		let year = fullYear.toString().slice(2);
-		let seriesCode = "";
-		let seriesID = "";
-		let seasonNumber = 0;
-		// Get Series Code
-		$.each(this.$D.allSeries, (key, series) => {
-			if(series.seriesID == this.$T.season.seriesID) {
-				seriesCode = series.series_code;
-				seriesID = series.seriesID;
-				return false;
-			}
-		});
-		
-		if(seriesCode !== "") {
-			// Get Season Number
-			$.each(this.$D.allSeasons, (key, season) => {
-				if(season.trashed != 1 && season.seriesID == seriesID && season.season_code && season.season_code.indexOf(year) >= 0)	 {
-					seasonNumber++;
-					console.log(season.season_code);
-				}
-			});
-			seasonNumber++;
-			if(seasonNumber > 0 && seasonNumber < 10) {
-				seasonNumber = `0${seasonNumber}`;
-			}
-			
-			this.$T.season.season_code = seriesCode + year + seasonNumber;
-			$("#season_code").removeClass("error").addClass("success");
-		}
-	}
-	
-	checkProgramRequirements() {
-		// Program Is Ready To Be Aired If:
-		// program status != 'rejected' or 'waiting approval'
-		// program doesn't need editing
-		// program is acquired (video file available)
-		this.$T.program.requirements = [];
-
-		// READY TO AIR
-		if(this.$T.program.program_status !== "00" && this.$T.program.program_status !== "03" && this.$T.program.broadcast_status !== "02" && this.$T.program.broadcast_status !== "03" && this.$T.program.program_need_editing === "0" && this.$T.program.program_aquired === "1") {
-			this.$T.program.requirements.push({text: "Ready to be aired", status: "success"});
-		} else {
-			this.$T.program.requirements.push({text: "Ready to be aired", status: "error"});
-		}
-		
-		this.setNextScheduledAirDate(this.$T.program.programID);
-		this.setOnDemandVideoStatus(this.$T.program.programID);
-		
-		
-		
-		// ON-DEMAND GRAPHIC -> AJAX CHECK IF FILE EXISTS
-		this.$T.program.requirements.push({text: "On-Demand graphic", status: "error"});
-	}
-	
-	// Updates whenever program is updated -> Too Often!!
-	setNextScheduledAirDate(id) {
-		this.url = this.config.serviceUrl + `?ws=get_next_air_date&id=${id}`;
-		$.get(this.url, response => {
-			if(response.status === "success") {
-				this.$T.program.requirements.push({text: `Next scheduled air date: ${response.next_air_date}`, status: "success"});
-			} else {
-				this.$T.program.requirements.push({text: "Next scheduled air date", status: "error"});
-			}
-		}, "json");
-	}
-	
-	setOnDemandVideoStatus(id) {
-		this.url = this.config.serviceUrl + `?ws=on_demand_video_files_exist&id=${id}`;
-		$.get(this.url, response => {
-			if(response.status === "success") {
-				this.$T.program.requirements.push({text: "On-Demand video", status: "success"});
-			} else {
-				this.$T.program.requirements.push({text: "On-Demand video", status: "error"});
-			}
-		}, "json");
 	}
 	
 	closePanel(type) {
@@ -763,6 +435,50 @@ export default class Functions {
 			this.$T[type].crud = true;
 		}
 		$(id).removeClass("hide").fadeIn(250);
+	}
+	
+	today() {
+		let today = new Date();
+		let dd = today.getDate();
+		let mm = today.getMonth() + 1;
+		let yyyy = today.getFullYear();
+		
+		if(dd < 10) {
+			dd = `0${dd}`;
+		} 
+		if(mm < 10) {
+			mm = `0${mm}`;
+		} 
+		return `${yyyy}-${mm}-${dd}`;
+	}
+	
+	exportPDF() {
+		console.log("export");
+		var columns = [
+			{title: "ID", dataKey: "id"},
+			{title: "Name", dataKey: "name"}, 
+			{title: "Country", dataKey: "country"}
+		];
+		var rows = [
+			{"id": 1, "name": "Shaw", "country": "Tanzania"},
+			{"id": 2, "name": "Nelson", "country": "Kazakhstan"},
+			{"id": 3, "name": "Garcia", "country": "Madagascar"}
+		];
+		
+		// Only pt supported (not mm or in)
+		var doc = new jsPDF('p', 'pt');
+		doc.autoTable(columns, rows, {
+			styles: {fillColor: [100, 255, 255]},
+			columnStyles: {
+				id: {fillColor: 255}
+			},
+			margin: {top: 60},
+			beforePageContent: function(data) {
+				doc.text("Header", 40, 30);
+			}
+		});
+		doc.save('table.pdf');
+				
 	}
 
 }

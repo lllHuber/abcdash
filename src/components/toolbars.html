@@ -1,8 +1,83 @@
 <template bindable="functions">
 		
-	<!-- EXAMPLE TOOLBAR -->	
-	<div class="grid-content content hide" id="toolbar">
-		Toolbar Content
+	<!-- FILTER -->	
+	<div class="grid-content content hide" id="filter">
+	
+		<!-- FILTER PROGRAMS -->
+		<form class="grid-block vertical ${functions.toolbar.content.filterArticles ? '' : ''}">
+			<div class="grid-block horizontal">
+				
+				<div class="grid-block vertical third">
+					<!-- ARTIKELNUMMER -->
+					<div class="row">
+						<label class="three columns" for="article.artikelnr">Artikelnummer:</label>
+						<div class="nine columns">
+							<input type="text" name="article.artikelnr" id="article.artikelnr" placeholder="Artikelnummer ..." value.bind="article.artikelnr.value" keyup.delegate="functions.updateFilter('article.artikelnr', article.artikelnr.value)">
+						</div>
+					</div>
+					<!-- BEZEICHNUNG -->
+					<div class="row">
+						<label class="three columns" for="article.bezeichnung">Bezeichnung:</label>
+						<div class="nine columns">
+							<input type="text" name="article.bezeichnung" id="article.bezeichnung" placeholder="Bezeichnung ..." value.bind="article.bezeichnung.value" keyup.delegate="functions.updateFilter('article.bezeichnung', article.bezeichnung.value)">
+						</div>
+					</div>
+				</div>
+				
+				<div class="grid-block vertical third">
+					<!-- LAGER -->
+					<div class="row">
+						<label class="three columns" for="article.lagerID">Lager:</label>
+						<div class="nine columns">
+							<select name="article.lager" id="article.lager" ref="article.lager" change.delegate="functions.updateFilter('article.lager', article.lager.value)">
+								<option value="">Alle Lager</option>
+								<option repeat.for="warehouse of functions.$D.allWarehouses" value.bind="warehouse.LAGER">${warehouse.LAGER}</option>
+							</select>
+						</div>
+					</div>
+					<!-- FORMAT -->
+					<div class="row">
+						<label class="three columns" for="article.gruppe">Format:</label>
+						<div class="nine columns">
+							<select name="article.gruppe" id="article.gruppe" ref="article.gruppe" change.delegate="functions.updateFilter('article.gruppe', article.gruppe.value)">
+								<option value="">Alle Formate</option>
+								<option value="Bücher, Hörbücher">Bücher, Hörbücher</option>
+								<option value="DVDs, CDs, MP3s, Hörspiele">DVDs, CDs, MP3s, Hörspiele</option>
+							</select>
+						</div>
+					</div>
+				</div>
+				
+				<div class="grid-block vertical third">
+					<!-- LETZTER VERKAUF -->
+					<div class="row">
+						<label class="three columns" for="article.letzterverkauf">Letzter Verkauf:</label>
+						<div class="nine columns">
+							<input type="text" name="article.letzterverkauf" id="article.letzterverkauf" placeholder="Letzter Verkauf ..." value.bind="article.letzterverkauf.value" keyup.delegate="functions.updateFilter('article.letzterverkauf', article.letzterverkauf.value)">
+						</div>
+					</div>
+				</div>
+			</div>
+			
+			<div class="grid-block horizontal shrink">
+				<div class="row">
+					<button class="button shrink small right" type="reset" mousedown.trigger="functions.resetFilter('#programs')"><icon icon="reload"></icon>Filter zurücksetzen</button>
+					<div class="button shrink small right disabled itemCount">0 Artikel gefunden</div>
+				</div>
+			</div>
+		</form>
+	</div>
+	
+	
+	<!-- EXPORT -->	
+	<div class="grid-content content horizontal hide" id="export">
+		<button class="primary hollow shrink" click.delegate="functions.exportPDF()">
+			Als PDF exportieren
+		</button>
+		<button class="primary hollow shrink">
+			Als XLS exportieren
+		</button>
+
 	</div>
 
 	

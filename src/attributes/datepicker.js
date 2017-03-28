@@ -9,10 +9,24 @@ export class DatePicker {
   
 	attached() {
 		$(this.element).datepicker({
-			dateFormat: "dd.mm.yy",
+			dateFormat: "yy-mm-dd",
 			prevText: "<",
 			nextText: ">",
-			showOtherMonths: true
+			showOtherMonths: true,
+			monthNames: [
+				"Januar",
+				"Februar",
+				"März",
+				"April",
+				"Mai",
+				"Juni",
+				"Juli",
+				"August",
+				"September",
+				"Oktober",
+				"November",
+				"Dezember"
+			]
 		})
 		.on('change', e => fireEvent(e.target, 'input'));
 		

@@ -1,0 +1,237 @@
+// --------------------------------------------------
+// VARIABLES
+// --------------------------------------------------
+
+$susy: (
+	columns: 12,
+	gutter: 1/4,
+	math: fluid,
+	output: float,
+	gutter-position: inside,
+	global-box-sizing: border-box,
+);
+
+
+// --------------------------------------------------
+// GRID
+// --------------------------------------------------
+
+html, body {
+  height: 100%;
+}
+
+.img {
+    width: 50px;
+    height: 50px;
+		border-radius: 50%;
+    position: relative;
+    overflow: hidden;
+}
+
+.img > img {
+    position: absolute;
+    top: 50%;
+    min-height: 100%;
+    display: block;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    min-width: 100%;
+}
+
+.wrapper {
+	height: 100vh;
+	display: flex;
+}
+
+.container {
+	@include container($maxWidth);
+}
+
+.grid-block {
+	display: flex;
+	flex: 1;
+	overflow: auto;
+	&.half {
+		flex: 0 0 calc( 50% - 2px);
+	}
+	&.third {
+		flex: 0 0 33.33333%;
+	}
+	&.fourth {
+		flex: 0 0 25%;
+	}
+	&.fifth {
+		flex: 0 0 20%;
+	}
+	&.sixth {
+		flex: 0 0 16.66666%;
+	}
+	&.padding {
+		margin: $contentPadding;
+	}
+	&.bottom {
+		margin-top: 0;
+	}
+	& > * {
+		flex: 1;
+	}
+}
+
+.grid-block.middle {
+	align-items: center;
+}
+
+.grid-block.center {
+	justify-content: center;
+}
+
+.flex-start {
+	align-self: flex-start;
+}
+
+.flex-end {
+	align-self: flex-end;
+}
+
+.grid-content {
+	min-height: min-content;
+	display: flex;
+	padding: $contentPadding;
+	//width: 100%;
+	flex: 1;
+}
+
+.wrapper.vertical,
+.grid-block.vertical,
+.grid-content.vertical {
+	flex-direction: column;
+}
+
+.wrapper.horizontal,
+.grid-block.horizontal,
+.grid-content.horizontal {
+	flex-direction: row;
+}
+
+.shrink {
+	flex: 0 auto;
+}
+
+.grow {
+	flex: 1 auto;
+}
+
+.row {
+	box-sizing: border-box;
+	margin: 0;
+	width: calc(100%);
+	position: relative;
+	&:after {
+		content: "";
+		display: table;
+		clear: both;
+	}
+	* {
+		position: relative;
+	}
+}
+
+.column, .columns {
+	box-sizing: border-box;
+	* {
+		position: relative;
+	}
+}
+
+// Columns
+.one	{ @include span(1); }
+.two	{ @include span(2); }
+.three	{ @include span(3); }
+.four	{ @include span(4); }
+.five	{ @include span(5); }
+.six	{ @include span(6); }
+.seven	{ @include span(7); }
+.eight	{ @include span(8); }
+.nine	{ @include span(9); }
+.ten	{ @include span(10); }
+.eleven	{ @include span(11); }
+.twelve	{ @include span(12); }
+
+// Center columns
+.center.horizontal.one		{ margin-left: span(5.5); }
+.center.horizontal.two		{ margin-left: span(5); }
+.center.horizontal.three	{ margin-left: span(4.5); }
+.center.horizontal.four		{ margin-left: span(4); }
+.center.horizontal.five		{ margin-left: span(3.5); }
+.center.horizontal.six		{ margin-left: span(3); }
+.center.horizontal.seven	{ margin-left: span(2.5); }
+.center.horizontal.eight	{ margin-left: span(2); }
+.center.horizontal.nine		{ margin-left: span(1.5); }
+.center.horizontal.ten		{ margin-left: span(1); }
+.center.horizontal.eleven	{ margin-left: span(0.5); }
+.center.horizontal.twelve	{ margin-left: span(0); }
+
+// Align left, right
+.left, .content-left * {	float: left; }
+.right, .content-right * { float: right; }
+.content-center { text-align: center; }
+
+// Sizes
+.small {
+	font-size: $fontSmall;
+}
+
+
+.center.vertical {
+	display: flex;
+	align-items: center;
+	& > * {
+		display: flex;
+	}	
+}
+
+.top-1 { margin-top: 1rem; }
+.top-2 { margin-top: 2rem; }
+.top-3 { margin-top: 3rem; }
+
+
+// Mimik Table With Divs
+.table {
+	display: table;
+}
+.thead {
+	display: table-header-group;
+}
+.tbody {
+	display: table-row-group;
+}
+.tfoot {
+	dislay: table-footer-group;
+}
+.tr {
+	display: table-row;
+}
+.th, .td {
+	display: table-cell;
+	vertical-align: middle;
+}
+
+.fixed {
+	position: absolute;
+	left: 0;
+	right: 0;
+	&.bottom {
+		bottom: 0;		
+	}
+	&.top {
+		top: 0;
+	}
+}
+.relative {
+	position: relative !important;
+}
+
+.controls {
+	padding: 0 $contentPadding 0 $contentPadding;
+	background: rgba(0, 0, 0, .25);
+}
