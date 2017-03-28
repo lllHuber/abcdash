@@ -2,7 +2,7 @@
 
 $http_origin = $_SERVER['HTTP_ORIGIN'];
 
-if ($http_origin == "http://localhost:7777" || $http_origin == "http://lifestyletv.se") {
+if ($http_origin == "http://localhost:7777" || $http_origin == "http://abc.dev") {
 	header("Access-Control-Allow-Origin: $http_origin");
 	header("Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept");
 	header('Access-Control-Allow-Methods: GET, PUT, POST, DELETE, OPTIONS');
@@ -21,11 +21,11 @@ if(isset($_POST)) {
 		
 		$data = file_get_contents('php://input');
 		$data = json_decode($data);
-		
+				
 		$email = $data->username;
 		$password = sha1($data->password);
 		
-		$userData = getDatabaseResult('lifestyletv', 'users', array('email', 'password'), array($email, $password));
+		$userData = getDatabaseResult('hbr', 'users', array('email', 'password'), array($email, $password));
 
 		// LOGIN SUCCESSFUL
 		if($userData) {

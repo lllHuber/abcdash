@@ -2,30 +2,52 @@
 	<require from="components/header.html"></require>
 	<require from="components/footer.html"></require>
 	<require from="components/toolbars.html"></require>
+	<require from="components/sidebar.html"></require>
 	
 	<!-- Custom UI Elements -->
 	<loader></loader>
 	<notification></notification>
 	
 	<!-- Main Content -->
-	<div class="wrapper vertical">
-		<header router.bind="router" auth.bind="auth" functions.bind="functions" class="grid-block shrink navMain">
-			<!-- Main Navigation Bar -->
-		</header>
+	<div class="wrapper horizontal">
 		
-		<div class="grid-block shrink lstvToolbar">
-			<toolbars class="grid-block" data.bind="$D" functions.bind="functions">
-				<!-- Main Tool Bar -->				
-			</toolbars>
+		<!-- LEFT -->
+		<div class="grid-block shrink vertical">
+			<!-- Logo -->
+			<logo class="grid-block center shrink">
+				<graphic class="grid-block middle shrink" src="application/assets/images/logo.png" width="4rem" height="2rem"></graphic>
+				<!--<div class="grid-block middle shrink logo-type">HBR<span>Dash</span></div>-->
+			</logo>
+
+			<!-- Sidebar -->
+			<div class="grid-block vertical hbrSidebar">
+				<sidebar class="grid-block" data.bind="$D" functions.bind="functions"></sidebar>
+			</div>
+			
+			<!-- Bottom -->
+			<bottom class="grid-block shrink"></bottom>
+			
 		</div>
 		
-		<div class="grid-block">
-			<router-view class="grid-block horizontal"></router-view>
-		</div>	
 		
-		<footer year.bind="currentYear" class="grid-block shrink">
-			<!-- Main Footer -->
-		</footer>
+		<!-- RIGHT -->
+		<div class="grid-block vertical">
+			<!-- Top Bar -->
+			<header router.bind="router" auth.bind="auth" functions.bind="functions" class="grid-block shrink navMain"></header>
+			
+			<!-- Toolbar -->
+			<div class="grid-block shrink hbrToolbar">
+				<toolbars class="grid-block" data.bind="$D" functions.bind="functions"></toolbars>
+			</div>
+			
+			<!-- Router View -->
+			<div class="grid-block">
+				<router-view class="grid-block horizontal"></router-view>
+			</div>
+			
+			<!-- Footer -->
+			<footer year.bind="currentYear" class="grid-block shrink"></footer>
+		</div>
 	</div>
 	
 </template>

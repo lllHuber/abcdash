@@ -1,24 +1,8 @@
 
 let configDevelopment = {
-  
-  serviceUrl: "http://lsods.dev/services/services.php",
-  authUrl: "http://lsods.dev/services/auth.php",
-  tokenPrefix: "lstv",
-  
-  programStatus: {
-    "00" : "rejected",
-    "01" : "approved",
-    "02" : "approved&nbsp;&&nbsp;proofed",
-    "03" : "awaiting&nbsp;approval"
-  },
-  
-  broadcastStatus: {
-    "00" : "new",
-    "01" : "active",
-    "02" : "archived",
-    "03" : "missing"
-  }
-  
+  serviceUrl: "http://abc.dev/abcdash/services/services.php",
+  authUrl: "http://abc.dev/abcdash/services/auth.php",
+  tokenPrefix: "abc"
 }
 
 
@@ -29,9 +13,9 @@ let configDevelopment = {
 
 
 let configProduction = {
-  serviceUrl: "http://lsods.dev/services/services.php",
-  authUrl: "http://lsods.dev/services/auth.php",
-  tokenPrefix: "lstv"
+  serviceUrl: "http://abcserver/dash/services/services.php",
+  authUrl: "http://abcserver/dash/services/auth.php",
+  tokenPrefix: "abc"
 }
 
 let config;

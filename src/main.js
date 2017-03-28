@@ -31,8 +31,7 @@ export function configure(aurelia) {
 			"converters/filter.js"
 		)
 	;
-	
-	
+		
 	aurelia.start().then(() => {
 		let auth = aurelia.container.get(AuthService);
 		let root = auth.isAuthenticated ? 'app' : 'login';

@@ -32,11 +32,11 @@ export class Login {
 	// --------------------------------------------------
 	
 	enableLoginButton() {
-		$(".lstvLoginButton").addClass("unlocked").prop("disabled", false);
+		$(".hbrLoginButton").addClass("unlocked").prop("disabled", false);
 	}
 	
 	disableLoginButton() {
-		$(".lstvLoginButton").removeClass("unlocked").prop("disabled", true);
+		$(".hbrLoginButton").removeClass("unlocked").prop("disabled", true);
 	}
 	
 	publishCredentialsChange() {

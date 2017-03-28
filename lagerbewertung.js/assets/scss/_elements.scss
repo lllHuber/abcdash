@@ -1,0 +1,293 @@
+.hbrGraphic {
+	display: block;
+	position: relative;
+	background-size: cover;
+}
+
+.hbrPanel {
+    position: relative;
+    display: block;
+    background: $airgray;
+	border: 1px solid $lightgray;
+    box-shadow: 0 1px 7px rgba(0, 0, 0, .2);
+    z-index: 0;
+    overflow: hidden;
+	h2 {
+		display: block;
+		background: #E0E0E0;
+		padding: .5rem;
+		margin: 0;
+		color: $gray;
+		text-transform: uppercase;
+		font-weight: 700;
+		text-align: center;
+		font-size: .75rem;
+	}
+	& > .content {
+		padding: $contentPadding;
+		transition: height #{$transition};
+		&.error, &.success {
+			padding-top: calc(#{$contentPadding} + 1.5rem);
+		}
+	}
+}
+
+.hbrCallout {
+	.panel {
+		margin: $contentPadding 0 0 0;
+		.content{
+			display: block;
+			border: 1px solid $mediumgray;
+			background: $airgray;
+			padding: .5rem 0;
+			&.success {
+				border: 1px solid $success;
+				background: $successLight;
+				color: $success;
+			}
+			&.error {
+				border: 1px solid $error;
+				background: $errorLight;
+				color: $error;
+			}
+		}
+	}
+}
+
+.flatPanel {
+    background: $airgray;
+	border-left: 1px solid $lightgray;
+	border-right: 1px solid $lightgray;
+}
+
+.hbrSysMessage {
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	.panel {
+		.content {
+			text-align: center;
+			display: block;
+			padding: .25rem 0;
+			font-style: italic;
+			font-size: $fontSmall;
+			&.success {
+				background: $success;
+				color: $white;
+			}
+			&.error {
+				background: $error;
+				color: $white;
+			}
+			&.info {
+				background: $poison;
+				color: $charcoal;
+			}
+		}
+	}
+}
+
+.hbrLoginButton {
+	background: transparent !important;
+	border: 1px solid $lightgray !important;
+	position: absolute;
+	width: initial;
+	display: block;
+	right: .75rem;
+	border-radius: 50%;
+	height: 1.25rem;
+	width: 1.25rem;
+	text-align: center;
+	padding: 0;
+	top: .375rem;
+	.iconic[data-glyph]:before {
+		font-size: 12px;
+		color: $lightgray;
+	}
+	&.unlocked {
+		border: 1px solid $darkblue !important;
+		.iconic[data-glyph]:before {
+			color: $darkblue !important;
+		}
+		&:hover {
+			cursor: pointer;
+		}
+	}
+	.grid-content {
+		flex: 0;
+	}
+	icon {
+		padding: 0;
+	}
+}
+
+.hbrList.table {
+	border-collapse: collapse;
+	width: 100%;
+	
+	.prstatus, .sestatus, .mlocation, .alocation {
+		white-space: nowrap;
+	}
+	
+	.thead .tr {
+		border-bottom: 1px solid $gray;
+		text-transform: uppercase;
+		&:hover {
+			background: transparent !important;
+		}
+		&:fixed {
+			position: fixed;
+		}
+	}
+	.tr {
+		border-bottom: 1px solid transparent;		
+		&:nth-child(2n) {
+		background: lighten($lightgray, 15%);
+		}
+		&:hover {
+			//background: lighten($highlight, 20%);
+			background: $poison;
+			cursor: default;
+		}
+	}	
+	.th {
+		padding: .5rem .25rem;
+		text-align: left;
+		span {
+			color: $mediumgray;
+			font-weight: 500;
+			transition: color #{$transition};
+		}
+		span:hover {
+			color: $charcoal;
+			cursor: pointer;
+		}
+	}
+	.td {
+		font-size: .7rem;
+		padding: .25rem .5rem;
+		overflow: hidden;
+	}
+	.td.edit {
+		white-space: nowrap;
+		icon{
+			color: $orange;
+		}
+	}
+	.td.delete {
+		white-space: nowrap;
+		icon{
+			color: $mediumgray;
+		}
+	}
+	.highlight {
+		//background: lighten($primary, 62%) !important;
+		//border-color: $secondary !important;
+		background: $poison !important;
+		color: inherit !important;
+	}
+}
+
+.hbrToolbar {
+	.content {
+		background: lighten($lightgray, 15%);
+		border-bottom: 1px solid $lightgray;
+		color: $gray;
+		padding-bottom: calc( #{$contentPadding} / 2 );
+	}
+	label {
+		font-size: .85rem;
+		text-align: right;
+		margin: .25rem 0;
+	}
+	input, select {
+		padding: .25rem .5rem;
+		color: $gray;
+	}
+	h2 {
+		margin: 0;
+		margin-bottom: calc( #{$contentPadding} / 2 );
+	}
+}
+
+.hbrNotification {
+	position: absolute;
+	bottom: calc(#{$contentPadding} * 1.5);
+	right: calc(#{$contentPadding} * 1.5);
+	z-index: 999999;
+	.content {
+		padding: calc( #{$contentPadding} / 2 );
+		font-size: $fontMedium;
+		&.success {
+			border: 1px solid darken($success, 12%);
+			background: $success;
+			color: $white;
+		}
+		&.error {
+			border: 1px solid darken($error, 12%);
+			background: $error;
+			color: $white;
+		}
+	}
+}
+
+.hbrCloseButton {
+	opacity: .25;
+	transition: all $transition;
+	&:hover {
+		opacity: .75;
+		cursor:pointer;
+	}
+}
+
+.hbrModal {
+	position: fixed;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	background: rgba(0, 0, 0, 0.5);
+	z-index: 999999999;
+	.modal {
+		display: block;
+		background: $white;
+		.header {
+			padding: 0 $contentPadding 0 calc( #{$contentPadding} - 8px );
+			background: lighten($primary, 63%);
+			border-bottom: 1px solid $secondary;
+			color: $primary;
+			&.alert {
+				background: lighten($alert, 50%);
+				border-bottom: 1px solid $alert;
+				color: $alert;
+			}
+			h1 {
+				text-transform: capitalize;
+				color: inherit;
+			}
+			& > icon {
+				color: inherit;;
+				font-size: $fontLarge;
+				margin: .1rem 0 0 0;
+			}
+		}
+		.content {
+			padding: calc( #{$contentPadding} / 2 ) $contentPadding calc( #{$contentPadding} / 2 );
+			padding: $contentPadding;
+			p {
+				margin: 0;
+			}
+		}
+		&.small {
+			min-width: $modalSmallWidth;
+		}
+		&.medium {
+			min-width: $modalMediumWidth;
+		}
+		&.large {
+			min-width: $modalLargeWidth;
+		}
+		font-size: initial;
+	}
+}

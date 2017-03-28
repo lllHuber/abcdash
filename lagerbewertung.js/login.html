@@ -1,0 +1,47 @@
+<template>
+	<require from="elements/panel.html"></require>
+	<require from="elements/graphic.html"></require>
+	<require from="elements/icon.html"></require>
+	<require from="elements/sysMessage.html"></require>
+	<require from="elements/callout.html"></require>
+	<require from="components/footer.html"></require>
+		
+	<div class="wrapper">
+		<div class="grid-block vertical">
+			<header class="grid-block shrink navMain">
+				<graphic class="grid-block middle shrink" src="application/assets/images/logo.png" width="2rem" height="2rem"></graphic>
+			</header>
+			
+			<div class="grid-block horizontal center middle">
+				<panel title="Welcome" class="login shrink" message="${auth.response.status}">
+					<sysMessage if.bind="auth.response" status="${auth.response.status}">
+						${auth.response.message}
+					</sysMessage>
+					<div class="row center vertical">
+						<div class="one column">
+							<icon icon="person-genderless"></icon>
+						</div>
+						<div class="eleven columns">
+							<input type="email" name="userEmail" placeholder="Email" value.bind="username" keyup.trigger="publishCredentialsChange()" focus.trigger="publishCredentialsChange()">
+						</div>
+					</div>
+					<div class="row center vertical">
+						<div class="one column contentCenter">
+							<icon icon="key"></icon>
+						</div>
+						<div class="eleven columns">
+							<input type="password" name="userPassword" placeholder="Password" value.bind="password" keyup.trigger="publishCredentialsChange()" focus.trigger="publishCredentialsChange()">
+							<button class="hbrLoginButton" mousedown.trigger="sendCredentials()">
+								<icon icon="arrow-thick-right-fill-large"></icon>
+							</button>
+						</div>
+					</div>
+				</panel>		
+			</div>
+			
+			<footer year.bind="currentYear" class="grid-block shrink">
+				<!-- Main Footer -->
+			</footer>
+		</div>
+	</div>
+</template>

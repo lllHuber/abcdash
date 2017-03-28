@@ -1,0 +1,14 @@
+<template bindable="title, size, id, icon, status, functions" class="hbrModal grid-block vertical center middle hide">
+	
+	<div class="modal grid-block vertical shrink ${size}">
+		<div class="grid-block header horizontal relative ${status}">
+			<icon class="grid-block shrink middle" icon="${icon}"></icon>
+			<h1>${title}</h1>
+			<closeButton click.trigger="functions.closeModal('#'+id)"></closeButton>
+		</div>
+		<div class="grid-block content vertical">
+			<slot></slot>
+		</div>
+	</div>
+	
+</template>

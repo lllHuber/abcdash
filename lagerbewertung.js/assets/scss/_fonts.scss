@@ -1,0 +1,78 @@
+// --------------------------------------------------
+//	FONTS
+// --------------------------------------------------
+
+@import url(https://fonts.googleapis.com/css?family=Roboto+Condensed:400,300,300italic,700,400italic,700italic);
+
+body {
+	font-family: "Roboto Condensed";
+	font-size: $bodyFontSize;
+	font-weight: $bodyFontWeight;
+	letter-spacing: .25px;
+}
+
+@font-face {
+    font-family: Graphik;
+    src: url('assets/fonts/graphik/Graphik-Thin.otf');
+	font-weight: 100;
+	font-style: regular;
+}
+
+@font-face {
+    font-family: Graphik;
+    src: url('assets/fonts/graphik/Graphik-Extralight.otf');
+	font-weight: 200;
+	font-style: regular;
+}
+
+@font-face {
+    font-family: Graphik;
+    src: url('assets/fonts/graphik/Graphik-Light.otf');
+	font-weight: 300;
+	font-style: regular;
+}
+
+@font-face {
+    font-family: Graphik;
+    src: url('assets/fonts/graphik/Graphik-Regular.otf');
+	font-weight: 400;
+	font-style: regular;
+}
+
+@font-face {
+    font-family: Graphik;
+    src: url('assets/fonts/graphik/Graphik-Medium.otf');
+	font-weight: 500;
+	font-style: regular;
+}
+
+@font-face {
+    font-family: Graphik;
+    src: url('assets/fonts/graphik/Graphik-Semibold.otf');
+	font-weight: 600;
+	font-style: regular;
+}
+
+@font-face {
+    font-family: Graphik;
+    src: url('assets/fonts/graphik/Graphik-Bold.otf');
+	font-weight: 700;
+	font-style: regular;
+}
+
+@font-face {
+    font-family: Graphik;
+    src: url('assets/fonts/graphik/Graphik-Black.otf');
+	font-weight: 800;
+	font-style: regular;
+}
+
+@font-face {
+    font-family: Graphik;
+    src: url('assets/fonts/graphik/Graphik-Super.otf');
+	font-weight: 900;
+	font-style: regular;
+}
+
+
+
