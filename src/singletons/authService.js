@@ -1,5 +1,5 @@
 import { Aurelia, inject, bindable } from 'aurelia-framework';
-import { HttpClient } from 'aurelia-fetch-client';
+import { HttpClient, json } from 'aurelia-fetch-client';
 import config from '../config/config';
 
 @inject(config, Aurelia, HttpClient)
@@ -21,7 +21,7 @@ export default class AuthService {
         this.http.fetch(this.config.authUrl, {
 			credentials: 'include',
 			method: 'post',
-			body: JSON.stringify(credentials)
+			body: json(credentials)
 		})
 		.then(result => result.json())
         .then(result => {
@@ -35,7 +35,10 @@ export default class AuthService {
 					this.app.setRoot('app');
 				}
 		    }
-        });
+        })
+		.catch(error => {
+			console.log(error);
+		});
 	}
 
 	logout() {

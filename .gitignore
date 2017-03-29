@@ -6,3 +6,4 @@ node_modules/*
 application/*
 
 *.log
+services/ADVENTISTBOOKCENTER.FDB

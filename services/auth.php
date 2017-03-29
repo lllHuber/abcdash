@@ -1,31 +1,20 @@
 <?php
 
-$http_origin = $_SERVER['HTTP_ORIGIN'];
-
-if ($http_origin == "http://localhost:7777" || $http_origin == "http://abc.dev") {
-	header("Access-Control-Allow-Origin: $http_origin");
-	header("Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept");
-	header('Access-Control-Allow-Methods: GET, PUT, POST, DELETE, OPTIONS');
-	header('Access-Control-Allow-Credentials: true');
-}
-
 require_once('headers.php');
 require_once('connection.php');
 require_once('functions.php');
 
-
-
 if(isset($_POST)) {
-
+	
 	if(file_get_contents('php://input')) {
 		
 		$data = file_get_contents('php://input');
 		$data = json_decode($data);
-				
+		
 		$email = $data->username;
 		$password = sha1($data->password);
 		
-		$userData = getDatabaseResult('hbr', 'users', array('email', 'password'), array($email, $password));
+		$userData = getDatabaseResult('abcdash', 'users', array('email', 'password'), array($email, $password));
 
 		// LOGIN SUCCESSFUL
 		if($userData) {
@@ -36,12 +25,11 @@ if(isset($_POST)) {
 			// Build Result Array
 			$resultArray = array(
 				'username' => $userData['username'],
-				'firstName' => $userData['first_name'],
-				'lastName' => $userData['last_name'],
+				'firstName' => $userData['firstname'],
+				'lastName' => $userData['lastname'],
 				'email' => $userData['email'],
 				'image' => $userData['image'],
-				'lsods' => $userData['lsods'],
-				'lscms' => $userData['lscms']
+				'abcdash' => $userData['abcdash']
 			);			
 
 			// Build JSON Web Token
@@ -68,8 +56,9 @@ if(isset($_POST)) {
 		
 	} else {
 		echo json_encode(array('status' => 'error', 'message' => 'Invalid request'));
-		die();
 	}
+} else {
+	echo json_encode(array('status' => 'error', 'message' => 'Invalid request'));
 }
 
 

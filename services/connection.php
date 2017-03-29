@@ -9,11 +9,11 @@ require_once('constants.php');
 $PDOM = '';
 try {
     //try connection
-    $DSN = 'mysql:host='.$GLOBALS['dbHost'].';dbname='.$GLOBALS['dbName'].';port='.$GLOBALS['dbPort'].'charset=utf8';
+    $DSNM = 'mysql:host='.$GLOBALS['mdbHost'].';dbname='.$GLOBALS['mdbName'].';port='.$GLOBALS['mdbPort'].'charset=utf8';
     $PDOM = new PDO( 
-        $DSN,
-        $GLOBALS['dbUser'],
-        $GLOBALS['dbPass'],
+        $DSNM,
+        $GLOBALS['mdbUser'],
+        $GLOBALS['mdbPass'],
         array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES 'utf8'")
     );
     $PDOerrorInfo = $PDOM->errorInfo();
@@ -38,8 +38,7 @@ if ($PDOM) {
 
 $PDOF = '';
 try {
-    //try connection
-    $PDOF = new PDO('odbc:Amicron');
+    $PDOF = new PDO('odbc:Amicron');    
     $PDOerrorInfo = $PDOF->errorInfo();
 } catch (Exception $e){
     //catch errors    

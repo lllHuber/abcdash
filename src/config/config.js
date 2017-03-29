@@ -1,20 +1,12 @@
-
 let configDevelopment = {
-  serviceUrl: "http://abc.dev/abcdash/services/services.php",
-  authUrl: "http://abc.dev/abcdash/services/auth.php",
+  serviceUrl: "http://abcdash.dev:8888/services/services.php",
+  authUrl: "http://abcdash.dev:8888/services/auth.php",
   tokenPrefix: "abc"
 }
 
-
-
-
-
-
-
-
 let configProduction = {
-  serviceUrl: "http://abcserver/dash/services/services.php",
-  authUrl: "http://abcserver/dash/services/auth.php",
+  serviceUrl: "http://abcdash.dev:8888/services/services.php",
+  authUrl: "http://abcdash.dev:8888/services/auth.php",
   tokenPrefix: "abc"
 }
 

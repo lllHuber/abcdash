@@ -1,14 +1,6 @@
 <?php
 
-$http_origin = $_SERVER['HTTP_ORIGIN'];
-
-if ($http_origin == "http://localhost:7777" || $http_origin == "http://abc.dev") {
-	header("Access-Control-Allow-Origin: $http_origin");
-	header("Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept");
-	header('Access-Control-Allow-Methods: GET, PUT, POST, DELETE, OPTIONS');
-	header('Access-Control-Allow-Credentials: true');
-}
-
+require_once('headers.php');
 require_once('connection.php');
 require_once('functions.php');
 require_once('classes/class.lstv.php');
@@ -40,7 +32,6 @@ function web_service() {
 function get_all_items($keydate = false) {
 	global $PDOF;
 	$resultArray = array('status' => 'error');
-	
 	
 	// DEFINE VARIABLES
 	if($keydate) {
@@ -303,10 +294,6 @@ function get_all_items($keydate = false) {
 
 		}
 		
-		
-		
-		
-	
 		$resultArray['status'] = 'success';
 		$resultArray['message'] = 'All items were loaded successfully.';
 		$resultArray['data'] = $artikelbestand;
