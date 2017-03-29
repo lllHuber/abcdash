@@ -118,12 +118,12 @@ function get_all_items($keydate = false) {
 			
 			// KEIN BIFI ( = GESUNDKOST)
 			if (preg_match("/BIFI/i", trim($artikel['ARTIKELNR']))) {
-				//continue;
+				continue;
 			}
 			
 			// KEIN WG ( = GESUNDKOST)
 			if (preg_match("/WG/i", trim($artikel['ARTIKELNR']))) {
-				//continue;
+				continue;
 			}
 			
 			// Kein "Flucht zu Gott"

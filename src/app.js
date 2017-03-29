@@ -7,14 +7,14 @@ import { EventAggregator } from 'aurelia-event-aggregator';
 
 // Import Dependent Classes From View-Models
 import {Dashboard} from 'dashboard';
-import {Lagerbestand} from 'lagerbestand';
+import {Lagerbewertung} from 'lagerbewertung';
 import {Kunden} from 'kunden';
 
 
-@inject(AuthService, config, EventAggregator, Functions, Dashboard, Lagerbestand, Kunden)
+@inject(AuthService, config, EventAggregator, Functions, Dashboard, Lagerbewertung, Kunden)
 export class App {
 	
-	constructor(AuthService, config, EventAggregator, Functions, Dashboard, Lagerbestand, Kunden) {
+	constructor(AuthService, config, EventAggregator, Functions, Dashboard, Lagerbewertung, Kunden) {
 		// Define Dependencies
 		this.currentYear = new Date().getFullYear();
 		this.auth = AuthService;
@@ -22,7 +22,7 @@ export class App {
 		this.ea = EventAggregator;
 		this.functions = Functions;
 		this.dashboard = Dashboard;
-		this.lagerbestand = Lagerbestand;
+		this.lagerbewertung = Lagerbewertung;
 		this.kunden = Kunden;
 	}
 
@@ -36,7 +36,7 @@ export class App {
 		config.map([
 			// EXAMPLE ROUTE
 			// { route: ['page', 'page'], name: 'page', moduleId: 'page', nav: true, title: 'Page' },
-			{ route: ['lagerbestand', 'lagerbestand'], name: 'lagerbestand', moduleId: 'lagerbestand', nav: true, title: 'Lagerbestand',
+			{ route: ['lagerbewertung', 'lagerbewertung'], name: 'lagerbewertung', moduleId: 'lagerbewertung', nav: true, title: 'Lagerbewertung',
 				settings: { icon: 'list' }
 			},
 			{ route: ['kunden', 'kunden'], name: 'kunden', moduleId: 'kunden', nav: true, title: 'Kunden',
