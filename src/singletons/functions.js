@@ -10,6 +10,7 @@ export default class Functions {
 	constructor(config, Router, MultiObserver, BindingEngine) {
 		this.config = config;
 		this.router = Router;
+		console.log(this.router);
 		this.observer = MultiObserver;
 		this.observe = BindingEngine;
 		this.$ui = {
@@ -17,12 +18,18 @@ export default class Functions {
 		};
 		
 		this.dates = {
-			"keydate": this.today()
+			"startdate": this.oneMonthBefore(),
+			"enddate": this.today()
 		};
 		
 		// Observe Date Change
-		this.observe.propertyObserver(this.dates, "keydate").subscribe((newValue, oldValue) => {
+		this.observe.propertyObserver(this.dates, "startdate").subscribe((newValue, oldValue) => {
 			this.allItems;
+			this.allSales;
+		});
+		this.observe.propertyObserver(this.dates, "enddate").subscribe((newValue, oldValue) => {
+			this.allItems;
+			this.allSales;
 		});
 		
 		// jQueryUI
@@ -61,10 +68,12 @@ export default class Functions {
 		this.$D = {
 			"allItems"			: this.allItems,
 			"allWarehouses"		: this.allWarehouses,
-			"allCustomers"		: this.allCustomers
+			"allCustomers"		: this.allCustomers,
+			"allSales"			: this.allSales
 		};
 		
 	}
+	
 
 	
 	// --------------------------------------------------
@@ -72,7 +81,7 @@ export default class Functions {
 	// --------------------------------------------------
 	
 	get allItems() {
-		this.url = this.config.serviceUrl + `?ws=get_all_items&keydate=${this.dates.keydate}`;
+		this.url = this.config.serviceUrl + `?ws=get_all_items&enddate=${this.dates.enddate}`;
 		$("#hbrLoader").show();
 		$.get(this.url, response => {
 			$("#hbrLoader").hide();
@@ -100,7 +109,20 @@ export default class Functions {
 			$("#hbrLoader").hide();
 			if(response.status === 'success') {
 				this.$D.allCustomers = response.data;
-				console.log(this.$D.allCustomers);
+				//console.log(this.$D.allCustomers);
+			}
+		}, "json");
+	}
+	
+	get allSales() {
+		this.url = this.config.serviceUrl + `?ws=get_all_sales&startdate=${this.dates.startdate}&enddate=${this.dates.enddate}`;
+		console.log(this.url);
+		$("#hbrLoader").show();
+		$.get(this.url, response => {
+			$("#hbrLoader").hide();
+			if(response.status === 'success') {
+				this.$D.allSales = response.data;
+				console.log(this.$D.allSales);
 			}
 		}, "json");
 	}
@@ -441,6 +463,21 @@ export default class Functions {
 		let today = new Date();
 		let dd = today.getDate();
 		let mm = today.getMonth() + 1;
+		let yyyy = today.getFullYear();
+		
+		if(dd < 10) {
+			dd = `0${dd}`;
+		} 
+		if(mm < 10) {
+			mm = `0${mm}`;
+		} 
+		return `${yyyy}-${mm}-${dd}`;
+	}
+	
+	oneMonthBefore() {
+		let today = new Date();
+		let dd = today.getDate();
+		let mm = today.getMonth();
 		let yyyy = today.getFullYear();
 		
 		if(dd < 10) {

@@ -191,9 +191,9 @@
 
 .hbrToolbar {
 	.content {
-		background: $airblue;
-		border-bottom: 1px solid $lightblue;
-		color: $darkblue;
+		background: $airgray;
+		border-bottom: 1px solid $lightgray;
+		color: $gray;
 		padding-bottom: calc( #{$contentPadding} / 2 );
 	}
 	label {
@@ -203,7 +203,7 @@
 	}
 	input, select {
 		//padding: .25rem .5rem;
-		color: $darkblue;
+		color: $gray;
 	}
 	h2 {
 		margin: 0;
@@ -303,13 +303,14 @@
 	ul {
 		list-style-type: none;
 		padding: 0;
+		color: darken($lightgray, 20%);
 		li {
 			margin: 1rem 0;
 			&:first-child {
 				margin-top: 0;
 			}
 			&:last-child {
-				border-top: 1px solid $mediumgray;
+				border-top: 1px solid darken($lightgray, 20%);
 				padding-top: 1rem;
 				margin-top: 2rem;
 			}

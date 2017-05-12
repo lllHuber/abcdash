@@ -1,0 +1,64 @@
+<template>
+		
+		<!-- BOTTOM -->
+		<div class="grid-block padding vertical">
+			<div class="grid-block shrink">
+				<h1 class="left shrink">Artikelverkäufe</h1>
+				<h2 class="left shrink">&nbsp;//&nbsp;Zeitraum: ${functions.dates.startdate} - ${functions.dates.enddate}</h2>
+			</div>
+			
+			<div class="grid-block">
+				<div class="hbrList table">
+					<div class="thead">
+						<div class="tr">
+							<div class="th spacer"></div>
+							<div class="td checkbox"><input type="checkbox" if.bind="functions.toolbar.edit"></div>
+							<div class="th number"><span>#</span></div>
+							<div class="th navOrder lagerbestand"><span class="arrowUpLight" click.delegate="functions.changeOrder('lagerbestand', 'lagerbestand')">Artikelnr.</span></div>
+							<div class="th navOrder lagerbestand"><span class="arrowUpLight" click.delegate="functions.changeOrder('lagerbestand', 'lagerbestand')">Bezeichnung</span></div>
+							<div class="th navOrder lager"><span class="arrowUpLight align-right" click.delegate="functions.changeOrder('lager', 'lager')">Menge</span></div>
+							<div class="th navOrder lagerbestand"><span class="arrowUpLight align-right" click.delegate="functions.changeOrder('lagerbestand', 'lagerbestand')">Einzel-VK</span></div>
+							<div class="th navOrder lagerbestand"><span class="arrowUpLight align-right" click.delegate="functions.changeOrder('lagerbestand', 'lagerbestand')">Gesamt-VK</span></div>
+							<div class="th navOrder bezeichnung"><span class="arrowUpLight align-right" click.delegate="functions.changeOrder('bezeichnung', 'bezeichnung')">Rabatt %</span></div>
+							<div class="th navOrder lagerbestand"><span class="arrowUpLight align-right" click.delegate="functions.changeOrder('lagerbestand', 'lagerbestand')">Einzel-EK</span></div>
+							<div class="th navOrder netto nowrap"><span class="arrowUpLight align-right" click.delegate="functions.changeOrder('netto', 'vknetto')">Gesamt-EK</span></div>
+							<div class="th navOrder artikelnr"><span class="arrowUpLight" click.delegate="functions.changeOrder('artikelnr', 'artikelnr')">Art</span></div>
+							<div class="th navOrder artikelnr"><span class="arrowUpLight" click.delegate="functions.changeOrder('artikelnr', 'artikelnr')">Auftragnr.</span></div>
+							<div class="th navOrder bezeichnung"><span class="arrowUpLight" click.delegate="functions.changeOrder('bezeichnung', 'bezeichnung')">Rechnungsdatum</span></div>
+							<div class="th navOrder bezeichnung"><span class="arrowUpLight" click.delegate="functions.changeOrder('bezeichnung', 'bezeichnung')">Land</span></div>
+							<div class="th navOrder bezeichnung"><span class="arrowUpLight" click.delegate="functions.changeOrder('bezeichnung', 'bezeichnung')">Steuer</span></div>
+							<div class="th navOrder bezeichnung"><span class="arrowUpLight" click.delegate="functions.changeOrder('bezeichnung', 'bezeichnung')">Steuersatz</span></div>
+							<div class="th navOrder netto nowrap"><span class="arrowUpLight" click.delegate="functions.changeOrder('netto', 'vknetto')">Lager</span></div>
+							<div class="th navOrder spacer"></div>
+						</div>
+					</div>
+					<div class="tbody">
+						<div class="tr"
+							 virtual-repeat.for="item of functions.$D.allSales
+								| filter: { 'filter': functions.filter, 'trigger': functions.filterChange }
+								| orderBy: { 'property': functions.order, 'direction': functions.direction}">
+							<div class="td spacer"></div>
+							<div class="td checkbox"><input type="checkbox" if.bind="functions.toolbar.edit"></div>
+							<div class="td number">${$index + 1}</div>
+							<div class="td code">${item.artikelnr}</div>
+							<div class="td schcode">${item.bezeichnung}</div>
+							<div class="td series align-right">${item.menge}</div>
+							<div class="td series align-right">${item.epreis}</div>
+							<div class="td series align-right">${item.gpreis}</div>
+							<div class="td series align-right">${item.rabatt}</div>
+							<div class="td series align-right">${item.ekpreis}</div>
+							<div class="td series align-right">${item.gekpreis}</div>
+							<div class="td series">${item.art}</div>
+							<div class="td series">${item.auftragnr}</div>
+							<div class="td series">${item.datum}</div>
+							<div class="td series">${item.land}</div>
+							<div class="td series">${item.steuer}</div>
+							<div class="td series">${item.steuersatz}</div>
+							<div class="td series">${item.lager}</div>
+							<div class="td spacer"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+</template>

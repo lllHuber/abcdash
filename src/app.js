@@ -8,13 +8,14 @@ import { EventAggregator } from 'aurelia-event-aggregator';
 // Import Dependent Classes From View-Models
 import {Dashboard} from 'dashboard';
 import {Lagerbewertung} from 'lagerbewertung';
+import {Verkauf} from 'verkauf';
 import {Kunden} from 'kunden';
 
 
-@inject(AuthService, config, EventAggregator, Functions, Dashboard, Lagerbewertung, Kunden)
+@inject(AuthService, config, EventAggregator, Functions, Dashboard, Lagerbewertung, Verkauf, Kunden)
 export class App {
 	
-	constructor(AuthService, config, EventAggregator, Functions, Dashboard, Lagerbewertung, Kunden) {
+	constructor(AuthService, config, EventAggregator, Functions, Dashboard, Lagerbewertung, Verkauf, Kunden) {
 		// Define Dependencies
 		this.currentYear = new Date().getFullYear();
 		this.auth = AuthService;
@@ -23,6 +24,7 @@ export class App {
 		this.functions = Functions;
 		this.dashboard = Dashboard;
 		this.lagerbewertung = Lagerbewertung;
+		this.verkauf = Verkauf;
 		this.kunden = Kunden;
 	}
 
@@ -32,12 +34,15 @@ export class App {
 	// --------------------------------------------------
 	
 	configureRouter(config, router) {
-		config.title = "ABC Dash";
+		config.title = "ABC Medien";
 		config.map([
 			// EXAMPLE ROUTE
 			// { route: ['page', 'page'], name: 'page', moduleId: 'page', nav: true, title: 'Page' },
 			{ route: ['lagerbewertung', 'lagerbewertung'], name: 'lagerbewertung', moduleId: 'lagerbewertung', nav: true, title: 'Lagerbewertung',
 				settings: { icon: 'list' }
+			},
+			{ route: ['verkauf', 'verkauf'], name: 'verkauf', moduleId: 'verkauf', nav: true, title: 'Verkauf',
+				settings: { icon: 'cart' }
 			},
 			{ route: ['kunden', 'kunden'], name: 'kunden', moduleId: 'kunden', nav: true, title: 'Kunden',
 				settings: { icon: 'person-genderless' }

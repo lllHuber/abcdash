@@ -189,7 +189,7 @@ bottom {
 		position: absolute;
 		bottom: 0;
 		left: calc( 50% - 0.5rem );
-		border-color: transparent transparent lighten($lightgray, 15%) transparent;
+		border-color: transparent transparent $topBarActiveColor transparent;
 		border-width: 0.5rem;
 		border-style: solid;
 	}
@@ -225,7 +225,7 @@ button {
 	width: 100%;
 	padding: .25rem .5rem;
 	margin: .25rem 0;
-	border: 1px solid lighten($lightblue, 10%);
+	border: 1px solid $lightgray;
     box-shadow: none;
 	-webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
@@ -233,8 +233,8 @@ button {
 	transition: all #{$transition};
 	&:focus {
 		outline:0;
-		border-bottom: 1px solid lighten($primary, 20%);
-		background: lighten($primary, 70%);
+		border-bottom: 1px solid $gray;
+		background: lighten($gray, 70%);
 	}
 	&.error {
 		border-bottom: 1px solid $error !important;
@@ -295,12 +295,12 @@ a.button, button.button, .button, button {
 	text-indent: 0;
     width: 100%;
 	background: $airgray;
-    border: 1px solid darken($airgray, 12%);
+    border: 1px solid darken($lightgray, 12%);
     margin-top: calc(#{$contentPadding} / 2);
     transition: all #{$transition};
 	&:not(.disabled):hover {
 		cursor: pointer;
-		background: darken($airgray, 12%);
+		background: darken($airgray, 8%);
 	}
 	&:not(.disabled):active {
 		cursor: pointer;
@@ -529,13 +529,31 @@ nav icon {
 	background: none;
 	width: 6.25rem !important;
 	border: 0 !important;
+	&:hover {
+		cursor: pointer;
+	}
+	&:focus {
+		background: none !important;
+	}
 }
 .ui-datepicker {
 	background: $white;
 	color: $mediumgray;
+	border: 1px solid $mediumgray;
+	border-top: 0;
+	top: $topBarHeight !important;
 	.ui-datepicker-header{
-		padding: calc( #{$contentPadding} / 2 );
+		padding: calc( #{$contentPadding} );
 		position: relative !important;
+		&:after {
+			display: block;
+			content: "";
+			position: absolute;
+			top: -20px;
+			left: 3rem;
+			border: 10px solid;
+			border-color: transparent transparent $white transparent;
+		}
 		.ui-datepicker-title {
 			text-align: center;
 			text-transform: uppercase;
@@ -570,6 +588,7 @@ nav icon {
 		tbody {
 			td {
 				text-align: center;
+				padding: .35rem;
 				&.ui-datepicker-unselectable {
 					opacity: .4;
 				}
@@ -577,7 +596,7 @@ nav icon {
 			a, a:visited {
 				text-decoration: none;
 				color: inherit;
-				padding: 0 .5rem;
+				padding: .35rem;
 				&:hover {
 					color: $primary;
 				}

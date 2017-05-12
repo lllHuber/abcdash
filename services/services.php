@@ -5,14 +5,13 @@ require_once('connection.php');
 require_once('functions.php');
 require_once('classes/class.lstv.php');
 
-
 if (isset($_GET['ws']) && $_GET['ws'] != ""  ) {
 	switch ($_GET['ws']) {
 		case 'web_service':
 			echo web_service();
 			break;
 		case 'get_all_items':
-			echo get_all_items($_GET['keydate']);
+			echo get_all_items($_GET['enddate']);
 			break;
 		case 'get_all_warehouses':
 			echo get_all_warehouses();
@@ -20,24 +19,25 @@ if (isset($_GET['ws']) && $_GET['ws'] != ""  ) {
 		case 'get_all_customers':
 			echo get_all_customers();
 			break;
+		case 'get_all_sales':
+			echo get_all_sales($_GET['startdate'], $_GET['enddate']);
+			break;
 		default:
 			break;
 	}
 }
 
 function web_service() {
-	
+
 }
 
-function get_all_items($keydate = false) {
+function get_all_items($enddate = false) {
 	global $PDOF;
 	$resultArray = array('status' => 'error');
 	
 	// DEFINE VARIABLES
-	if($keydate) {
-		$stichtag = $keydate;
-	} else {
-		$stichtag = Date('Y-m-d');
+	if(!$enddate) {
+		$enddate = Date('Y-m-d');
 	}
 	$stichjahr = Date('Y');
 	
@@ -82,7 +82,7 @@ function get_all_items($keydate = false) {
 		ON
 			ARTIKEL.LAGERLFDNR = LAGER.LFDNR
 		WHERE
-			ARTBUCH.ANGELEGTAM <= '{$stichtag} 23:59:59'
+			ARTBUCH.ANGELEGTAM <= '{$enddate} 23:59:59'
         GROUP BY
         	ARTIKEL.ARTIKELNR,
             ARTIKEL.LFDNR,
@@ -336,16 +336,131 @@ function get_all_customers() {
 	if($stmt->execute()) {
 		$kunden = $stmt->fetchAll(PDO::FETCH_ASSOC);
 		$resultArray['data'] = $kunden;
-	}
-	
-	
-	
-	
-	
-	
-	
-	
+	}	
+
 	echo json_encode($resultArray);
+}
+
+function get_all_sales($startdate = false, $enddate = false) {
+	global $PDOF;
+	$resultArray = array('status' => 'error');
+	
+	if($enddate == false) {
+		$enddate = Date('Y-m-d');
+	}
+	if($startdate == false) {
+		$startdate = Date('Y-m-d', strtotime('-1 month'));
+	}
+
+	$stmt = $PDOF->query("
+		SELECT FIRST 1000
+			AUFTRAG.LFDNR,
+			AUFTRAG.AUFTRAGNR,
+			AUFTRAG.DATUM,
+			AUFTRAG.AUFTRAGART,
+			AUFTRAG.STORNIERTAM,
+			AUFTRAG.ANGELEGTAM,
+			AUFTRAG.STEUERINKL,
+			AUFTRAG.LAND,
+			ATRPOS.AUFTRAGLFDNR,
+			ATRPOS.ARTIKELNR,
+			ATRPOS.BEZEICHNUNG,
+			ATRPOS.STEUERSATZ,
+			ATRPOS.MENGE,
+			ATRPOS.EPREIS,
+			ATRPOS.GPREIS,
+			ATRPOS.GPREISNETTO,
+			ATRPOS.EKPREIS,
+			ATRPOS.LAGERLFDNR,
+			ATRPOS.ARTGEBUCHT,
+			ATRPOS.RABATT,
+			LAGER.LFDNR AS LAGERID,
+			LAGER.LAGER
+		FROM
+			ATRPOS
+		JOIN
+			AUFTRAG
+		ON
+			AUFTRAG.LFDNR = ATRPOS.AUFTRAGLFDNR
+		JOIN
+			LAGER
+		ON
+			ATRPOS.LAGERLFDNR = LAGER.LFDNR
+		WHERE
+			AUFTRAG.DATUM BETWEEN '{$startdate}' AND '{$enddate}'
+		AND
+			AUFTRAG.STORNIERTAM IS NULL
+		AND
+			ATRPOS.ARTGEBUCHT = 'J'
+		AND
+			(
+				AUFTRAG.AUFTRAGART = 4
+			OR
+				AUFTRAG.AUFTRAGART = 5
+			OR
+				AUFTRAG.AUFTRAGART = 6
+			)
+		ORDER BY
+			AUFTRAG.AUFTRAGNR DESC		
+	");
+
+	if($stmt->execute()) {
+		$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+		
+		//echo '<pre>';
+		//print_r($result);
+		//echo '</pre>';
+		
+		$art = array(
+			4 => 'Rechnung',
+			5 => 'Barrechnung',
+			6 => 'Gutschrift'
+		);
+		$steuer = array(
+			'J' => 'inkl',
+			'N' => 'exkl',
+			'0' => 'ohne'
+		);
+		
+		
+				
+		for($i = 0; $i < count($result); $i++) {
+			
+			if ($result[$i]['LAND'] == '') {
+				$result[$i]['LAND'] = 'AT';
+			}
+			if(number_format($result[$i]['RABATT'], 0) == 0) {
+				$rabatt = '';
+			} else {
+				$rabatt = number_format($result[$i]['RABATT'], 0);
+			}
+			
+			$sales[$i] = array(
+				'artikelnr' => $result[$i]['ARTIKELNR'],
+				'bezeichnung' => $result[$i]['BEZEICHNUNG'],
+				'epreis' => number_format($result[$i]['EPREIS'], 2),
+				'gpreis' => number_format($result[$i]['GPREIS'], 2),
+				'ekpreis' => number_format($result[$i]['EKPREIS'], 2),
+				'menge' => number_format($result[$i]['MENGE'], 0),
+				'gekpreis' => number_format($result[$i]['MENGE']*$result[$i]['EKPREIS'], 2),
+				'auftragnr' => $result[$i]['AUFTRAGNR'],
+				'datum' => explode(' ', $result[$i]['DATUM'])[0],
+				'land' => $result[$i]['LAND'],
+				'steuer' => $steuer[$result[$i]['STEUERINKL']],
+				'steuersatz' => $result[$i]['STEUERSATZ'],
+				'rabatt' => $rabatt,
+				'art' => $art[$result[$i]['AUFTRAGART']],
+				'lager' => $result[$i]['LAGER'],
+				'lagerid' => $result[$i]['LAGERID']
+			);
+		}
+		
+		$resultArray['status'] = 'success';
+		$resultArray['message'] = 'All sales were loaded successfully';
+		$resultArray['data'] = $sales;
+	}
+
+	echo json_encode($resultArray);	
 }
 
 
