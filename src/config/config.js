@@ -5,8 +5,8 @@ let configDevelopment = {
 }
 
 let configProduction = {
-  serviceUrl: "http://abcdash.dev:8888/services/services.php",
-  authUrl: "http://abcdash.dev:8888/services/auth.php",
+  serviceUrl: "http://abcserver/abc/services/services.php",
+  authUrl: "http://abcserver/abc/services/auth.php",
   tokenPrefix: "abc"
 }
 

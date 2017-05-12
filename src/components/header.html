@@ -33,17 +33,17 @@
 					<icon style="padding: 0 1.5rem"></icon>
 				</li>
 				
-				<!-- EXPORT -->
-				<li if.bind="auth.isAuthenticated">
-					<a href="#" click.delegate="functions.toggleToolbar('export', '')" class="${functions.toolbar.export ? 'active' : ''}">
-						<icon icon="share-boxed"></icon>Export
-					</a>
-				</li>
-
 				<!-- FILTER -->
 				<li if.bind="auth.isAuthenticated">
 					<a href="#" click.delegate="functions.toggleToolbar('filter', '#series')" class="${functions.toolbar.filter ? 'active' : ''} ${functions.filterApplied ? 'highlight' : ''}">
 						<icon icon="funnel"></icon>Filter
+					</a>
+				</li>
+
+				<!-- EXPORT -->
+				<li if.bind="auth.isAuthenticated">
+					<a href="#" click.delegate="functions.toggleToolbar('export', '')" class="${functions.toolbar.export ? 'active' : ''}">
+						<icon icon="share-boxed"></icon>Export
 					</a>
 				</li>
 				

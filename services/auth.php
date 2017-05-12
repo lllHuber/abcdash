@@ -55,10 +55,10 @@ if(isset($_POST)) {
 		}
 		
 	} else {
-		echo json_encode(array('status' => 'error', 'message' => 'Invalid request'));
+		echo json_encode(array('status' => 'error', 'message' => 'Invalid request 01'));
 	}
 } else {
-	echo json_encode(array('status' => 'error', 'message' => 'Invalid request'));
+	echo json_encode(array('status' => 'error', 'message' => 'Invalid request 02'));
 }
 
 

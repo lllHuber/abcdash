@@ -353,7 +353,10 @@ function get_all_sales($startdate = false, $enddate = false) {
 	}
 
 	$stmt = $PDOF->query("
-		SELECT FIRST 1000
+		SELECT
+			ARTIKEL.LFDNR,
+			ARTIKEL.BEZEICHNUNG,
+			ARTIKEL.LIEFERANTLFDNR,
 			AUFTRAG.LFDNR,
 			AUFTRAG.AUFTRAGNR,
 			AUFTRAG.DATUM,
@@ -362,15 +365,18 @@ function get_all_sales($startdate = false, $enddate = false) {
 			AUFTRAG.ANGELEGTAM,
 			AUFTRAG.STEUERINKL,
 			AUFTRAG.LAND,
+			AUFTRAG.FREIFELD3,
+			ADRESSEN.LFDNR AS ADRESSENLFDNR,
+			ADRESSEN.SUCHBEGRIFF AS LIEFERANT,
 			ATRPOS.AUFTRAGLFDNR,
 			ATRPOS.ARTIKELNR,
-			ATRPOS.BEZEICHNUNG,
 			ATRPOS.STEUERSATZ,
 			ATRPOS.MENGE,
 			ATRPOS.EPREIS,
 			ATRPOS.GPREIS,
 			ATRPOS.GPREISNETTO,
 			ATRPOS.EKPREIS,
+			ATRPOS.ARTIKELLFDNR,
 			ATRPOS.LAGERLFDNR,
 			ATRPOS.ARTGEBUCHT,
 			ATRPOS.RABATT,
@@ -386,6 +392,14 @@ function get_all_sales($startdate = false, $enddate = false) {
 			LAGER
 		ON
 			ATRPOS.LAGERLFDNR = LAGER.LFDNR
+		JOIN
+			ARTIKEL
+		ON
+			ARTIKEL.LFDNR = ATRPOS.ARTIKELLFDNR
+		JOIN
+			ADRESSEN
+		ON
+			ADRESSEN.LFDNR = ARTIKEL.LIEFERANTLFDNR
 		WHERE
 			AUFTRAG.DATUM BETWEEN '{$startdate}' AND '{$enddate}'
 		AND
@@ -412,9 +426,9 @@ function get_all_sales($startdate = false, $enddate = false) {
 		//echo '</pre>';
 		
 		$art = array(
-			4 => 'Rechnung',
-			5 => 'Barrechnung',
-			6 => 'Gutschrift'
+			4 => 'RG',
+			5 => 'BR',
+			6 => 'GS'
 		);
 		$steuer = array(
 			'J' => 'inkl',
@@ -451,7 +465,10 @@ function get_all_sales($startdate = false, $enddate = false) {
 				'rabatt' => $rabatt,
 				'art' => $art[$result[$i]['AUFTRAGART']],
 				'lager' => $result[$i]['LAGER'],
-				'lagerid' => $result[$i]['LAGERID']
+				'lagerid' => $result[$i]['LAGERID'],
+				'shop' => $result[$i]['FREIFELD3'],
+				'lieferantid' => $result[$i]['LIEFERANTLFDNR'],
+				'lieferant' => $result[$i]['LIEFERANT']
 			);
 		}
 		
