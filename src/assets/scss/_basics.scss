@@ -446,11 +446,29 @@ nav icon {
 	}
 }
 
+.loginscreen {
+	background-image: url('../images/abc-loginscreen.jpg');
+	background-size: cover;
+	background-position: center;
+}
 
 .login {
+	top: 15rem;
 	width: 25rem;
 	input {
 		padding: .5rem;
+	}
+	&:after {
+		content: "";
+		position: absolute;
+		display: block;
+		width: 25rem;
+		height: 10rem;
+		top: -11.5rem;
+		background-image: url('../images/logo.png');
+		background-position: center;
+		background-size: 50%;
+		background-repeat: no-repeat;
 	}
 }
 
