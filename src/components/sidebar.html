@@ -1,5 +1,6 @@
 <template bindable="router, functions">
 	
+	<!-- LAGERBEWERTUNG -->
 	<div class="grid-content vertical" id="lagerbewertung" if.bind="router.history.fragment == '/lagerbewertung'">
 		<h1>Lagerbewertung</h1>
 		<ul>
@@ -8,7 +9,22 @@
 			<li>Lager:  <span class="value warehouse">Alle Lager</span></li>
 			<li>Artikel im Lager: <span class="value amount"></span></li>
 			<li>Exemplare: <span class="value exemplare"></span></li>
-			<li>Gesamtwert €: <span class="value totalValue"></span></li>
+			<li class="lineAbove">Gesamtwert €: <span class="value totalValue"></span></li>
+		</ul>
+	</div>
+	
+	<!-- ARTIKELVERKÄUFE -->
+	<div class="grid-content vertical" id="verkauf" if.bind="router.history.fragment == '/verkauf'">
+		<h1>Artikelverkäufe</h1>
+		<ul>
+			<li>Zeitraum: <span class="value">${functions.dates.startdate} - ${functions.dates.enddate} </span></li>
+			<li>Lieferant:  <span class="value vendor">Alle Lieferanten</span></li>
+			<li>Lager:  <span class="value warehouse">Alle Lager</span></li>
+			<li>Aufträge:  <span class="value rechnungen"></span></li>
+			<li>Positionen:  <span class="value verkauf"></span></li>
+			<li>Exemplare: <span class="value exemplareverkauft"></span></li>
+			<li class="lineAbove">Umsatz € (brutto): <span class="value umsatz"></span></li>
+			<li>Umsatz € (netto): <span class="value umsatzNetto"></span></li>
 		</ul>
 	</div>
 	

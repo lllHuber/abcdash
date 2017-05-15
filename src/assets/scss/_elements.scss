@@ -295,7 +295,7 @@
 .hbrSidebar {
 	background: $gray;
 	border-right: 1px solid $charcoal;
-	width: 20rem;
+	width: 22.5rem;
 	h1 {
 		color: $lightgray;
 		font-weight: 300;
@@ -309,11 +309,19 @@
 			&:first-child {
 				margin-top: 0;
 			}
-			&:last-child {
+			&.lineAbove {
 				border-top: 1px solid darken($lightgray, 20%);
 				padding-top: 1rem;
 				margin-top: 2rem;
 			}
 		}
+	}
+	.value {
+		float: right;
+		max-width: 11rem;
+		text-align: right;
+		overflow: hidden;
+		white-space: nowrap;
+		text-overflow: ellipsis;
 	}
 }

@@ -1,10 +1,10 @@
-<template bindable="functions">
+<template bindable="functions, router">
 		
 	<!-- FILTER -->	
 	<div class="grid-content content hide" id="filter">
 	
-		<!-- FILTER ITEMS -->
-		<form class="grid-block vertical ${functions.toolbar.content.filterArticles ? '' : ''}">
+		<!-- FILTER LAGERBEWERTUNG -->
+		<form class="grid-block vertical ${router.history.fragment == '/lagerbewertung' ? '' : 'hide'}">
 			<div class="grid-block horizontal">
 				
 				<div class="grid-block vertical third">
@@ -66,9 +66,74 @@
 				</div>
 			</div>
 		</form>
+		
+		
+		<!-- FILTER VERKAUF -->
+		<form class="grid-block vertical ${router.history.fragment == '/verkauf' ? '' : 'hide'}">
+			<div class="grid-block horizontal">
+				
+				<div class="grid-block vertical third">
+					<!-- ARTIKELNUMMER -->
+					<div class="row">
+						<label class="three columns" for="sale.artikelnr">Artikelnummer:</label>
+						<div class="nine columns">
+							<input type="text" name="sale.artikelnr" id="sale.artikelnr" placeholder="Artikelnummer ..." value.bind="sale.artikelnr.value" keyup.delegate="functions.updateFilter('sale.artikelnr', sale.artikelnr.value)">
+						</div>
+					</div>
+					<!-- BEZEICHNUNG -->
+					<div class="row">
+						<label class="three columns" for="sale.bezeichnung">Bezeichnung:</label>
+						<div class="nine columns">
+							<input type="text" name="sale.bezeichnung" id="sale.bezeichnung" placeholder="Bezeichnung ..." value.bind="sale.bezeichnung.value" keyup.delegate="functions.updateFilter('sale.bezeichnung', sale.bezeichnung.value)">
+						</div>
+					</div>
+				</div>
+				
+				<div class="grid-block vertical third">
+					<!-- LAGER -->
+					<div class="row">
+						<label class="three columns" for="sale.lagerID">Lager:</label>
+						<div class="nine columns">
+							<select name="sale.lager" id="sale.lager" ref="sale.lager" change.delegate="functions.updateFilter('sale.lager', sale.lager.value)">
+								<option value="">Alle Lager</option>
+								<option repeat.for="warehouse of functions.$D.allWarehouses" value.bind="warehouse.LAGER">${warehouse.LAGER}</option>
+							</select>
+						</div>
+					</div>
+					<!-- LIEFERANT -->
+					<div class="row">
+						<label class="three columns" for="sale.lieferant">Lieferant:</label>
+						<div class="nine columns">
+							<select name="sale.lieferant" id="sale.lieferant" ref="sale.lieferant" change.delegate="functions.updateFilter('sale.lieferant', sale.lieferant.value)">
+								<option value="">Alle Lieferanten</option>
+								<option repeat.for="vendor of functions.$D.allVendors" value.bind="vendor.lieferant">${vendor.lieferant}</option>	
+							</select>
+						</div>
+					</div>
+				</div>
+				
+				<div class="grid-block vertical third">
+					<!-- SHOP -->
+					<div class="row">
+						<label class="three columns" for="sale.letzterverkauf">Shop:</label>
+						<div class="nine columns">
+							<input type="text" name="sale.shop" id="sale.shop" placeholder="Shop ..." value.bind="sale.shop.value" keyup.delegate="functions.updateFilter('sale.shop', sale.shop.value)">
+						</div>
+					</div>
+				</div>
+			</div>
+			
+			<div class="grid-block horizontal shrink">
+				<div class="row">
+					<button class="button shrink small right" type="reset" mousedown.trigger="functions.resetFilter('#programs')"><icon icon="reload"></icon>Filter zurücksetzen</button>
+					<div class="button shrink small right disabled itemCount">0 Artikelverkäufe gefunden</div>
+				</div>
+			</div>
+		</form>
+	
 	</div>
 	
-	
+		
 	<!-- EXPORT -->	
 	<div class="grid-content content horizontal hide" id="export">
 		<button class="hollow shrink" click.delegate="functions.exportPDF()">

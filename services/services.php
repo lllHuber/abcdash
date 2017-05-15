@@ -16,6 +16,9 @@ if (isset($_GET['ws']) && $_GET['ws'] != ""  ) {
 		case 'get_all_warehouses':
 			echo get_all_warehouses();
 			break;
+		case 'get_all_vendors':
+			echo get_all_vendors();
+			break;
 		case 'get_all_customers':
 			echo get_all_customers();
 			break;
@@ -316,6 +319,47 @@ function get_all_warehouses() {
 		$resultArray['data'] = $lager;
 	}
 	
+	echo json_encode($resultArray);
+}
+
+function get_all_vendors() {
+	global $PDOF;
+	$resultArray = array('status' => 'error');
+	
+	$stmt = $PDOF->query("
+		SELECT
+			ADRESSEN.LFDNR,
+			ARTIKEL.LIEFERANTLFDNR AS LIEFERANTID,
+			ADRESSEN.SUCHBEGRIFF AS LIEFERANT
+		FROM
+			ARTIKEL
+		JOIN
+			ADRESSEN
+		ON
+			ADRESSEN.LFDNR = ARTIKEL.LIEFERANTLFDNR	
+	");
+
+	if($stmt->execute()) {
+		$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+		$vendors = array();
+		// Identify unique vendors
+		for($i = 0; $i < count($result); $i++) {
+			$vendor = array(
+				'lieferantid' => $result[$i]['LIEFERANTID'],
+				'lieferant' => $result[$i]['LIEFERANT']
+			);
+			
+			if($vendor['lieferant'] && !in_array($vendor, $vendors)) {
+				array_push($vendors, $vendor);
+			}
+			
+			usort($vendors, 'sortByName');
+		}
+				
+		$resultArray['status'] = 'success';
+		$resultArray['message'] = 'All vendors were loaded successfully.';
+		$resultArray['data'] = $vendors;
+	}
 	
 	echo json_encode($resultArray);
 }
@@ -369,6 +413,7 @@ function get_all_sales($startdate = false, $enddate = false) {
 			ADRESSEN.LFDNR AS ADRESSENLFDNR,
 			ADRESSEN.SUCHBEGRIFF AS LIEFERANT,
 			ATRPOS.AUFTRAGLFDNR,
+			ATRPOS.BEZEICHNUNG AS TITEL,
 			ATRPOS.ARTIKELNR,
 			ATRPOS.STEUERSATZ,
 			ATRPOS.MENGE,
@@ -388,15 +433,15 @@ function get_all_sales($startdate = false, $enddate = false) {
 			AUFTRAG
 		ON
 			AUFTRAG.LFDNR = ATRPOS.AUFTRAGLFDNR
-		JOIN
+		LEFT JOIN
 			LAGER
 		ON
 			ATRPOS.LAGERLFDNR = LAGER.LFDNR
-		JOIN
+		LEFT JOIN
 			ARTIKEL
 		ON
 			ARTIKEL.LFDNR = ATRPOS.ARTIKELLFDNR
-		JOIN
+		LEFT JOIN
 			ADRESSEN
 		ON
 			ADRESSEN.LFDNR = ARTIKEL.LIEFERANTLFDNR
@@ -405,7 +450,7 @@ function get_all_sales($startdate = false, $enddate = false) {
 		AND
 			AUFTRAG.STORNIERTAM IS NULL
 		AND
-			ATRPOS.ARTGEBUCHT = 'J'
+			AUFTRAG.GEBUCHT = 'J'
 		AND
 			(
 				AUFTRAG.AUFTRAGART = 4
@@ -421,13 +466,9 @@ function get_all_sales($startdate = false, $enddate = false) {
 	if($stmt->execute()) {
 		$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 		
-		//echo '<pre>';
-		//print_r($result);
-		//echo '</pre>';
-		
 		$art = array(
 			4 => 'RG',
-			5 => 'BR',
+			5 => 'RB',
 			6 => 'GS'
 		);
 		$steuer = array(
@@ -440,23 +481,34 @@ function get_all_sales($startdate = false, $enddate = false) {
 				
 		for($i = 0; $i < count($result); $i++) {
 			
+			// SET COUNTRY
 			if ($result[$i]['LAND'] == '') {
 				$result[$i]['LAND'] = 'AT';
 			}
+			
+			// SET DISCOUNT
 			if(number_format($result[$i]['RABATT'], 0) == 0) {
 				$rabatt = '';
 			} else {
 				$rabatt = number_format($result[$i]['RABATT'], 0);
 			}
 			
+			// SET CORRECT TITLE
+			if ($result[$i]['BEZEICHNUNG'] == '') {
+				$bezeichnung = $result[$i]['TITEL'];
+			} else {
+				$bezeichnung = $result[$i]['BEZEICHNUNG'];
+			}
+			
 			$sales[$i] = array(
 				'artikelnr' => $result[$i]['ARTIKELNR'],
-				'bezeichnung' => $result[$i]['BEZEICHNUNG'],
-				'epreis' => number_format($result[$i]['EPREIS'], 2),
-				'gpreis' => number_format($result[$i]['GPREIS'], 2),
-				'ekpreis' => number_format($result[$i]['EKPREIS'], 2),
-				'menge' => number_format($result[$i]['MENGE'], 0),
-				'gekpreis' => number_format($result[$i]['MENGE']*$result[$i]['EKPREIS'], 2),
+				'bezeichnung' => $bezeichnung,
+				'epreis' => $result[$i]['EPREIS'],
+				'gpreis' => $result[$i]['GPREIS'],
+				'gpreisnetto' => $result[$i]['GPREISNETTO'],
+				'ekpreis' => $result[$i]['EKPREIS'],
+				'menge' => (float)$result[$i]['MENGE'],
+				'gekpreis' => $result[$i]['MENGE']*$result[$i]['EKPREIS'],
 				'auftragnr' => $result[$i]['AUFTRAGNR'],
 				'datum' => explode(' ', $result[$i]['DATUM'])[0],
 				'land' => $result[$i]['LAND'],
@@ -475,6 +527,14 @@ function get_all_sales($startdate = false, $enddate = false) {
 		$resultArray['status'] = 'success';
 		$resultArray['message'] = 'All sales were loaded successfully';
 		$resultArray['data'] = $sales;
+		
+		/*
+		echo count($sales);
+		echo '<pre>';
+		print_r($sales);
+		echo '</pre>';
+		*/
+		
 	}
 
 	echo json_encode($resultArray);	
@@ -490,6 +550,10 @@ function get_all_sales($startdate = false, $enddate = false) {
 
 function sortByDate($a, $b) {
 	return strnatcmp($b['BUCHUNGSTAG'], $a['BUCHUNGSTAG']);
+}
+
+function sortByName($a, $b) {
+	return strnatcasecmp ($a['lieferant'], $b['lieferant']);
 }
 
 

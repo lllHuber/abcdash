@@ -21,8 +21,12 @@ export class FilterValueConverter {
 
 		let tempArray = [];
 		let filteredArray = [];
+		let rechnungen = [];
 		let exemplare = 0;
+		let exemplareverkauft = 0;
 		let gesamtwert = 0;
+		let umsatz = 0;
+		let umsatzNetto = 0;
 		let matchedFilters = 0;
 		let matchedSubFilters = 0;
 		
@@ -47,20 +51,35 @@ export class FilterValueConverter {
 			// gesamtwert, exemplare
 			$.each(tempArray, (index, item) => {
 				exemplare = exemplare + item.lagerbestand;
+				exemplareverkauft = exemplareverkauft + item.menge;
 				gesamtwert = gesamtwert + parseFloat(item.gesamtwert);
+				umsatz = umsatz + parseFloat(item.gpreis);
+				umsatzNetto = umsatzNetto + parseFloat(item.gpreisnetto);
+				// zähle rechnungen
+				if (rechnungen.includes(item.auftragnr) === false) {
+					rechnungen.push(item.auftragnr);
+				}
 			});
 			
 			let amount = tempArray.length;
 			if(filter.updateAmount) {
-				$(".itemCount").text(`${amount} Artikel gefunden`);
+				$(".itemCount").text(`${amount} Ergebnisse gefunden`);
 				$(".amount").text(`${amount}`);
+				$(".verkauf").text(`${amount}`);
+				$(".rechnungen").text(rechnungen.length);
 			}
 			
 			gesamtwert = gesamtwert.toFixed(2);
+			umsatz = umsatz.toFixed(2);
+			umsatzNetto = umsatzNetto.toFixed(2);
 			$(".exemplare").text(exemplare);
+			$(".exemplareverkauft").text(exemplareverkauft);
 			$(".totalValue").text(gesamtwert);
+			$(".umsatz").text(umsatz);
+			$(".umsatzNetto").text(umsatzNetto);	
 			$(".format").text('Alle Formate');	
 			$(".warehouse").text('Alle Lager');	
+			$(".vendor").text('Alle Lieferanten');
 			
 			return tempArray;		
 		}
@@ -161,25 +180,44 @@ export class FilterValueConverter {
 			}
 			
 		});
+		
 		if(filter.updateAmount) {
 			
 			// gesamtwert, exemplare
 			$.each(filteredArray, (index, item) => {
 				exemplare = exemplare + item.lagerbestand;
+				exemplareverkauft = exemplareverkauft + item.menge;
 				gesamtwert = gesamtwert + parseFloat(item.gesamtwert);
+				umsatz = umsatz + parseFloat(item.gpreis);
+				umsatzNetto = umsatzNetto + parseFloat(item.gpreisnetto);
+				console.log(item.gpreisnetto);
+				// zähle rechnungen
+				if (rechnungen.includes(item.auftragnr) === false) {
+					rechnungen.push(item.auftragnr);
+				}
 			});
 			gesamtwert = gesamtwert.toFixed(2);
+			umsatz = umsatz.toFixed(2);
+			umsatzNetto = umsatzNetto.toFixed(2);
 			if(filter.filter.gruppe) {
 				$(".format").text(filter.filter.gruppe);	
 			}
 			if(filter.filter.lager) {
 				$(".warehouse").text(filter.filter.lager);	
 			}
+			if(filter.filter.lieferant) {
+				$(".vendor").text(filter.filter.lieferant);	
+			}
 			let amount = filteredArray.length;
-			$(".itemCount").text(`${amount} Artikel gefunden`);
+			$(".itemCount").text(`${amount} Ergebnisse gefunden`);
+			$(".verkauf").text(amount);
 			$(".amount").text(amount);
 			$(".exemplare").text(exemplare);
+			$(".exemplareverkauft").text(exemplareverkauft);
 			$(".totalValue").text(gesamtwert);
+			$(".umsatz").text(umsatz);
+			$(".umsatzNetto").text(umsatzNetto);
+			$(".rechnungen").text(rechnungen.length);
 		}
 		
 		return filteredArray;

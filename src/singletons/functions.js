@@ -53,7 +53,8 @@ export default class Functions {
 			"export"			: false,
 			
 			content				: {
-				"filterArticles": true
+				"filterArticles": true,
+				"filterSales": false
 			}
 		};
 
@@ -68,6 +69,7 @@ export default class Functions {
 		this.$D = {
 			"allItems"			: this.allItems,
 			"allWarehouses"		: this.allWarehouses,
+			"allVendors"		: this.allVendors,
 			"allCustomers"		: this.allCustomers,
 			"allSales"			: this.allSales
 		};
@@ -98,6 +100,17 @@ export default class Functions {
 			$("#hbrLoader").hide();
 			if(response.status === 'success') {
 				this.$D.allWarehouses = response.data;
+			}
+		}, "json");
+	}
+	
+	get allVendors() {
+		this.url = this.config.serviceUrl + "?ws=get_all_vendors";
+		$("#hbrLoader").show();
+		$.get(this.url, response => {
+			$("#hbrLoader").hide();
+			if(response.status === 'success') {
+				this.$D.allVendors = response.data;
 			}
 		}, "json");
 	}
@@ -516,6 +529,27 @@ export default class Functions {
 		});
 		doc.save('table.pdf');
 				
+	}
+	
+	round(value, decimals) {
+		var number = Number(Math.round(value+'e'+decimals)+'e-'+decimals);
+		
+		if(number.toString().indexOf(".") !== -1) {
+			var dd = number.toString().split(".")[1].length;
+			var diff = decimals - Number(dd);
+			
+			if(diff > 0) {
+				for (var i = 1; i <= diff; i++) {
+					number = number + "0";
+				}
+			}
+		} else {
+			number = number + ".";
+			for (var j = 1; j <= decimals; j++) {
+				number = number + "0";
+			}
+		}
+		return number;
 	}
 
 }
