@@ -124,7 +124,15 @@
 					<div class="row">
 						<label class="three columns" for="sale.steuersatz">Steuersatz:</label>
 						<div class="nine columns">
-							<input type="text" name="sale.steuersatz" id="sale.steuersatz" placeholder="Steuersatz ..." value.bind="sale.steuersatz.value" keyup.delegate="functions.updateFilter('sale.steuersatz', sale.steuersatz.value)">
+							<select name="sale.steuersatz" id="sale.steuersatz" ref="sale.steuersatz" change.delegate="functions.updateFilter('sale.steuersatz', sale.steuersatz.value)">
+								<option value="">Alle Steuersätze</option>
+								<option value=" 1">1 - Österreich regulär (20%)</option>
+								<option value=" 2">2 - Österreich ermäßigt (10%)</option>
+								<option value=" 3">3 - Deutschland regulär (19%)</option>
+								<option value=" 4">4 - Deutschland ermäßigt (7%)</option>
+								<option value="10">10 - Innergemeintschaftlich (0%)</option>
+								<option value="20">20 - Export (0%)</option>	
+							</select>
 						</div>
 					</div>
 				</div>
