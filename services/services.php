@@ -499,9 +499,9 @@ function get_all_sales($startdate = false, $enddate = false) {
 			} else {
 				$bezeichnung = $result[$i]['BEZEICHNUNG'];
 			}
-			
+			//$string = preg_replace('/\s+/', '', $string);
 			$sales[$i] = array(
-				'artikelnr' => $result[$i]['ARTIKELNR'],
+				'artikelnr' => preg_replace('/\s+/', '', $result[$i]['ARTIKELNR']),
 				'bezeichnung' => $bezeichnung,
 				'epreis' => $result[$i]['EPREIS'],
 				'gpreis' => $result[$i]['GPREIS'],
@@ -509,11 +509,11 @@ function get_all_sales($startdate = false, $enddate = false) {
 				'ekpreis' => $result[$i]['EKPREIS'],
 				'menge' => (float)$result[$i]['MENGE'],
 				'gekpreis' => $result[$i]['MENGE']*$result[$i]['EKPREIS'],
-				'auftragnr' => $result[$i]['AUFTRAGNR'],
+				'auftragnr' => preg_replace('/\s+/', '', $result[$i]['AUFTRAGNR']),
 				'datum' => explode(' ', $result[$i]['DATUM'])[0],
 				'land' => $result[$i]['LAND'],
 				'steuer' => $steuer[$result[$i]['STEUERINKL']],
-				'steuersatz' => $result[$i]['STEUERSATZ'],
+				'steuersatz' => preg_replace('/\s+/', '', $result[$i]['STEUERSATZ']),
 				'rabatt' => $rabatt,
 				'art' => $art[$result[$i]['AUFTRAGART']],
 				'lager' => $result[$i]['LAGER'],
