@@ -190,7 +190,6 @@ export class FilterValueConverter {
 				gesamtwert = gesamtwert + parseFloat(item.gesamtwert);
 				umsatz = umsatz + parseFloat(item.gpreis);
 				umsatzNetto = umsatzNetto + parseFloat(item.gpreisnetto);
-				console.log(item.gpreisnetto);
 				// zähle rechnungen
 				if (rechnungen.includes(item.auftragnr) === false) {
 					rechnungen.push(item.auftragnr);
