@@ -473,7 +473,7 @@ function get_all_sales($startdate = false, $enddate = false) {
 		);
 		$steuer = array(
 			'J' => 'inkl',
-			'N' => 'exkl',
+			'N' => 'zzgl',
 			'0' => 'ohne'
 		);
 		

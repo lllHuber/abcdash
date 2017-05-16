@@ -87,9 +87,61 @@
 							<input type="text" name="sale.bezeichnung" id="sale.bezeichnung" placeholder="Bezeichnung ..." value.bind="sale.bezeichnung.value" keyup.delegate="functions.updateFilter('sale.bezeichnung', sale.bezeichnung.value)">
 						</div>
 					</div>
+					<!-- MENGE -->
+					<div class="row">
+						<label class="three columns" for="sale.menge">Menge:</label>
+						<div class="nine columns">
+							<input type="text" name="sale.menge" id="sale.menge" placeholder="Menge ..." value.bind="sale.menge.value" keyup.delegate="functions.updateFilter('sale.menge', sale.menge.value)">
+						</div>
+					</div>
 				</div>
 				
 				<div class="grid-block vertical third">
+					<!-- AUFTRAGNUMMER -->
+					<div class="row">
+						<label class="three columns" for="sale.auftragnr">Auftragsnummer:</label>
+						<div class="nine columns">
+							<input type="text" name="sale.auftragnr" id="sale.auftragnr" placeholder="Auftragsnummer ..." value.bind="sale.auftragnr.value" keyup.delegate="functions.updateFilter('sale.auftragnr', sale.auftragnr.value)">
+						</div>
+					</div>
+					<!-- STEUER -->
+					<div class="row">
+						<label class="three columns" for="sale.steuer">Steuer:</label>
+						<div class="nine columns">
+							<select name="sale.steuer" id="sale.steuer" ref="sale.steuer" change.delegate="functions.updateFilter('sale.steuer', sale.steuer.value)">
+								<option value="">Alle Steuerarten</option>
+								<option value="inkl">inkl</option>
+								<option value="zzgl">zzgl</option>
+								<option value="ohne">ohne</option>								
+							</select>
+						</div>
+					</div>
+					<!-- STEUERSATZ -->
+					<div class="row">
+						<label class="three columns" for="sale.steuersatz">Steuersatz:</label>
+						<div class="nine columns">
+							<select name="sale.steuersatz" id="sale.steuersatz" ref="sale.steuersatz" change.delegate="functions.updateFilter('sale.steuersatz', sale.steuersatz.value)">
+								<option value="">Alle Steuersätze</option>
+								<option value=" 0">0 - Gutscheine (0%)</option>
+								<option value=" 1">1 - Österreich regulär (20%)</option>
+								<option value=" 2">2 - Österreich ermäßigt (10%)</option>
+								<option value=" 3">3 - Deutschland ermäßigt (7%)</option>
+								<option value=" 4">4 - Deutschland regulär (19%)</option>
+								<option value="10">10 - Innergemeintschaftlich (0%)</option>
+								<option value="20">20 - Export (0%)</option>
+							</select>
+						</div>
+					</div>
+				</div>
+				
+				<div class="grid-block vertical third">
+					<!-- SHOP -->
+					<div class="row">
+						<label class="three columns" for="sale.letzterverkauf">Shop:</label>
+						<div class="nine columns">
+							<input type="text" name="sale.shop" id="sale.shop" placeholder="Shop ..." value.bind="sale.shop.value" keyup.delegate="functions.updateFilter('sale.shop', sale.shop.value)">
+						</div>
+					</div>
 					<!-- LAGER -->
 					<div class="row">
 						<label class="three columns" for="sale.lagerID">Lager:</label>
@@ -112,30 +164,6 @@
 					</div>
 				</div>
 				
-				<div class="grid-block vertical third">
-					<!-- SHOP -->
-					<div class="row">
-						<label class="three columns" for="sale.letzterverkauf">Shop:</label>
-						<div class="nine columns">
-							<input type="text" name="sale.shop" id="sale.shop" placeholder="Shop ..." value.bind="sale.shop.value" keyup.delegate="functions.updateFilter('sale.shop', sale.shop.value)">
-						</div>
-					</div>
-					<!-- STEUER -->
-					<div class="row">
-						<label class="three columns" for="sale.steuersatz">Steuersatz:</label>
-						<div class="nine columns">
-							<select name="sale.steuersatz" id="sale.steuersatz" ref="sale.steuersatz" change.delegate="functions.updateFilter('sale.steuersatz', sale.steuersatz.value)">
-								<option value="">Alle Steuersätze</option>
-								<option value=" 1">1 - Österreich regulär (20%)</option>
-								<option value=" 2">2 - Österreich ermäßigt (10%)</option>
-								<option value=" 3">3 - Deutschland regulär (19%)</option>
-								<option value=" 4">4 - Deutschland ermäßigt (7%)</option>
-								<option value="10">10 - Innergemeintschaftlich (0%)</option>
-								<option value="20">20 - Export (0%)</option>	
-							</select>
-						</div>
-					</div>
-				</div>
 			</div>
 			
 			<div class="grid-block horizontal shrink">
