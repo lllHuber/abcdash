@@ -605,8 +605,8 @@ export default class Functions {
 				fontSize: 9
 			},
 			columnStyles: {
-				artikelnr:		{ columnWidth: 101 },
-				bezeichnung:	{ columnWidth: 250 },
+				artikelnr:		{ columnWidth: 105 },
+				bezeichnung:	{ columnWidth: 245 },
 				menge:			{ columnWidth: 41 },
 				auftragnr:		{ columnWidth: 36 },
 				epreis:			{ halign: 'right' },
