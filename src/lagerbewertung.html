@@ -29,7 +29,7 @@
 					<div class="tbody">
 						<div class="tr"
 							 virtual-repeat.for="item of functions.$D.allItems
-								| filter: { 'filter': functions.filter, 'trigger': functions.filterChange }
+								| filter: { 'filter': functions.filter, 'getFilteredArray': functions.getFilteredArray, 'context': functions.context, 'trigger': functions.filterChange }
 								| orderBy: { 'property': functions.order, 'direction': functions.direction}">
 							<div class="td spacer"></div>
 							<div class="td checkbox"><input type="checkbox" if.bind="functions.toolbar.edit"></div>

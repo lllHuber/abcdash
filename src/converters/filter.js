@@ -78,9 +78,10 @@ export class FilterValueConverter {
 			$(".umsatz").text(umsatz);
 			$(".umsatzNetto").text(umsatzNetto);	
 			$(".format").text('Alle Formate');	
-			$(".warehouse").text('Alle Lager');	
+			$(".shop").text('Alle Shops');	
 			$(".vendor").text('Alle Lieferanten');
 			
+			filter.getFilteredArray(tempArray, filter.context);
 			return tempArray;		
 		}
 		
@@ -201,8 +202,8 @@ export class FilterValueConverter {
 			if(filter.filter.gruppe) {
 				$(".format").text(filter.filter.gruppe);	
 			}
-			if(filter.filter.lager) {
-				$(".warehouse").text(filter.filter.lager);	
+			if(filter.filter.shop) {
+				$(".shop").text(filter.filter.shop);	
 			}
 			if(filter.filter.lieferant) {
 				$(".vendor").text(filter.filter.lieferant);	
@@ -219,8 +220,10 @@ export class FilterValueConverter {
 			$(".rechnungen").text(rechnungen.length);
 		}
 		
+		filter.getFilteredArray(filteredArray, filter.context);
 		return filteredArray;
 	}
+	
 }
 
 /**

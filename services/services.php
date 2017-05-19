@@ -499,17 +499,25 @@ function get_all_sales($startdate = false, $enddate = false) {
 			} else {
 				$bezeichnung = $result[$i]['BEZEICHNUNG'];
 			}
+						
+			// SET SHOP
+			if (!$result[$i]['FREIFELD3']) { $result[$i]['FREIFELD3'] = "Adventist Book Center"; } 
+			
+			// SET EMPTY STRINGS
+			if (!$result[$i]['LIEFERANT']) { $result[$i]['LIEFERANT'] = "";	}
+			
+			
 			//$string = preg_replace('/\s+/', '', $string);
 			$sales[$i] = array(
-				'artikelnr' => preg_replace('/\s+/', '', $result[$i]['ARTIKELNR']),
+				'artikelnr' => (string)preg_replace('/\s+/', '', $result[$i]['ARTIKELNR']),
 				'bezeichnung' => $bezeichnung,
-				'epreis' => $result[$i]['EPREIS'],
-				'gpreis' => $result[$i]['GPREIS'],
-				'gpreisnetto' => $result[$i]['GPREISNETTO'],
-				'ekpreis' => $result[$i]['EKPREIS'],
+				'epreis' => number_format($result[$i]['EPREIS'], 2),
+				'gpreis' => number_format($result[$i]['GPREIS'], 2),
+				'gpreisnetto' => number_format($result[$i]['GPREISNETTO'], 2),
+				'ekpreis' => number_format($result[$i]['EKPREIS'], 2),
 				'menge' => (float)$result[$i]['MENGE'],
-				'gekpreis' => $result[$i]['MENGE']*$result[$i]['EKPREIS'],
-				'auftragnr' => preg_replace('/\s+/', '', $result[$i]['AUFTRAGNR']),
+				'gekpreis' => number_format($result[$i]['MENGE']*$result[$i]['EKPREIS'], 2),
+				'auftragnr' => (string)preg_replace('/\s+/', '', $result[$i]['AUFTRAGNR']),
 				'datum' => explode(' ', $result[$i]['DATUM'])[0],
 				'land' => $result[$i]['LAND'],
 				'steuer' => $steuer[$result[$i]['STEUERINKL']],

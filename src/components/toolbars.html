@@ -4,7 +4,7 @@
 	<div class="grid-content content hide" id="filter">
 	
 		<!-- FILTER LAGERBEWERTUNG -->
-		<form class="grid-block vertical ${router.history.fragment == '/lagerbewertung' ? '' : 'hide'}">
+		<form class="grid-block vertical" if.bind="router.history.fragment == '/lagerbewertung'">
 			<div class="grid-block horizontal">
 				
 				<div class="grid-block vertical third">
@@ -69,7 +69,7 @@
 		
 		
 		<!-- FILTER VERKAUF -->
-		<form class="grid-block vertical ${router.history.fragment == '/verkauf' ? '' : 'hide'}">
+		<form class="grid-block vertical" if.bind="router.history.fragment == '/verkauf'">
 			<div class="grid-block horizontal">
 				
 				<div class="grid-block vertical third">
@@ -177,14 +177,14 @@
 	</div>
 	
 		
-	<!-- EXPORT -->	
+	<!-- EXPORT VERKAUF -->	
 	<div class="grid-content content horizontal hide" id="export">
-		<button class="hollow shrink" click.delegate="functions.exportPDF()">
-			Als PDF exportieren
-		</button>
-		<button class="hollow shrink">
-			Als XLS exportieren
-		</button>
+		
+		<div if.bind="router.history.fragment == '/verkauf'">
+			<button class="hollow shrink" click.delegate="functions.exportSalesPDF()">
+				Als PDF exportieren
+			</button>
+		</div>
 
 	</div>
 
