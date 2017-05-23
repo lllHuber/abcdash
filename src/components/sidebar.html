@@ -13,7 +13,7 @@
 		</ul>
 	</div>
 	
-	<!-- ARTIKELVERKÄUFE -->
+	<!-- VERKAUF -->
 	<div class="grid-content vertical" id="verkauf" if.bind="router.history.fragment == '/verkauf'">
 		<h1>Artikelverkäufe</h1>
 		<ul>
@@ -23,8 +23,23 @@
 			<li>Aufträge:  <span class="value rechnungen"></span></li>
 			<li>Positionen:  <span class="value verkauf"></span></li>
 			<li>Exemplare: <span class="value exemplareverkauft"></span></li>
-			<li class="lineAbove">Umsatz € (brutto): <span class="value umsatz"></span></li>
-			<li>Umsatz € (netto): <span class="value umsatzNetto"></span></li>
+			<li class="lineAbove">Umsatz € (netto): <span class="value umsatzNetto"></span></li>
+		</ul>
+	</div>
+	
+	<!-- KOMMISSION -->
+	<div class="grid-content vertical" id="verkauf" if.bind="router.history.fragment == '/kommission'">
+		<h1>Kommissionseinkauf</h1>
+		<ul>
+			<li>Zeitraum: <span class="value">${functions.dates.startdate} - ${functions.dates.enddate} </span></li>
+			<li>Lieferant:  <span class="value vendor">Alle Lieferanten</span></li>
+			<li>Shop:  <span class="value shops">Alle Shops</span></li>
+			<li>Aufträge:  <span class="value rechnungen"></span></li>
+			<li>Positionen:  <span class="value verkauf"></span></li>
+			<li>Exemplare: <span class="value exemplareverkauft"></span></li>
+			<li class="lineAbove dashed">Umsatz € (netto): <span class="value umsatzNettoKommission"></span></li>
+			<li>Rabatt %: <span class="value"><input type="text" class="align-right ekrabatt" value.bind="functions.ekrabatt"></span></li>
+			<li class="lineAbove">Gesamt-EK €: <span class="value gesamtEK"></span></li>
 		</ul>
 	</div>
 	

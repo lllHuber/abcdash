@@ -48,7 +48,8 @@ export default class Functions {
 			
 			content				: {
 				"filterArticles": true,
-				"filterSales": false
+				"filterSales": false,
+				"filterCommissions": false
 			}
 		};
 
@@ -66,7 +67,16 @@ export default class Functions {
 			"allVendors"		: this.allVendors,
 			"allCustomers"		: this.allCustomers,
 			"allSales"			: this.allSales,
-			"allSalesF"			: [{test: 'entry'}]
+			"allCommissions"	: this.allCommissions,
+			"allTaxes"			: [
+									{ "id" : "0", "label" : "0 - Gutscheine (0%)" },
+									{ "id" : "1", "label" : "1 - Österreich regulär (20%)" },
+									{ "id" : "2", "label"  : "2 - Österreich ermäßigt (10%)" },
+									{ "id" : "3", "label"  : "3 - Deutschland ermäßigt (7%)" },
+									{ "id" : "4", "label"  : "4 - Deutschland regulär (19%)" },
+									{ "id" : "10", "label"  : "10 - Innergemeintschaftlich (0%)" },
+									{ "id" : "20", "label"  : "20 - Export (0%)" }				
+								  ]
 		};
 		
 		// Observe Date Change
@@ -78,9 +88,23 @@ export default class Functions {
 			this.allItems;
 			this.allSales;
 		});
-		this.observe.propertyObserver(this.$D, "allSalesF").subscribe((newValue, oldValue) => {
-			console.log('changed');
+		this.observe.propertyObserver(this, "ekrabatt").subscribe((newValue, oldValue) => {
+			// Update Discount
+			this.modifyArray(this.filteredArray, "ekrabatt", this.ekrabatt);
+			// Update Gesamt-EK
+			this.updateTotalEK(this.filteredArray, this.ekrabatt);
 		});
+		this.observe.propertyObserver(this, "filteredArray").subscribe((newValue, oldValue) => {
+			// Update Discount
+			this.modifyArray(this.filteredArray, "ekrabatt", this.ekrabatt);
+			// Update Gesamt-EK
+			this.updateTotalEK(this.filteredArray, this.ekrabatt);
+		});
+		
+		this.ekrabatt = 0;
+		
+		
+		// Steuersatz
 		
 	}
 	
@@ -142,8 +166,8 @@ export default class Functions {
 		$.get(this.url, response => {
 			$("#hbrLoader").hide();
 			if(response.status === 'success') {
-				this.$D.allSales = response.data;
-				console.log(this.$D.allSales);
+				this.$D.allSales = response.sales;
+				this.$D.allCommissions = response.commissions;
 			}
 		}, "json");
 	}
@@ -527,8 +551,6 @@ export default class Functions {
 	
 	getFilteredArray(array, context) {
 		context.filteredArray = array;
-		
-		console.log(context.filteredArray);
 	}
 	
 	exportSalesPDF() {
@@ -671,6 +693,45 @@ export default class Functions {
 			}
 		}
 		return number;
+	}
+	
+	modifyArray(array, key, newValue) {
+		$.each(array, (index, object) => {
+			object[key] = newValue;
+		});
+	}
+	
+	updateTotalEK(array, discount) {
+		let gesamtEK = 0;
+		
+		if ($.isNumeric(discount)) {
+			discount = parseFloat(discount);
+			
+			$.each(array, (index, object) => {
+				var cgpreisnetto = parseFloat(object.cgpreisnetto);
+				
+				if (cgpreisnetto < 0) {
+					object.cgekpreis = cgpreisnetto;
+					object.ekrabatt = 0;
+				} else {
+					object.cgekpreis = (cgpreisnetto / 100) * (100 - discount);
+				}
+				gesamtEK = gesamtEK + object.cgekpreis;
+			});
+		} else {
+			$.each(array, (index, object) => {
+				var cgpreisnetto = parseFloat(object.cgpreisnetto);
+				if (cgpreisnetto < 0) {
+					object.cgekpreis = cgpreisnetto;
+					object.ekrabatt = 0;
+				} else {
+					object.cgekpreis = cgpreisnetto;
+				}
+				gesamtEK = gesamtEK + object.cgekpreis;
+			});
+		}
+		gesamtEK = this.round(gesamtEK, 2);
+		$(".gesamtEK").text(gesamtEK);			
 	}
 
 }

@@ -1,0 +1,57 @@
+<template>
+		
+		<!-- BOTTOM -->
+		<div class="grid-block padding vertical">
+			<div class="grid-block shrink">
+				<h1 class="left shrink">Kommissionsverkäufe</h1>
+				<h2 class="left shrink"><icon icon="chevron-right" style="font-size:1rem; padding: 0 .5rem; top: -2px;" color="#d4e5f3"></icon>Zeitraum: ${functions.dates.startdate} - ${functions.dates.enddate}</h2>
+			</div>
+			<div class="grid-block">
+				<div class="hbrList table">
+					<div class="thead">
+						<div class="tr">
+							<div class="th spacer"></div>
+							<div class="td checkbox"><input type="checkbox" if.bind="functions.toolbar.edit"></div>
+							<div class="th number"><span>#</span></div>
+							<div class="th navOrder artikelnr"><span class="arrowUpLight" click.delegate="functions.changeOrder('artikelnr', 'artikelnr')">Artikelnr.</span></div>
+							<div class="th navOrder bezeichnung"><span class="arrowUpLight" click.delegate="functions.changeOrder('bezeichnung', 'bezeichnung')">Bezeichnung</span></div>
+							<div class="th navOrder menge"><span class="arrowUpLight align-right" click.delegate="functions.changeOrder('menge', 'menge')">Menge</span></div>
+							<div class="th navOrder datum"><span class="arrowUpLight" click.delegate="functions.changeOrder('datum', 'datum')">Datum</span></div>
+							<div class="th navOrder lieferantid nowrap"><span class="arrowUpLight" click.delegate="functions.changeOrder('lieferantid', 'lieferantid')">Lieferant</span></div>
+							<div class="th navOrder shop nowrap"><span class="arrowUpLight" click.delegate="functions.changeOrder('shop', 'shop')">Shop</span></div>
+							<div class="th navOrder epreis nowrap"><span class="arrowUpLight align-right" click.delegate="functions.changeOrder('epreis', 'epreis')">Einzel-VK</span></div>
+							<div class="th navOrder gpreis nowrap"><span class="arrowUpLight align-right" click.delegate="functions.changeOrder('gpreis', 'gpreis')">Gesamt-VK</span></div>
+							<div class="th navOrder eksteuer nowrap"><span class="arrowUpLight align-right" click.delegate="functions.changeOrder('eksteuer', 'eksteuer')">Steuer</span></div>
+							<div class="th navOrder cgpreisnetto nowrap"><span class="arrowUpLight align-right" click.delegate="functions.changeOrder('cgpreisnetto', 'cgpreisnetto')">Gesamt-VK netto</span></div>
+							<div class="th nowrap"><span class="align-right">Rabatt %</span></div>
+							<div class="th navOrder cgekpreis nowrap"><span class="arrowUpLight align-right" click.delegate="functions.changeOrder('cgekpreis', 'cgekpreis')">Gesamt-EK</span></div>
+							<div class="th navOrder spacer"></div>
+						</div>
+					</div>
+					<div class="tbody">
+						<div class="tr"
+							virtual-repeat.for="item of functions.$D.allCommissions
+								| filter: { 'filter': functions.filter, 'getFilteredArray': functions.getFilteredArray, 'context': functions.context, 'ekrabatt': functions.ekrabatt, 'trigger': functions.filterChange }
+								| orderBy: { 'property': functions.order, 'direction': functions.direction}">
+							<div class="td spacer"></div>
+							<div class="td checkbox"><input type="checkbox" if.bind="functions.toolbar.edit"></div>
+							<div class="td number">${$index + 1}</div>
+							<div class="td code">${item.artikelnr}</div>
+							<div class="td schcode">${item.bezeichnung}</div>
+							<div class="td series align-right">${item.menge}</div>
+							<div class="td series nowrap">${item.datum}</div>
+							<div class="td series nowrap">${item.lieferant}</div>
+							<div class="td series nowrap">${item.shop}</div>
+							<div class="td series align-right">${item.epreis} €</div>
+							<div class="td series align-right">${item.gpreis} €</div>
+							<div class="td series align-right">${item.eksteuer} %</div>
+							<div class="td series align-right">${item.cgpreisnetto} €</div>
+							<div class="td series align-right">${item.ekrabatt} %</div>
+							<div class="td series align-right">${functions.round(item.cgekpreis, 2)} €</div>
+							<div class="td spacer"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+</template>

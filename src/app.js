@@ -10,12 +10,13 @@ import {Dashboard} from 'dashboard';
 import {Lagerbewertung} from 'lagerbewertung';
 import {Verkauf} from 'verkauf';
 import {Kunden} from 'kunden';
+import {Kommission} from 'kommission';
 
 
-@inject(AuthService, config, EventAggregator, Functions, Dashboard, Lagerbewertung, Verkauf, Kunden)
+@inject(AuthService, config, EventAggregator, Functions, Dashboard, Lagerbewertung, Verkauf, Kunden, Kommission)
 export class App {
 	
-	constructor(AuthService, config, EventAggregator, Functions, Dashboard, Lagerbewertung, Verkauf, Kunden) {
+	constructor(AuthService, config, EventAggregator, Functions, Dashboard, Lagerbewertung, Verkauf, Kunden, Kommission) {
 		// Define Dependencies
 		this.currentYear = new Date().getFullYear();
 		this.auth = AuthService;
@@ -26,6 +27,7 @@ export class App {
 		this.lagerbewertung = Lagerbewertung;
 		this.verkauf = Verkauf;
 		this.kunden = Kunden;
+		this.kommission = Kommission;
 	}
 
 	
@@ -43,6 +45,9 @@ export class App {
 			},
 			{ route: ['verkauf', 'verkauf'], name: 'verkauf', moduleId: 'verkauf', nav: true, title: 'Verkauf',
 				settings: { icon: 'cart' }
+			},
+			{ route: ['kommission', 'kommission'], name: 'kommission', moduleId: 'kommission', nav: true, title: 'Kommission',
+				settings: { icon: 'clipboard' }
 			},
 			{ route: ['kunden', 'kunden'], name: 'kunden', moduleId: 'kunden', nav: true, title: 'Kunden',
 				settings: { icon: 'person-genderless' }

@@ -412,6 +412,7 @@ function get_all_sales($startdate = false, $enddate = false) {
 			AUFTRAG.FREIFELD3,
 			ADRESSEN.LFDNR AS ADRESSENLFDNR,
 			ADRESSEN.SUCHBEGRIFF AS LIEFERANT,
+			ADRESSEN.LAND AS LIEFERANTLAND,
 			ATRPOS.AUFTRAGLFDNR,
 			ATRPOS.BEZEICHNUNG AS TITEL,
 			ATRPOS.ARTIKELNR,
@@ -477,7 +478,7 @@ function get_all_sales($startdate = false, $enddate = false) {
 			'0' => 'ohne'
 		);
 		
-		
+		$comCount = 0;
 				
 		for($i = 0; $i < count($result); $i++) {
 			
@@ -501,13 +502,44 @@ function get_all_sales($startdate = false, $enddate = false) {
 			}
 						
 			// SET SHOP
-			if (!$result[$i]['FREIFELD3']) { $result[$i]['FREIFELD3'] = "Adventist Book Center"; } 
+			if (!$result[$i]['FREIFELD3']) { $result[$i]['FREIFELD3'] = "Adventist Book Center"; }
+			
+			// SET EK-TAX TO VENDOR COUNTRY
+			if ($result[$i]['STEUERSATZ']) {
+				
+				if ($result[$i]['STEUERSATZ'] == 1) { $eksteuer = 20; }
+				if ($result[$i]['STEUERSATZ'] == 2) { $eksteuer = 10; }
+				if ($result[$i]['STEUERSATZ'] == 3) { $eksteuer = 7; }
+				if ($result[$i]['STEUERSATZ'] == 4) { $eksteuer = 19; }
+				if ($result[$i]['STEUERSATZ'] == 10) { $eksteuer = 0; }
+				if ($result[$i]['STEUERSATZ'] == 20) { $eksteuer = 0; }
+				if ($result[$i]['STEUERSATZ'] == 0) { $eksteuer = 0; }
+				
+				if($result[$i]['LIEFERANTLAND']) {
+
+					// DEUTSCHLAND
+					if ($result[$i]['LIEFERANTLAND'] == 'DE') {
+						if ($result[$i]['STEUERSATZ'] == 1) { $eksteuer = 19; }
+						if ($result[$i]['STEUERSATZ'] == 2) { $eksteuer = 7; }
+					}
+					
+					// ÖSTERREICH
+					if ($result[$i]['LIEFERANTLAND'] == 'AT') {
+						if ($result[$i]['STEUERSATZ'] == 3) { $eksteuer = 10; }
+						if ($result[$i]['STEUERSATZ'] == 4) { $eksteuer = 20; }
+					}
+				}
+				
+			} else {
+				$eksteuer = '';
+			}
+			
+			// SET EK-RPRICE FOR COMMISSIONS
+			$cgpreisnetto = number_format(((number_format($result[$i]['MENGE']*$result[$i]['EPREIS'], 2)) / 100) * (100 - $eksteuer), 2);
 			
 			// SET EMPTY STRINGS
 			if (!$result[$i]['LIEFERANT']) { $result[$i]['LIEFERANT'] = "";	}
 			
-			
-			//$string = preg_replace('/\s+/', '', $string);
 			$sales[$i] = array(
 				'artikelnr' => (string)preg_replace('/\s+/', '', $result[$i]['ARTIKELNR']),
 				'bezeichnung' => $bezeichnung,
@@ -530,11 +562,35 @@ function get_all_sales($startdate = false, $enddate = false) {
 				'lieferantid' => $result[$i]['LIEFERANTLFDNR'],
 				'lieferant' => $result[$i]['LIEFERANT']
 			);
+			
+			if ($result[$i]['LAGERID'] == '17047') {
+				$commissions[$comCount] = array(
+					'artikelnr' => (string)preg_replace('/\s+/', '', $result[$i]['ARTIKELNR']),
+					'bezeichnung' => $bezeichnung,
+					'epreis' => number_format($result[$i]['EPREIS'], 2),
+					'gpreis' => number_format($result[$i]['MENGE']*$result[$i]['EPREIS'], 2),
+					'cgpreisnetto' => $cgpreisnetto,
+					'menge' => (float)$result[$i]['MENGE'],
+					'datum' => explode(' ', $result[$i]['DATUM'])[0],
+					'auftragnr' => (string)preg_replace('/\s+/', '', $result[$i]['AUFTRAGNR']),
+					'steuersatz' => preg_replace('/\s+/', '', $result[$i]['STEUERSATZ']),
+					'lager' => $result[$i]['LAGER'],
+					'lagerid' => $result[$i]['LAGERID'],
+					'shop' => $result[$i]['FREIFELD3'],
+					'lieferantid' => $result[$i]['LIEFERANTLFDNR'],
+					'lieferant' => $result[$i]['LIEFERANT'],
+					'eksteuer' => $eksteuer,
+					'ekrabatt' => 0,
+					'cgekpreis' => (string)$cgpreisnetto
+				);
+				$comCount++;
+			}
 		}
 		
 		$resultArray['status'] = 'success';
 		$resultArray['message'] = 'All sales were loaded successfully';
-		$resultArray['data'] = $sales;
+		$resultArray['sales'] = $sales;
+		$resultArray['commissions'] = $commissions;
 		
 		/*
 		echo count($sales);

@@ -122,13 +122,7 @@
 						<div class="nine columns">
 							<select name="sale.steuersatz" id="sale.steuersatz" ref="sale.steuersatz" change.delegate="functions.updateFilter('sale.steuersatz', sale.steuersatz.value)">
 								<option value="">Alle Steuersätze</option>
-								<option value="0">0 - Gutscheine (0%)</option>
-								<option value="1">1 - Österreich regulär (20%)</option>
-								<option value="2">2 - Österreich ermäßigt (10%)</option>
-								<option value="3">3 - Deutschland ermäßigt (7%)</option>
-								<option value="4">4 - Deutschland regulär (19%)</option>
-								<option value="10">10 - Innergemeintschaftlich (0%)</option>
-								<option value="20">20 - Export (0%)</option>
+								<option repeat.for="tax of functions.$D.allTaxes" value.bind="tax.id">${tax.label}</option>
 							</select>
 						</div>
 					</div>
@@ -150,6 +144,74 @@
 								<option value="">Alle Lager</option>
 								<option repeat.for="warehouse of functions.$D.allWarehouses" value.bind="warehouse.LAGER">${warehouse.LAGER}</option>
 							</select>
+						</div>
+					</div>
+					<!-- LIEFERANT -->
+					<div class="row">
+						<label class="three columns" for="sale.lieferant">Lieferant:</label>
+						<div class="nine columns">
+							<select name="sale.lieferant" id="sale.lieferant" ref="sale.lieferant" change.delegate="functions.updateFilter('sale.lieferant', sale.lieferant.value)">
+								<option value="">Alle Lieferanten</option>
+								<option repeat.for="vendor of functions.$D.allVendors" value.bind="vendor.lieferant">${vendor.lieferant}</option>	
+							</select>
+						</div>
+					</div>
+				</div>
+				
+			</div>
+			
+			<div class="grid-block horizontal shrink">
+				<div class="row">
+					<button class="button shrink small right" type="reset" mousedown.trigger="functions.resetFilter('#programs')"><icon icon="reload"></icon>Filter zurücksetzen</button>
+					<div class="button shrink small right disabled itemCount">0 Artikelverkäufe gefunden</div>
+				</div>
+			</div>
+		</form>
+		
+		<!-- FILTER KOMMISSION -->
+		<form class="grid-block vertical" if.bind="router.history.fragment == '/kommission'">
+			<div class="grid-block horizontal">
+				
+				<div class="grid-block vertical third">
+					<!-- ARTIKELNUMMER -->
+					<div class="row">
+						<label class="three columns" for="commission.artikelnr">Artikelnummer:</label>
+						<div class="nine columns">
+							<input type="text" name="commission.artikelnr" id="commission.artikelnr" placeholder="Artikelnummer ..." value.bind="commission.artikelnr.value" keyup.delegate="functions.updateFilter('commission.artikelnr', commission.artikelnr.value)">
+						</div>
+					</div>
+					<!-- BEZEICHNUNG -->
+					<div class="row">
+						<label class="three columns" for="commission.bezeichnung">Bezeichnung:</label>
+						<div class="nine columns">
+							<input type="text" name="commission.bezeichnung" id="commission.bezeichnung" placeholder="Bezeichnung ..." value.bind="commission.bezeichnung.value" keyup.delegate="functions.updateFilter('commission.bezeichnung', commission.bezeichnung.value)">
+						</div>
+					</div>
+				</div>
+				
+				<div class="grid-block vertical third">
+					<!-- MENGE -->
+					<div class="row">
+						<label class="three columns" for="commission.menge">Menge:</label>
+						<div class="nine columns">
+							<input type="text" name="commission.menge" id="commission.menge" placeholder="Menge ..." value.bind="commission.menge.value" keyup.delegate="functions.updateFilter('commission.menge', commission.menge.value)">
+						</div>
+					</div>
+					<!-- DATUM -->
+					<div class="row">
+						<label class="three columns" for="commission.datum">Datum:</label>
+						<div class="nine columns">
+							<input type="text" name="commission.datum" id="commission.datum" placeholder="Datum ..." value.bind="commission.datum.value" keyup.delegate="functions.updateFilter('commission.datum', commission.datum.value)">
+						</div>
+					</div>
+				</div>
+				
+				<div class="grid-block vertical third">
+					<!-- SHOP -->
+					<div class="row">
+						<label class="three columns" for="sale.letzterverkauf">Shop:</label>
+						<div class="nine columns">
+							<input type="text" name="sale.shop" id="sale.shop" placeholder="Shop ..." value.bind="sale.shop.value" keyup.delegate="functions.updateFilter('sale.shop', sale.shop.value)">
 						</div>
 					</div>
 					<!-- LIEFERANT -->

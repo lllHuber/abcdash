@@ -22,11 +22,13 @@ export class FilterValueConverter {
 		let tempArray = [];
 		let filteredArray = [];
 		let rechnungen = [];
+		let multipleStrings = [];
 		let exemplare = 0;
 		let exemplareverkauft = 0;
 		let gesamtwert = 0;
-		let umsatz = 0;
 		let umsatzNetto = 0;
+		let umsatzNettoKommission = 0;
+		let gesamtEK = 0;
 		let matchedFilters = 0;
 		let matchedSubFilters = 0;
 		
@@ -50,14 +52,17 @@ export class FilterValueConverter {
 		if(appliedFilters === 0) {
 			// gesamtwert, exemplare
 			$.each(tempArray, (index, item) => {
-				exemplare = exemplare + item.lagerbestand;
-				exemplareverkauft = exemplareverkauft + item.menge;
-				gesamtwert = gesamtwert + parseFloat(item.gesamtwert);
-				umsatz = umsatz + parseFloat(item.gpreis);
-				umsatzNetto = umsatzNetto + parseFloat(item.gpreisnetto);
+				if (item.lagerbestand) { exemplare = exemplare + item.lagerbestand; }
+				if (item.menge) { exemplareverkauft = exemplareverkauft + item.menge; }
+				if (item.gesamtwert) { gesamtwert = gesamtwert + parseFloat(item.gesamtwert); }
+				if (item.gpreisnetto) { umsatzNetto = umsatzNetto + parseFloat(item.gpreisnetto); }
+				if (item.cgpreisnetto) { umsatzNettoKommission = umsatzNettoKommission + parseFloat(item.cgpreisnetto); }
+				if (item.cgekpreis) { gesamtEK = gesamtEK + parseFloat(item.cgekpreis); }
 				// zähle rechnungen
-				if (rechnungen.includes(item.auftragnr) === false) {
-					rechnungen.push(item.auftragnr);
+				if (item.auftragnr) {
+					if (rechnungen.includes(item.auftragnr) === false) {
+						rechnungen.push(item.auftragnr);
+					}
 				}
 			});
 			
@@ -70,15 +75,17 @@ export class FilterValueConverter {
 			}
 			
 			gesamtwert = gesamtwert.toFixed(2);
-			umsatz = umsatz.toFixed(2);
 			umsatzNetto = umsatzNetto.toFixed(2);
+			umsatzNettoKommission = umsatzNettoKommission.toFixed(2);
+			gesamtEK = gesamtEK.toFixed(2);
 			$(".exemplare").text(exemplare);
 			$(".exemplareverkauft").text(exemplareverkauft);
 			$(".totalValue").text(gesamtwert);
-			$(".umsatz").text(umsatz);
-			$(".umsatzNetto").text(umsatzNetto);	
+			$(".umsatzNetto").text(umsatzNetto);
+			$(".umsatzNettoKommission").text(umsatzNettoKommission);
+			$(".gesamtEK").text(gesamtEK);
 			$(".format").text('Alle Formate');	
-			$(".shop").text('Alle Shops');	
+			$(".shops").text('Alle Shops');	
 			$(".vendor").text('Alle Lieferanten');
 			
 			filter.getFilteredArray(tempArray, filter.context);
@@ -115,9 +122,24 @@ export class FilterValueConverter {
 						
 						// COMPARE STRINGS
 						if($.type(program[property]) === "string" && $.type(value) === "string") {
+							
+							// SEARCH FOR "EITHER, ... OR" IF STRING CONTAINS A COMMA
+							if(value.toLowerCase().indexOf(", ") >= 0) {
+								multipleStrings = value.toLowerCase().split(", ") ;
+								$.each(multipleStrings, (index, string) => {
+									if(program[property].toLowerCase().indexOf(string) >= 0 || value === "") {
+										matchedFilters++;
+									}	
+								});
+							}
+							
+							// SEARCH FOR STRING AS IS
 							if(program[property].toLowerCase().indexOf(value.toLowerCase()) >= 0 || value === "") {
 								matchedFilters++;
 							}
+							
+							
+							
 						} else
 						
 						// PROPERTY IS MULTI-OBJECT (ONE INPUT FIELD CAN SEARCH FOR MULTIPLE PROPERTIES)
@@ -186,24 +208,29 @@ export class FilterValueConverter {
 			
 			// gesamtwert, exemplare
 			$.each(filteredArray, (index, item) => {
-				exemplare = exemplare + item.lagerbestand;
-				exemplareverkauft = exemplareverkauft + item.menge;
-				gesamtwert = gesamtwert + parseFloat(item.gesamtwert);
-				umsatz = umsatz + parseFloat(item.gpreis);
-				umsatzNetto = umsatzNetto + parseFloat(item.gpreisnetto);
+				if (item.lagerbestand) { exemplare = exemplare + item.lagerbestand; }
+				if (item.menge) { exemplareverkauft = exemplareverkauft + item.menge; }
+				if (item.gesamtwert) { gesamtwert = gesamtwert + parseFloat(item.gesamtwert); }
+				if (item.gpreisnetto) { umsatzNetto = umsatzNetto + parseFloat(item.gpreisnetto); }
+				if (item.cgpreisnetto) { umsatzNettoKommission = umsatzNettoKommission + parseFloat(item.cgpreisnetto); }
+				if (item.cgekpreis) { gesamtEK = gesamtEK + parseFloat(item.cgekpreis); }
+				
 				// zähle rechnungen
-				if (rechnungen.includes(item.auftragnr) === false) {
-					rechnungen.push(item.auftragnr);
+				if (item.auftragnr) {
+					if (rechnungen.includes(item.auftragnr) === false) {
+						rechnungen.push(item.auftragnr);
+					}
 				}
 			});
 			gesamtwert = gesamtwert.toFixed(2);
-			umsatz = umsatz.toFixed(2);
 			umsatzNetto = umsatzNetto.toFixed(2);
+			umsatzNettoKommission = umsatzNettoKommission.toFixed(2);
+			gesamtEK = gesamtEK.toFixed(2);
 			if(filter.filter.gruppe) {
 				$(".format").text(filter.filter.gruppe);	
 			}
 			if(filter.filter.shop) {
-				$(".shop").text(filter.filter.shop);	
+				$(".shops").text(filter.filter.shop);	
 			}
 			if(filter.filter.lieferant) {
 				$(".vendor").text(filter.filter.lieferant);	
@@ -215,8 +242,9 @@ export class FilterValueConverter {
 			$(".exemplare").text(exemplare);
 			$(".exemplareverkauft").text(exemplareverkauft);
 			$(".totalValue").text(gesamtwert);
-			$(".umsatz").text(umsatz);
 			$(".umsatzNetto").text(umsatzNetto);
+			$(".umsatzNettoKommission").text(umsatzNettoKommission);
+			$(".gesamtEK").text(gesamtEK);
 			$(".rechnungen").text(rechnungen.length);
 		}
 		
