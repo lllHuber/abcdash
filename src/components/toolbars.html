@@ -238,17 +238,23 @@
 	
 	</div>
 	
-		
-	<!-- EXPORT VERKAUF -->	
+	<!-- EXPORT -->	
 	<div class="grid-content content horizontal hide" id="export">
-		
+	
+		<!-- VERKAUF -->	
 		<div if.bind="router.history.fragment == '/verkauf'">
 			<button class="hollow shrink" click.delegate="functions.exportSalesPDF()">
 				Als PDF exportieren
 			</button>
 		</div>
-
+		
+		<!-- KOMMISSION -->
+		<div if.bind="router.history.fragment == '/kommission'">
+			<button class="hollow shrink" click.delegate="functions.exportCommissionsPDF()">
+				Als PDF exportieren
+			</button>
+		</div>
+		
 	</div>
-
 	
 </template>
