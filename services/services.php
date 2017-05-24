@@ -388,6 +388,8 @@ function get_all_customers() {
 function get_all_sales($startdate = false, $enddate = false) {
 	global $PDOF;
 	$resultArray = array('status' => 'error');
+	$sales = array();
+	$commissions = array();
 	
 	if($enddate == false) {
 		$enddate = Date('Y-m-d');

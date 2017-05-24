@@ -81,11 +81,11 @@ export default class Functions {
 		
 		// Observe Date Change
 		this.observe.propertyObserver(this.dates, "startdate").subscribe((newValue, oldValue) => {
-			this.allItems;
+			this.allItems();
 			this.allSales;
 		});
 		this.observe.propertyObserver(this.dates, "enddate").subscribe((newValue, oldValue) => {
-			this.allItems;
+			this.allItems();
 			this.allSales;
 		});
 		this.observe.propertyObserver(this, "ekrabatt").subscribe((newValue, oldValue) => {
@@ -101,6 +101,19 @@ export default class Functions {
 			this.updateTotalEK(this.filteredArray, this.ekrabatt);
 		});
 		
+		this.observe.propertyObserver(this.router.history, "fragment").subscribe((newValue, oldValue) => {
+			switch(newValue) {
+				case "/lagerbewertung":
+					this.allItems();
+					break;
+				default:
+					break;
+			}
+		});
+		
+		
+		
+		
 		this.ekrabatt = 0;
 		
 		
@@ -113,17 +126,6 @@ export default class Functions {
 	// --------------------------------------------------
 	// GET DATA
 	// --------------------------------------------------
-	
-	get allItems() {
-		this.url = this.config.serviceUrl + `?ws=get_all_items&enddate=${this.dates.enddate}`;
-		$("#hbrLoader").show();
-		$.get(this.url, response => {
-			$("#hbrLoader").hide();
-			if(response.status === 'success') {
-				this.$D.allItems = response.data;
-			}
-		}, "json");
-	}
 	
 	get allWarehouses() {
 		this.url = this.config.serviceUrl + "?ws=get_all_warehouses";
@@ -146,8 +148,19 @@ export default class Functions {
 			}
 		}, "json");
 	}
-	
-	get allCustomers() {
+
+	allItems() {
+		this.url = this.config.serviceUrl + `?ws=get_all_items&enddate=${this.dates.enddate}`;
+		$("#hbrLoader").show();
+		$.get(this.url, response => {
+			$("#hbrLoader").hide();
+			if(response.status === 'success') {
+				this.$D.allItems = response.data;
+			}
+		}, "json");
+	}
+		
+	allCustomers() {
 		this.url = this.config.serviceUrl + "?ws=get_all_customers";
 		$("#hbrLoader").show();
 		$.get(this.url, response => {
@@ -600,7 +613,7 @@ export default class Functions {
 			{"label": "Anzahl Exemplare:", "value": $(".exemplareverkauft").text()},
 			{"label": "", "value": ""},
 			{"label": "Umsatz € (netto):", "value": $(".umsatzNetto").text()},
-			{"label": "Rabatt gewährt €:", "value": $(".gesamtRabatt").text()}
+			{"label": "Gewährter Rabatt €:", "value": $(".gesamtRabatt").text()}
 		];
 
 		pdf.autoTable(columnsSummary, rowsSummary, {
