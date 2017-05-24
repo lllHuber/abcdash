@@ -29,6 +29,7 @@ export class FilterValueConverter {
 		let umsatzNetto = 0;
 		let umsatzNettoKommission = 0;
 		let gesamtEK = 0;
+		let gesamtRabatt = 0;
 		let matchedFilters = 0;
 		let matchedSubFilters = 0;
 		
@@ -58,6 +59,7 @@ export class FilterValueConverter {
 				if (item.gpreisnetto) { umsatzNetto = umsatzNetto + parseFloat(item.gpreisnetto); }
 				if (item.cgpreisnetto) { umsatzNettoKommission = umsatzNettoKommission + parseFloat(item.cgpreisnetto); }
 				if (item.cgekpreis) { gesamtEK = gesamtEK + parseFloat(item.cgekpreis); }
+				if (item.rabatt && item.rabatt > 0) { gesamtRabatt = gesamtRabatt + parseFloat(item.ekpreis) * parseFloat(item.menge) / 100 * parseFloat(item.rabatt); }
 				// zähle rechnungen
 				if (item.auftragnr) {
 					if (rechnungen.includes(item.auftragnr) === false) {
@@ -78,12 +80,15 @@ export class FilterValueConverter {
 			umsatzNetto = umsatzNetto.toFixed(2);
 			umsatzNettoKommission = umsatzNettoKommission.toFixed(2);
 			gesamtEK = gesamtEK.toFixed(2);
+			gesamtRabatt = gesamtRabatt.toFixed(2);
+			
 			$(".exemplare").text(exemplare);
 			$(".exemplareverkauft").text(exemplareverkauft);
 			$(".totalValue").text(gesamtwert);
 			$(".umsatzNetto").text(umsatzNetto);
 			$(".umsatzNettoKommission").text(umsatzNettoKommission);
 			$(".gesamtEK").text(gesamtEK);
+			$(".gesamtRabatt").text(gesamtRabatt);
 			$(".format").text('Alle Formate');	
 			$(".shops").text('Alle Shops');	
 			$(".vendor").text('Alle Lieferanten');
@@ -214,6 +219,7 @@ export class FilterValueConverter {
 				if (item.gpreisnetto) { umsatzNetto = umsatzNetto + parseFloat(item.gpreisnetto); }
 				if (item.cgpreisnetto) { umsatzNettoKommission = umsatzNettoKommission + parseFloat(item.cgpreisnetto); }
 				if (item.cgekpreis) { gesamtEK = gesamtEK + parseFloat(item.cgekpreis); }
+				if (item.rabatt && item.rabatt > 0) { gesamtRabatt = gesamtRabatt + parseFloat(item.ekpreis) * parseFloat(item.menge) / 100 * parseFloat(item.rabatt); }
 				
 				// zähle rechnungen
 				if (item.auftragnr) {
@@ -226,6 +232,7 @@ export class FilterValueConverter {
 			umsatzNetto = umsatzNetto.toFixed(2);
 			umsatzNettoKommission = umsatzNettoKommission.toFixed(2);
 			gesamtEK = gesamtEK.toFixed(2);
+			gesamtRabatt = gesamtRabatt.toFixed(2);
 			if(filter.filter.gruppe) {
 				$(".format").text(filter.filter.gruppe);	
 			}
@@ -245,6 +252,7 @@ export class FilterValueConverter {
 			$(".umsatzNetto").text(umsatzNetto);
 			$(".umsatzNettoKommission").text(umsatzNettoKommission);
 			$(".gesamtEK").text(gesamtEK);
+			$(".gesamtRabatt").text(gesamtRabatt);
 			$(".rechnungen").text(rechnungen.length);
 		}
 		

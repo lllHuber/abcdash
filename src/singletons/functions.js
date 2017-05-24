@@ -780,7 +780,7 @@ export default class Functions {
 				eksteuer:		{ columnWidth: 35, halign: 'right' },
 				cgpreisnetto:	{ halign: 'right', columnWidth: 59 },
 				ekrabatt: 		{ columnWidth: 20 },
-				cgekpreis:		{ columnWidth: 35, halign: 'right' }
+				cgekpreis:		{ columnWidth: 45, halign: 'right' }
 			},
 			headerStyles: {
 				fillColor: [255, 255, 255],
