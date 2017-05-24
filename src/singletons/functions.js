@@ -598,8 +598,9 @@ export default class Functions {
 			{"label": "Anzahl Aufträge:", "value": $(".rechnungen").text()},
 			{"label": "Anzahl Artikel:", "value": $(".verkauf").text()},
 			{"label": "Anzahl Exemplare:", "value": $(".exemplareverkauft").text()},
-			{"label": "Umsatz € (brutto):", "value": $(".umsatz").text()},
-			{"label": "Umsatz € (netto):", "value": $(".umsatzNetto").text()}
+			{"label": "", "value": ""},
+			{"label": "Umsatz € (netto):", "value": $(".umsatzNetto").text()},
+			{"label": "Rabatt gewährt €:", "value": $(".gesamtRabatt").text()}
 		];
 
 		pdf.autoTable(columnsSummary, rowsSummary, {
@@ -624,7 +625,7 @@ export default class Functions {
 				if (typeof pdf.putTotalPages === 'function') {
 					seite = seite + " von " + totalPagesExp;
 				}
-				pdf.setFontSize(8).setTextColor(77).text(`EVK = Einzelverkaufspreis, GVK = Gesamtverkaufspreis, % = Rabatt | Export: ${exportdatum}`, 448, 565);
+				pdf.setFontSize(8).setTextColor(77).text(`Export: ${exportdatum}`, 700, 565);
 				pdf.setFontSize(8).setTextColor(77).text(`Seite ${seite}`, 40, 565);
 				pdf.setDrawColor(33).line(40, 62, 802, 62);
 			}
