@@ -11,6 +11,10 @@ import { autotable } from 'jspdf-autotable';
 @inject(config, Router, MultiObserver, BindingEngine)
 export default class Functions {
  
+	// --------------------------------------------------
+	// INITIALIZE
+	// --------------------------------------------------
+	
 	constructor(config, Router, MultiObserver, BindingEngine) {
 		this.config = config;
 		this.router = Router;
@@ -20,16 +24,16 @@ export default class Functions {
 		this.$ui = {
 			"resizable": ""	
 		};
+		this.abrechnung = [];
+		this.markerEK = [];
+		this.ekrabatt = 0;
+		this.editCommissionTable = 'locked';
 		
+		// Datum
 		this.dates = {
 			"startdate": this.oneMonthBefore(),
 			"enddate": this.today("date")
 		};
-		
-		// jQueryUI
-		//console.log($ui);
-		
-		//$(".resizable").$ui.resizable.resizable();
 		
 		// OrderBy
 		this.direction = 'desc';
@@ -49,7 +53,8 @@ export default class Functions {
 			content				: {
 				"filterArticles": true,
 				"filterSales": false,
-				"filterCommissions": false
+				"filterCommissions": false,
+				"filterSalesByItem": false
 			}
 		};
 
@@ -68,6 +73,7 @@ export default class Functions {
 			"allCustomers"		: this.allCustomers,
 			"allSales"			: this.allSales,
 			"allCommissions"	: this.allCommissions,
+			"salesByItem"		: this.salesByItem,
 			"allTaxes"			: [
 									{ "id" : "0", "label" : "0 - Gutscheine (0%)" },
 									{ "id" : "1", "label" : "1 - Österreich regulär (20%)" },
@@ -79,21 +85,33 @@ export default class Functions {
 								  ]
 		};
 		
+		
+		
+		// --------------------------------------------------
+		// OBSERVERS
+		// --------------------------------------------------
+	
 		// Observe Date Change
 		this.observe.propertyObserver(this.dates, "startdate").subscribe((newValue, oldValue) => {
 			this.allItems();
 			this.allSales;
+			this.allCommissions;
 		});
 		this.observe.propertyObserver(this.dates, "enddate").subscribe((newValue, oldValue) => {
 			this.allItems();
 			this.allSales;
+			this.allCommissions;
 		});
+		
+		// Observer EK-RABATT Change
 		this.observe.propertyObserver(this, "ekrabatt").subscribe((newValue, oldValue) => {
 			// Update Discount
 			this.modifyArray(this.filteredArray, "ekrabatt", this.ekrabatt);
 			// Update Gesamt-EK
 			this.updateTotalEK(this.filteredArray, this.ekrabatt);
 		});
+		
+		// Observe FilteredArray Change
 		this.observe.propertyObserver(this, "filteredArray").subscribe((newValue, oldValue) => {
 			// Update Discount
 			this.modifyArray(this.filteredArray, "ekrabatt", this.ekrabatt);
@@ -101,6 +119,12 @@ export default class Functions {
 			this.updateTotalEK(this.filteredArray, this.ekrabatt);
 		});
 		
+		// Observe Abrechnung Change
+		this.observe.propertyObserver(this, "abrechnung").subscribe((newValue, oldValue) => {
+			console.log(this.abrechnung);
+		});
+		
+		// Observe Navigation Change
 		this.observe.propertyObserver(this.router.history, "fragment").subscribe((newValue, oldValue) => {
 			switch(newValue) {
 				case "/lagerbewertung":
@@ -110,15 +134,7 @@ export default class Functions {
 					break;
 			}
 		});
-		
-		
-		
-		
-		this.ekrabatt = 0;
-		
-		
-		// Steuersatz
-		
+
 	}
 	
 
@@ -174,13 +190,36 @@ export default class Functions {
 	
 	get allSales() {
 		this.url = this.config.serviceUrl + `?ws=get_all_sales&startdate=${this.dates.startdate}&enddate=${this.dates.enddate}`;
+		$("#hbrLoader").show();
+		$.get(this.url, response => {
+			$("#hbrLoader").hide();
+			if(response.status === 'success') {
+				this.$D.allSales = response.data;
+			}
+		}, "json");
+	}
+	
+	get allCommissions() {
+		this.url = this.config.serviceUrl + `?ws=get_all_commissions&startdate=${this.dates.startdate}&enddate=${this.dates.enddate}`;
 		console.log(this.url);
 		$("#hbrLoader").show();
 		$.get(this.url, response => {
 			$("#hbrLoader").hide();
 			if(response.status === 'success') {
-				this.$D.allSales = response.sales;
-				this.$D.allCommissions = response.commissions;
+				this.$D.allCommissions = response.data;
+				console.log(response.data);
+			}
+		}, "json");
+	}
+	
+	get salesByItem() {
+		this.url = this.config.serviceUrl + `?ws=get_sales_by_item&startdate=${this.dates.startdate}&enddate=${this.dates.enddate}`;
+		console.log(this.url);
+		$("#hbrLoader").show();
+		$.get(this.url, response => {
+			$("#hbrLoader").hide();
+			if(response.status === 'success') {
+				this.$D.salesByItem = response.sales;
 			}
 		}, "json");
 	}
@@ -443,12 +482,6 @@ export default class Functions {
 			}, "json");
 		}
 	}
-	
-	
-	// --------------------------------------------------
-	// OBSERVERS
-	// --------------------------------------------------
-	
 	
 	
 	// --------------------------------------------------
@@ -866,6 +899,7 @@ export default class Functions {
 	
 	updateTotalEK(array, discount) {
 		let gesamtEK = 0;
+		let gesamtUmsatz = 0;
 		
 		if ($.isNumeric(discount)) {
 			discount = parseFloat(discount);
@@ -894,7 +928,32 @@ export default class Functions {
 			});
 		}
 		gesamtEK = this.round(gesamtEK, 2);
-		$(".gesamtEK").text(gesamtEK);			
+		gesamtUmsatz = this.round(gesamtEK / (100 - discount) * 100, 2);
+		
+		$(".gesamtEK").text(gesamtEK);
+		$(".umsatzNettoKommission").text(gesamtUmsatz);			
+	}
+	
+	updateObject(id, value) {
+		if ($.isNumeric(value)) {
+			console.log('number');
+			value = parseFloat(value);
+			
+			$.each(this.$D.allCommissions, (index, object) => {
+				if(object.id == id) {
+					object.gpreis = this.round(object.epreis * object.menge, 2);
+					object.cgpreisnetto = this.round(object.gpreis * 100  / (100 + parseFloat(object.eksteuer)), 2);
+					object.cgekpreis = this.round((object.cgpreisnetto / 100) * (100 - parseFloat(object.ekrabatt)), 2);
+					
+					// Update Total-EK
+					this.updateTotalEK(this.filteredArray, object.ekrabatt);
+					
+					return false;
+				}
+			});
+			
+		} else {
+		}
 	}
 
 }

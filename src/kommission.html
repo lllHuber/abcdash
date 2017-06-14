@@ -2,9 +2,15 @@
 		
 		<!-- BOTTOM -->
 		<div class="grid-block padding vertical">
-			<div class="grid-block shrink">
+			<div class="grid-block shrink horizontal" style="overflow: hidden;">
 				<h1 class="left shrink">Kommissionsverkäufe</h1>
-				<h2 class="left shrink"><icon icon="chevron-right" style="font-size:1rem; padding: 0 .5rem; top: -2px;" color="#d4e5f3"></icon>Zeitraum: ${functions.dates.startdate} - ${functions.dates.enddate}</h2>
+				<h2 class="left"><icon icon="chevron-right" style="font-size:1rem; padding: 0 .5rem; top: -2px;" color="#d4e5f3"></icon>Zeitraum: ${functions.dates.startdate} - ${functions.dates.enddate}</h2>
+				<div class="grid-block horizontal shrink editMenu">
+					<label for="lockCommissionTable" if.bind="functions.editCommissionTable == 'locked'"><icon icon="lock-locked"></icon></label>
+					<label for="unlockCommissionTable" if.bind="functions.editCommissionTable == 'unlocked'"><icon icon="lock-unlocked" color="#f08a24"></icon></label>
+					<input type="radio" name="editCommissionTable" value="unlocked" id="lockCommissionTable" checked.bind="functions.editCommissionTable" hidden />
+					<input type="radio" name="editCommissionTable" value="locked" id="unlockCommissionTable" checked.bind="functions.editCommissionTable" hidden />
+				</div> 
 			</div>
 			<div class="grid-block">
 				<div class="hbrList table">
@@ -42,9 +48,13 @@
 							<div class="td series nowrap">${item.datum}</div>
 							<div class="td series nowrap">${item.lieferant}</div>
 							<div class="td series nowrap">${item.shop}</div>
-							<div class="td series align-right">${item.epreis} €</div>
+							<div class="td series align-right nowrap ${functions.editCommissionTable == 'unlocked' ? 'edit' : ''}">
+								<input class="hbrTextfield align-right ${functions.editCommissionTable == 'unlocked' ? 'edit' : ''}" disabled="${functions.editCommissionTable == 'unlocked' ? '' : 'disabled'}" value.bind="item.epreis" keyup.delegate="functions.updateObject(item.id, item.epreis)" align="right" mode="edit"></input> €
+							</div>
 							<div class="td series align-right">${item.gpreis} €</div>
-							<div class="td series align-right">${item.eksteuer} %</div>
+							<div class="td series align-right nowrap ${functions.editCommissionTable == 'unlocked' ? 'edit' : ''}">
+								<input class="hbrTextfield align-right ${functions.editCommissionTable == 'unlocked' ? 'edit' : ''}" disabled="${functions.editCommissionTable == 'unlocked' ? '' : 'disabled'}" value.bind="item.eksteuer" keyup.delegate="functions.updateObject(item.id, item.eksteuer)" align="right" mode="edit"></input> %
+							</div>
 							<div class="td series align-right">${item.cgpreisnetto} €</div>
 							<div class="td series align-right">${item.ekrabatt} %</div>
 							<div class="td series align-right">${functions.round(item.cgekpreis, 2)} €</div>

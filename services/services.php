@@ -25,6 +25,9 @@ if (isset($_GET['ws']) && $_GET['ws'] != ""  ) {
 		case 'get_all_sales':
 			echo get_all_sales($_GET['startdate'], $_GET['enddate']);
 			break;
+		case 'get_all_commissions':
+			echo get_all_commissions($_GET['startdate'], $_GET['enddate']);
+			break;
 		default:
 			break;
 	}
@@ -385,11 +388,198 @@ function get_all_customers() {
 	echo json_encode($resultArray);
 }
 
+
 function get_all_sales($startdate = false, $enddate = false) {
 	global $PDOF;
 	$resultArray = array('status' => 'error');
+	
+	$allSales = get_sales($startdate, $enddate);
+	if($allSales) {
+		$resultArray['status'] = 'success';
+		$resultArray['message'] = 'All sales were loaded successfully';
+		$resultArray['data'] = $allSales;
+	}
+	
+	echo json_encode($resultArray);
+}
+
+function get_all_commissions($startdate = false, $enddate = false) {
+	global $PDOF;
+	$resultArray = array('status' => 'error');
+	$CC = 0;
+	
+	$allSales = get_sales($startdate, $enddate);
+	
+	if($allSales) {
+		$comCount = 0;
+		$itemCount = 0;
+		for($i = 0; $i < count($allSales); $i++) {
+			
+			// SET EK-TAX TO VENDOR COUNTRY	
+			if ($allSales[$i]['steuersatz']) {
+					
+				if ($allSales[$i]['steuersatz'] == 1) { $eksteuer = 20; $vksteuer = 20; }
+				if ($allSales[$i]['steuersatz'] == 2) { $eksteuer = 10; $vksteuer = 10; }
+				if ($allSales[$i]['steuersatz'] == 3) { $eksteuer = 7; $vksteuer = 7; }
+				if ($allSales[$i]['steuersatz'] == 4) { $eksteuer = 19; $vksteuer = 19; }
+				if ($allSales[$i]['steuersatz'] == 10) { $eksteuer = 0; $vksteuer = 0; }
+				if ($allSales[$i]['steuersatz'] == 20) { $eksteuer = 0; $vksteuer = 0; }
+				if ($allSales[$i]['steuersatz'] == 0) { $eksteuer = 0; $vksteuer = 0; }
+				
+				if($eksteuer == 0) {
+					if ($allSales[$i]['artikelsteuer'] == 1) { $eksteuer = 20; $vksteuer = 20; }
+					if ($allSales[$i]['artikelsteuer'] == 2) { $eksteuer = 10; $vksteuer = 10; }
+					if ($allSales[$i]['artikelsteuer'] == 3) { $eksteuer = 7; $vksteuer = 7; }
+					if ($allSales[$i]['artikelsteuer'] == 4) { $eksteuer = 19; $vksteuer = 19; }
+				}
+								
+				if($allSales[$i]['lieferantland']) {
+					// DEUTSCHLAND
+					if ($allSales[$i]['lieferantland'] == 'DE') {
+						if ($eksteuer == 20) { $eksteuer = 19; }
+						if ($eksteuer == 10) { $eksteuer = 7; }
+					}
+					
+					// ÖSTERREICH
+					if ($allSales[$i]['lieferantland'] == 'AT') {
+						if ($eksteuer == 7) { $eksteuer = 10; }
+						if ($eksteuer == 19) { $eksteuer = 20; }
+					}
+				}
+				
+			} else {
+				$eksteuer = 0;
+			}
+			
+			// COMMISSIONS
+			if ($allSales[$i]['lagerid'] == '17047') {
+			
+				// ADD TAX
+				if($allSales[$i]['steuer'] == 'N') {
+					$allSales[$i]['epreis'] = $allSales[$i]['epreis'] * ($vksteuer/100 + 1);
+				}
+				// SET EK-RPRICE FOR COMMISSIONS
+				$cgpreisnetto = number_format( (number_format($allSales[$i]['menge']*$allSales[$i]['epreis'], 2) * 100  / (100 + $eksteuer) ), 2);
+				
+				$commissions[$comCount] = array(
+					'artikelnr' => (string)preg_replace('/\s+/', '', $allSales[$i]['artikelnr']),
+					'bezeichnung' => $allSales[$i]['bezeichnung'],
+					'epreis' => number_format($allSales[$i]['epreis'], 2),
+					'gpreis' => number_format($allSales[$i]['menge']*$allSales[$i]['epreis'], 2),
+					'cgpreisnetto' => $cgpreisnetto,
+					'menge' => (float)$allSales[$i]['menge'],
+					'datum' => explode(' ', $allSales[$i]['datum'])[0],
+					'auftragnr' => (string)preg_replace('/\s+/', '', $allSales[$i]['auftragnr']),
+					'steuersatz' => preg_replace('/\s+/', '', $allSales[$i]['steuersatz']),
+					'lager' => $allSales[$i]['lager'],
+					'lagerid' => $allSales[$i]['lagerid'],
+					'shop' => $allSales[$i]['shop'],
+					'lieferantid' => $allSales[$i]['lieferantid'],
+					'lieferant' => $allSales[$i]['lieferant'],
+					'eksteuer' => $eksteuer,
+					'ekrabatt' => 0,
+					'cgekpreis' => (string)$cgpreisnetto,
+					'steuerinkl' => $allSales[$i]['steuer'],
+					'id' => $allSales[$i]['id']
+				);
+				$comCount++;
+			}
+		}
+		
+		$resultArray['status'] = 'success';
+		$resultArray['message'] = 'All commissions were loaded successfully';
+		$resultArray['data'] = $commissions;
+	}
+	
+	echo json_encode($resultArray);
+}
+
+function get_sales_by_item($startdate = false, $enddate = false) {
+	global $PDOF;
+	$resultArray = array('status' => 'error');
+	$CC = 0;
+	
+	$allSales = get_sales($startdate, $enddate);
+	
+	if($allSales) {
+		$comCount = 0;
+		$itemCount = 0;
+		for($i = 0; $i < count($allSales); $i++) {
+			
+		}
+		
+		$resultArray['status'] = 'success';
+		$resultArray['message'] = 'All commissions were loaded successfully';
+		$resultArray['data'] = $commissions;
+	}
+	
+	echo json_encode($resultArray);
+	
+}
+
+
+
+
+/*
+			
+			// SALES BY ITEM
+			if(!valueInArray($salesByItem, 'artikelnr', $result[$i]['ARTIKELNR'])) {
+				$salesByItem[$itemCount] = array(
+					'artikelnr' => (string)preg_replace('/\s+/', '', $result[$i]['ARTIKELNR']),
+					'bezeichnung' => $bezeichnung,
+					'epreis' => number_format($result[$i]['EPREIS'], 2),
+					'gpreis' => number_format($result[$i]['MENGE']*$result[$i]['EPREIS'], 2),
+					'cgpreisnetto' => $cgpreisnetto,
+					'menge' => (float)$result[$i]['MENGE'],
+					'datum' => explode(' ', $result[$i]['DATUM'])[0],
+					'auftragnr' => (string)preg_replace('/\s+/', '', $result[$i]['AUFTRAGNR']),
+					'steuersatz' => preg_replace('/\s+/', '', $result[$i]['STEUERSATZ']),
+					'lager' => $result[$i]['LAGER'],
+					'lagerid' => $result[$i]['LAGERID'],
+					'shop' => $result[$i]['FREIFELD3'],
+					'lieferantid' => $result[$i]['LIEFERANTLFDNR'],
+					'lieferant' => $result[$i]['LIEFERANT'],
+					'eksteuer' => $eksteuer,
+					'ekrabatt' => 0,
+					'cgekpreis' => (string)$cgpreisnetto
+				);
+				$itemCount++;
+			}
+			$CC++;
+
+
+
+*/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// --------------------------------------------------
+// HELPER FUNCTIONS
+// --------------------------------------------------
+
+function get_sales($startdate = false, $enddate = false) {
+	global $PDOF;
 	$sales = array();
-	$commissions = array();
+
 	
 	if($enddate == false) {
 		$enddate = Date('Y-m-d');
@@ -403,6 +593,7 @@ function get_all_sales($startdate = false, $enddate = false) {
 			ARTIKEL.LFDNR,
 			ARTIKEL.BEZEICHNUNG,
 			ARTIKEL.LIEFERANTLFDNR,
+			ARTIKEL.STEUERSATZ AS ARTIKELSTEUER,
 			AUFTRAG.LFDNR,
 			AUFTRAG.AUFTRAGNR,
 			AUFTRAG.DATUM,
@@ -474,13 +665,13 @@ function get_all_sales($startdate = false, $enddate = false) {
 			5 => 'RB',
 			6 => 'GS'
 		);
+		
 		$steuer = array(
 			'J' => 'inkl',
 			'N' => 'zzgl',
 			'0' => 'ohne'
 		);
 		
-		$comCount = 0;
 				
 		for($i = 0; $i < count($result); $i++) {
 			
@@ -506,44 +697,13 @@ function get_all_sales($startdate = false, $enddate = false) {
 			// SET SHOP
 			if (!$result[$i]['FREIFELD3']) { $result[$i]['FREIFELD3'] = "Adventist Book Center"; }
 			
-			// SET EK-TAX TO VENDOR COUNTRY
-			if ($result[$i]['STEUERSATZ']) {
-				
-				if ($result[$i]['STEUERSATZ'] == 1) { $eksteuer = 20; }
-				if ($result[$i]['STEUERSATZ'] == 2) { $eksteuer = 10; }
-				if ($result[$i]['STEUERSATZ'] == 3) { $eksteuer = 7; }
-				if ($result[$i]['STEUERSATZ'] == 4) { $eksteuer = 19; }
-				if ($result[$i]['STEUERSATZ'] == 10) { $eksteuer = 0; }
-				if ($result[$i]['STEUERSATZ'] == 20) { $eksteuer = 0; }
-				if ($result[$i]['STEUERSATZ'] == 0) { $eksteuer = 0; }
-				
-				if($result[$i]['LIEFERANTLAND']) {
-
-					// DEUTSCHLAND
-					if ($result[$i]['LIEFERANTLAND'] == 'DE') {
-						if ($result[$i]['STEUERSATZ'] == 1) { $eksteuer = 19; }
-						if ($result[$i]['STEUERSATZ'] == 2) { $eksteuer = 7; }
-					}
-					
-					// ÖSTERREICH
-					if ($result[$i]['LIEFERANTLAND'] == 'AT') {
-						if ($result[$i]['STEUERSATZ'] == 3) { $eksteuer = 10; }
-						if ($result[$i]['STEUERSATZ'] == 4) { $eksteuer = 20; }
-					}
-				}
-				
-			} else {
-				$eksteuer = '';
-			}
-			
-			// SET EK-RPRICE FOR COMMISSIONS
-			$cgpreisnetto = number_format(((number_format($result[$i]['MENGE']*$result[$i]['EPREIS'], 2)) / 100) * (100 - $eksteuer), 2);
-			
 			// SET EMPTY STRINGS
 			if (!$result[$i]['LIEFERANT']) { $result[$i]['LIEFERANT'] = "";	}
-			
+
+			// SALES
 			$sales[$i] = array(
 				'artikelnr' => (string)preg_replace('/\s+/', '', $result[$i]['ARTIKELNR']),
+				'artikelsteuer' => $result[$i]['ARTIKELSTEUER'],
 				'bezeichnung' => $bezeichnung,
 				'epreis' => number_format($result[$i]['EPREIS'], 2),
 				'gpreis' => number_format($result[$i]['GPREIS'], 2),
@@ -562,57 +722,14 @@ function get_all_sales($startdate = false, $enddate = false) {
 				'lagerid' => $result[$i]['LAGERID'],
 				'shop' => $result[$i]['FREIFELD3'],
 				'lieferantid' => $result[$i]['LIEFERANTLFDNR'],
-				'lieferant' => $result[$i]['LIEFERANT']
+				'lieferant' => $result[$i]['LIEFERANT'],
+				'lieferantland' => $result[$i]['LIEFERANTLAND'],
+				'id' => $i
 			);
-			
-			if ($result[$i]['LAGERID'] == '17047') {
-				$commissions[$comCount] = array(
-					'artikelnr' => (string)preg_replace('/\s+/', '', $result[$i]['ARTIKELNR']),
-					'bezeichnung' => $bezeichnung,
-					'epreis' => number_format($result[$i]['EPREIS'], 2),
-					'gpreis' => number_format($result[$i]['MENGE']*$result[$i]['EPREIS'], 2),
-					'cgpreisnetto' => $cgpreisnetto,
-					'menge' => (float)$result[$i]['MENGE'],
-					'datum' => explode(' ', $result[$i]['DATUM'])[0],
-					'auftragnr' => (string)preg_replace('/\s+/', '', $result[$i]['AUFTRAGNR']),
-					'steuersatz' => preg_replace('/\s+/', '', $result[$i]['STEUERSATZ']),
-					'lager' => $result[$i]['LAGER'],
-					'lagerid' => $result[$i]['LAGERID'],
-					'shop' => $result[$i]['FREIFELD3'],
-					'lieferantid' => $result[$i]['LIEFERANTLFDNR'],
-					'lieferant' => $result[$i]['LIEFERANT'],
-					'eksteuer' => $eksteuer,
-					'ekrabatt' => 0,
-					'cgekpreis' => (string)$cgpreisnetto
-				);
-				$comCount++;
-			}
 		}
-		
-		$resultArray['status'] = 'success';
-		$resultArray['message'] = 'All sales were loaded successfully';
-		$resultArray['sales'] = $sales;
-		$resultArray['commissions'] = $commissions;
-		
-		/*
-		echo count($sales);
-		echo '<pre>';
-		print_r($sales);
-		echo '</pre>';
-		*/
-		
 	}
-
-	echo json_encode($resultArray);	
+	return $sales;
 }
-
-
-
-
-// --------------------------------------------------
-// HELPER FUNCTIONS
-// --------------------------------------------------
-
 
 function sortByDate($a, $b) {
 	return strnatcmp($b['BUCHUNGSTAG'], $a['BUCHUNGSTAG']);
@@ -620,6 +737,15 @@ function sortByDate($a, $b) {
 
 function sortByName($a, $b) {
 	return strnatcasecmp ($a['lieferant'], $b['lieferant']);
+}
+
+function valueInArray(array $array, $key, $value) {
+    foreach ($array as $element) {
+        if (!empty($array["{$key}"]) && valueInArray($array["{$key}"], $value)) {
+            return true;
+        }
+    }
+    return false;
 }
 
 

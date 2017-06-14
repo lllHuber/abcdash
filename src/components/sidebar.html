@@ -30,7 +30,7 @@
 	
 	<!-- KOMMISSION -->
 	<div class="grid-content vertical" id="verkauf" if.bind="router.history.fragment == '/kommission'">
-		<h1>Kommissionseinkauf</h1>
+		<h1>Auswertung</h1>
 		<ul>
 			<li>Zeitraum: <span class="value">${functions.dates.startdate} - ${functions.dates.enddate} </span></li>
 			<li>Lieferant:  <span class="value vendor">Alle Lieferanten</span></li>
@@ -42,6 +42,23 @@
 			<li>Rabatt %: <span class="value"><input type="text" class="align-right ekrabatt" value.bind="functions.ekrabatt"></span></li>
 			<li class="lineAbove">Gesamt-EK €: <span class="value gesamtEK"></span></li>
 		</ul>
+		
+		<h1>Abrechnung</h1>
+		<ol>
+			<li class="">Filtern</li>
+			<li class="">Korrigieren</li>
+			<li class="">Rabatt einfügen</li>
+			<li class="">Gruppieren</li>
+			<li class="">Exportieren</li>
+		</ol>
+		<!--
+		<div class="grid-block horizontal shrink">
+			<a class="grid-block button small">Zurück</a>
+			<span class="shrink">&nbsp;&nbsp;</span>
+			<a class="grid-block button small">Weiter</a>
+		</div>
+		-->
+		
 	</div>
 	
 </template>

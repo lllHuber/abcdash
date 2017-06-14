@@ -19,10 +19,10 @@
 					<icon icon="calendar" color="#FFFFFF" style="padding: 0"></icon>
 				</li>
 				<!-- START DATE -->
-				<li if.bind="router.history.fragment == '/verkauf' || router.history.fragment == '/kommission'">
+				<li if.bind="router.history.fragment != '/lagerbewertung'">
 					<input datepicker class="datepicker main" type="text" name="startdate" id="startdate" value.bind="functions.dates.startdate">
 				</li>
-				<li if.bind="router.history.fragment == '/verkauf' || router.history.fragment == '/kommission'">
+				<li if.bind="router.history.fragment != '/lagerbewertung'">
 					<icon icon="arrow-thick-right-fill-large" color="#FFFFFF" style="padding: 0"></icon>
 				</li>
 				<!-- END DATE -->

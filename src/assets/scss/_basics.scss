@@ -17,7 +17,7 @@ h1, h2 {
 	font-weight: 400;
 	font-size: $fontLarge;
 	color: $primary;
-	margin: calc( #{$contentPadding} / 2 ) 0;
+	margin: calc( #{$contentPadding} / 2 ) 0 $contentPadding 0;
 }
 
 .capitalize {
@@ -305,6 +305,17 @@ a.button, button.button, .button, button {
 	&:not(.disabled):active {
 		cursor: pointer;
 		background: darken($airgray, 22%);
+	}
+	&.hollow {
+		background: transparent;
+		color: darken($lightgray, 20%);
+		border-color: darken($lightgray, 20%);
+		text-shadow: none;
+		&:hover {
+			background: transparent;
+			border-color: $lightgray;
+			color: $lightgray;
+		}
 	}
 	&.success {
 		background: $success;
@@ -642,4 +653,15 @@ nav icon {
 
 .align-center {
 	text-align: center;
+}
+
+.editMenu {
+	margin: calc( #{$contentPadding} / 2 ) 0 $contentPadding 0;
+	icon, label {
+		padding: 0;
+	}
+	.iconic[data-glyph]:before {
+		font-size: 1.25rem;
+		color: $mediumgray;
+	}	
 }
