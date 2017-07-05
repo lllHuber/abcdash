@@ -10,6 +10,6 @@ Create modern web applications with the power of Aurelia, JQuery, Sass, Susy, Ic
 - Install all dependencies by running the following commands:
   - $ npm install
   - $ jspm install
-  - $ bundler install
+  - $ bundle install
 - Build your project from there
   
