@@ -56,7 +56,7 @@
   },
   "devDependencies": {
     "aurelia-templating": "^1.0.0-beta.1.2.7",
-    "browser-sync": "^2.12.8",
+    "browser-sync": "^2.18.12",
     "del": "^2.2.0",
     "gulp": "^3.9.1",
     "gulp-autoprefixer": "^3.1.0",
@@ -70,7 +70,7 @@
     "gulp-sass": "^2.0.4",
     "gulp-sourcemaps": "^1.6.0",
     "gulp-uglify": "^1.4.2",
-    "jspm": "^0.16.15",
+    "jspm": "^0.16.53",
     "node-sass": "^3.7.0",
     "normalize-scss": "^5.0.2",
     "object.assign": "^4.0.3",
@@ -80,6 +80,7 @@
     "whatwg-fetch": "^1.0.0"
   },
   "dependencies": {
+    "bundler": "^0.8.0",
     "whatwg-fetch": "^1.0.0"
   }
 }

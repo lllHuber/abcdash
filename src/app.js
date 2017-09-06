@@ -12,12 +12,13 @@ import {Verkauf} from 'verkauf';
 import {Kunden} from 'kunden';
 import {Kommission} from 'kommission';
 import {Statistik} from 'statistik';
+import {Handbuch} from 'handbuch';
 
 
-@inject(AuthService, config, EventAggregator, Functions, Dashboard, Lagerbewertung, Verkauf, Kunden, Kommission, Statistik)
+@inject(AuthService, config, EventAggregator, Functions, Dashboard, Lagerbewertung, Verkauf, Kunden, Kommission, Statistik, Handbuch)
 export class App {
 	
-	constructor(AuthService, config, EventAggregator, Functions, Dashboard, Lagerbewertung, Verkauf, Kunden, Kommission, Statistik) {
+	constructor(AuthService, config, EventAggregator, Functions, Dashboard, Lagerbewertung, Verkauf, Kunden, Kommission, Statistik, Handbuch) {
 		// Define Dependencies
 		this.currentYear = new Date().getFullYear();
 		this.auth = AuthService;
@@ -30,6 +31,7 @@ export class App {
 		this.kunden = Kunden;
 		this.kommission = Kommission;
 		this.statistik = Statistik;
+		this.handbuch = Handbuch;
 	}
 
 	
@@ -51,12 +53,17 @@ export class App {
 			{ route: ['kommission', 'kommission'], name: 'kommission', moduleId: 'kommission', nav: true, title: 'Kommission',
 				settings: { icon: 'clipboard' }
 			},
+			{ route: ['handbuch', 'handbuch'], name: 'handbuch', moduleId: 'handbuch', nav: true, title: 'Handbuch',
+				settings: { icon: 'lightbulb-alt-on' }
+			},
+			/*
 			{ route: ['statistik', 'statistik'], name: 'statistik', moduleId: 'statistik', nav: true, title: 'Statistik',
 				settings: { icon: 'pie-chart' }
 			},
 			{ route: ['kunden', 'kunden'], name: 'kunden', moduleId: 'kunden', nav: true, title: 'Kunden',
 				settings: { icon: 'person-genderless' }
 			},
+			*/
 			
 			{ route: ['', 'dashboard'], name: 'dashboard', moduleId: 'dashboard', nav: false, title: 'Dashboard' }
 		]);

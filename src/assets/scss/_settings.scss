@@ -4,91 +4,92 @@
 
 
 // GRID
-$maxWidth				:				60rem;
-$small					:				320px;
-$medium					:				768px;
-$large					:				1024px;
-$xlarge					:				1280px;
+$maxWidth							:				60rem;
+$small								:				320px;
+$medium								:				768px;
+$large								:				1024px;
+$xlarge								:				1280px;
 
 
 // COLORS
-$darkblue				:				#193d5c;
-$mediumblue				:				#1f4c73;
-$lightblue				:				#619fd4;
-$airblue				:				#d4e5f3;
+$darkblue							:				#193d5c;
+$mediumblue						:				#1f4c73;
+$lightblue						:				#619fd4;
+$airblue							:				#d4e5f3;
 
-$charcoal				:				#333333;
-$gray					:				#454545;
-$mediumgray				:				#777777;
-$lightgray				:				#cccccc;
-$airgray				:				#f1f1f1;
-$silver					:				#f5f5f5;
-$white					:				#ffffff;
-$leafgreen				:				#73c075;
-$cerise					:				#cb0065;
-$pink					:				#cb4d8c;
-$orange					:				#f08a24;
-$poison					:				#ccff00;
-$crimson				:				#e50101;
-$abcred					:				#98000a;
+$charcoal							:				#333333;
+$gray									:				#454545;
+$mediumgray						:				#777777;
+$lightgray						:				#cccccc;
+$airgray							:				#f1f1f1;
+$silver								:				#f5f5f5;
+$white								:				#ffffff;
+$leafgreen						:				#73c075;
+$cerise								:				#cb0065;
+$pink									:				#cb4d8c;
+$orange								:				#f08a24;
+$poison								:				#ccff00;
+$crimson							:				#e50101;
+$abcred								:				#98000a;
 
-$primary				:				$darkblue;
-$secondary				:				$lightblue;
-$complementary			:				$poison;
-$highlight				:				$orange;
-$success				:				$leafgreen;
-$alert					:				$cerise;
-$error					:				$cerise;
-$successLight			:				lighten($success, 40%);
-$errorLight				:				lighten($error, 55%);
+$primary							:				$darkblue;
+$secondary						:				$lightblue;
+$complementary				:				$poison;
+$highlight						:				$orange;
+$success							:				$leafgreen;
+$alert								:				$cerise;
+$error								:				$cerise;
+$successLight					:				lighten($success, 40%);
+$errorLight						:				lighten($error, 55%);
 
+$opacity							:				0.2;
 
 // DOCUMENT
 $documentBackground		:				$white;
-$contentPadding			:				2rem;
-$viewPadding			:				calc(#{$contentPadding} * 2);
+$contentPadding				:				2rem;
+$viewPadding					:				calc(#{$contentPadding} * 2);
 	
 
 // FONTS
-$bodyFontSize			:				.9rem;
-$bodyFontWeight			:				400;
-$bodyFontColor			:				$mediumgray;
-$fontSmall				:				.75rem;
-$fontMedium				:				1rem;
-$fontLarge				:				1.25rem;
-$fontXLarge				:				1.75rem;
+$bodyFontSize					:				.9rem;
+$bodyFontWeight				:				400;
+$bodyFontColor				:				$mediumgray;
+$fontSmall						:				.75rem;
+$fontMedium						:				1rem;
+$fontLarge						:				1.25rem;
+$fontXLarge						:				1.75rem;
 
 
 // TOP BAR
-$topBarHeight			:				3.5rem;
-$topBarPaddingTop		:				0rem;
+$topBarHeight					:				3.5rem;
+$topBarPaddingTop			:				0rem;
 $topBarPaddingBottom	:				0rem;
 $topBarPaddingLeft		:				2rem;
 $topBarPaddingRight		:				2rem;
 	
-$topBarNavSpacing		:				2rem;
+$topBarNavSpacing			:				2rem;
 $topBarNavOffsetTop		:				-0.125rem;
 $topBarNavOffsetLeft	:				0rem;
-$topBarNavOffsetRight	:				1rem;
+$topBarNavOffsetRight	:				0rem;
 
-$topBarFontSize			:				1rem;
-$topBarFontWeight		:				300;
+$topBarFontSize				:				1rem;
+$topBarFontWeight			:				300;
 
-$topBarBackground		:				$primary;
-$topBarColor			:				$white;
-$topBarHoverColor		:				$white;
+$topBarBackground			:				$primary;
+$topBarColor					:				$white;
+$topBarHoverColor			:				$white;
 $topBarActiveColor		:				$white;
 
 
 // FOOTER
-$footerHeight			:				1.6rem;
-
+$footerHeight					:				1.6rem;
+	
 
 // TRANSITION
-$transition				:				.35s "ease-in-out";
+$transition						:				.35s "ease-in-out";
 
 
 // MODAL
-$modalSmallWidth		:				25rem;
-$modalMediumWidth		:				35rem;
-$modalLargeWidth		:				45rem;
+$modalSmallWidth			:				25rem;
+$modalMediumWidth			:				35rem;
+$modalLargeWidth			:				45rem;

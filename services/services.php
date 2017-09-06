@@ -73,10 +73,14 @@ function get_all_items($enddate = false) {
 			ARTIKEL.VK1BRUTTO AS BRUTTOPREIS,
 			ARTIKEL.ANGELEGTAM AS EINGESTELLT,
 			ARTIKEL.LAGERLFDNR AS LAGER,
-            LIST(ARTBUCH.ANGELEGTAM, ',') AS BUCHUNGSTAG,
+			ARTIKEL.LIEFERANTLFDNR,
+      LIST(ARTBUCH.ANGELEGTAM, ',') AS BUCHUNGSTAG,
 			LIST(ARTBUCH.BEWEGUNG, ',') AS BEWEGUNG,
 			LAGER.LAGER,
-			LAGER.LFDNR AS LAGERID
+			LAGER.LFDNR AS LAGERID,
+			ADRESSEN.LFDNR AS ADRESSENLFDNR,
+			ADRESSEN.SUCHBEGRIFF AS LIEFERANT,
+			ADRESSEN.LAND AS LIEFERANTLAND
 		FROM
 			ARTIKEL
 		LEFT JOIN
@@ -87,6 +91,10 @@ function get_all_items($enddate = false) {
 			LAGER
 		ON
 			ARTIKEL.LAGERLFDNR = LAGER.LFDNR
+		LEFT JOIN
+			ADRESSEN
+		ON
+			ADRESSEN.LFDNR = ARTIKEL.LIEFERANTLFDNR
 		WHERE
 			ARTBUCH.ANGELEGTAM <= '{$enddate} 23:59:59'
         GROUP BY
@@ -100,7 +108,11 @@ function get_all_items($enddate = false) {
             ARTIKEL.ANGELEGTAM,
 			ARTIKEL.LAGERLFDNR,
 			LAGER.LAGER,
-			LAGER.LFDNR
+			LAGER.LFDNR,
+			ADRESSEN.LFDNR,
+			ADRESSEN.SUCHBEGRIFF,
+			ADRESSEN.LAND,
+			ARTIKEL.LIEFERANTLFDNR
 		ORDER BY
 			ARTIKEL.BEZEICHNUNG
 	");
@@ -289,7 +301,10 @@ function get_all_items($enddate = false) {
 					'letzterverkauf' => explode(' ', $artikel['LETZTERVERKAUF'])[0],
 					'lager' => $artikel['LAGER'],
 					'lagerID' => $artikel['LAGERID'],
-					'gruppe' => $artikel['GRUPPE']
+					'gruppe' => $artikel['GRUPPE'],
+					'liefarantid' => $artikel['LIEFERANTLFDNR'],
+					'lieferant' => $artikel['LIEFERANT']
+					
 				);
 			// Falls neuere Buchung -> Ersetzen
 			} else {

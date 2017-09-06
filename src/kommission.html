@@ -6,10 +6,21 @@
 				<h1 class="left shrink">Kommissionsverkäufe</h1>
 				<h2 class="left"><icon icon="chevron-right" style="font-size:1rem; padding: 0 .5rem; top: -2px;" color="#d4e5f3"></icon>Zeitraum: ${functions.dates.startdate} - ${functions.dates.enddate}</h2>
 				<div class="grid-block horizontal shrink editMenu">
-					<label for="lockCommissionTable" if.bind="functions.editCommissionTable == 'locked'"><icon icon="lock-locked"></icon></label>
-					<label for="unlockCommissionTable" if.bind="functions.editCommissionTable == 'unlocked'"><icon icon="lock-unlocked" color="#f08a24"></icon></label>
+					<div>
+					<label for="lockCommissionTable" if.bind="functions.editCommissionTable == 'locked'"><icon icon="lock-locked" title="Tabelle entsperren"></icon></label>
+					<label for="unlockCommissionTable" if.bind="functions.editCommissionTable == 'unlocked'"><icon icon="lock-unlocked" color="#f08a24" title="Tabelle sperren"></icon></label>
 					<input type="radio" name="editCommissionTable" value="unlocked" id="lockCommissionTable" checked.bind="functions.editCommissionTable" hidden />
 					<input type="radio" name="editCommissionTable" value="locked" id="unlockCommissionTable" checked.bind="functions.editCommissionTable" hidden />
+					</div>
+					
+					<div style="width: 1rem;"></div>
+					
+					<!--<div>-->
+					<!--<label for="groupCommissionTable" if.bind="functions.groupCommissionTable == 'group'"><icon icon="group" title="Tabelle nach Artikeln gruppieren"></icon></label>-->
+					<!--<label for="ungroupCommissionTable" if.bind="functions.groupCommissionTable == 'ungroup'"><icon icon="ungroup" color="#f08a24" title="Tabelle nach Positionen gruppieren"></icon></label>-->
+					<!--<input type="radio" name="groupCommissionTable" value="ungroup" id="groupCommissionTable" checked.bind="functions.groupCommissionTable" hidden />-->
+					<!--<input type="radio" name="groupCommissionTable" value="group" id="ungroupCommissionTable" checked.bind="functions.groupCommissionTable" hidden />-->
+					<!--</div>-->
 				</div> 
 			</div>
 			<div class="grid-block">

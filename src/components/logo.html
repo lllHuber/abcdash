@@ -1,0 +1,28 @@
+<template bindable="auth, functions">
+	
+	<div class="grid-block horizontal">
+		
+		<!-- Logo -->
+		<div class="grid-block">
+			<graphic class="grid-block middle shrink" src="application/assets/images/logo.png" width="4rem" height="2rem"></graphic>
+		</div>
+		
+		<!-- Navigation -->
+		<div class="grid-block shrink">
+			<nav>
+				<ul>
+					
+					<!-- HILFE -->
+					<li if.bind="auth.isAuthenticated">
+						<a>
+							<icon icon="info"></icon>Hilfe
+						</a>
+					</li>
+					
+				</ul>
+			</nav>
+		</div>
+		
+	</div>
+	
+</template>

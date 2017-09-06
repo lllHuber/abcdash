@@ -28,6 +28,7 @@ export default class Functions {
 		this.markerEK = [];
 		this.ekrabatt = 0;
 		this.editCommissionTable = 'locked';
+		this.groupCommissionTable = 'group';
 		
 		// Datum
 		this.dates = {
@@ -67,14 +68,14 @@ export default class Functions {
 		
 		// Store Data In $D
 		this.$D = {
-			"allItems"			: this.allItems,
+			"allItems"				: [],
 			"allWarehouses"		: this.allWarehouses,
-			"allVendors"		: this.allVendors,
+			"allVendors"			: this.allVendors,
 			"allCustomers"		: this.allCustomers,
-			"allSales"			: this.allSales,
+			"allSales"				: this.allSales,
 			"allCommissions"	: this.allCommissions,
-			"salesByItem"		: this.salesByItem,
-			"allTaxes"			: [
+			"salesByItem"			: this.salesByItem,
+			"allTaxes"				: [
 									{ "id" : "0", "label" : "0 - Gutscheine (0%)" },
 									{ "id" : "1", "label" : "1 - Österreich regulär (20%)" },
 									{ "id" : "2", "label"  : "2 - Österreich ermäßigt (10%)" },
@@ -93,14 +94,18 @@ export default class Functions {
 	
 		// Observe Date Change
 		this.observe.propertyObserver(this.dates, "startdate").subscribe((newValue, oldValue) => {
-			this.allItems();
-			this.allSales;
-			this.allCommissions;
+			if(this.router.history.fragment != "/lagerbewertung") {
+				this.allSales;
+				this.allCommissions;
+			}
 		});
 		this.observe.propertyObserver(this.dates, "enddate").subscribe((newValue, oldValue) => {
-			this.allItems();
-			this.allSales;
-			this.allCommissions;
+			if(this.router.history.fragment == "/lagerbewertung") {
+				this.dates.startdate = this.oneMonthBefore(this.dates.enddate);
+			} else {
+				this.allSales;
+				this.allCommissions;
+			}
 		});
 		
 		// Observer EK-RABATT Change
@@ -128,7 +133,7 @@ export default class Functions {
 		this.observe.propertyObserver(this.router.history, "fragment").subscribe((newValue, oldValue) => {
 			switch(newValue) {
 				case "/lagerbewertung":
-					this.allItems();
+					//this.allItems();
 					break;
 				default:
 					break;
@@ -142,7 +147,7 @@ export default class Functions {
 	// --------------------------------------------------
 	// GET DATA
 	// --------------------------------------------------
-	
+			
 	get allWarehouses() {
 		this.url = this.config.serviceUrl + "?ws=get_all_warehouses";
 		$("#hbrLoader").show();
@@ -183,7 +188,6 @@ export default class Functions {
 			$("#hbrLoader").hide();
 			if(response.status === 'success') {
 				this.$D.allCustomers = response.data;
-				//console.log(this.$D.allCustomers);
 			}
 		}, "json");
 	}
@@ -201,20 +205,17 @@ export default class Functions {
 	
 	get allCommissions() {
 		this.url = this.config.serviceUrl + `?ws=get_all_commissions&startdate=${this.dates.startdate}&enddate=${this.dates.enddate}`;
-		console.log(this.url);
 		$("#hbrLoader").show();
 		$.get(this.url, response => {
 			$("#hbrLoader").hide();
 			if(response.status === 'success') {
 				this.$D.allCommissions = response.data;
-				console.log(response.data);
 			}
 		}, "json");
 	}
 	
 	get salesByItem() {
 		this.url = this.config.serviceUrl + `?ws=get_sales_by_item&startdate=${this.dates.startdate}&enddate=${this.dates.enddate}`;
-		console.log(this.url);
 		$("#hbrLoader").show();
 		$.get(this.url, response => {
 			$("#hbrLoader").hide();
@@ -580,8 +581,9 @@ export default class Functions {
 		
 	}
 
-	oneMonthBefore() {
-		let today = new Date();
+	oneMonthBefore(setDate = this.today("date")) {
+		let today = new Date(setDate);
+		today.setMonth(today.getMonth() - 0);
 		let dd = today.getDate();
 		let mm = today.getMonth();
 		let yyyy = today.getFullYear();

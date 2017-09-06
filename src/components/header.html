@@ -15,6 +15,7 @@
 		
 		<nav class="grid-block shrink navUi">
 			<ul>
+				
 				<li>
 					<icon icon="calendar" color="#FFFFFF" style="padding: 0"></icon>
 				</li>
@@ -28,6 +29,9 @@
 				<!-- END DATE -->
 				<li>
 					<input datepicker class="datepicker main" type="text" name="enddate" id="enddate" value.bind="functions.dates.enddate">
+				</li>
+				<li if.bind="router.history.fragment == '/lagerbewertung'">
+					<icon click.delegate="functions.allItems()" class="reload" icon="reload" color="#FFFFFF" style="padding:0 0 0 .35rem"> </icon>
 				</li>
 				<li>
 					<icon style="padding: 0 1.5rem"></icon>
@@ -46,7 +50,8 @@
 						<icon icon="share-boxed"></icon>Export
 					</a>
 				</li>
-				
+
+				<!-- LOGIN -->						
 				<li if.bind="!auth.isAuthenticated">
 					<a href="#/login">Login</a>
 				</li>

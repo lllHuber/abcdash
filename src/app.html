@@ -3,6 +3,7 @@
 	<require from="components/footer.html"></require>
 	<require from="components/toolbars.html"></require>
 	<require from="components/sidebar.html"></require>
+	<require from="components/logo.html"></require>
 	
 	<!-- Custom UI Elements -->
 	<loader></loader>
@@ -13,11 +14,8 @@
 		
 		<!-- LEFT -->
 		<div class="grid-block shrink vertical">
-			<!-- Logo -->
-			<logo class="grid-block shrink">
-				<graphic class="grid-block middle shrink" src="application/assets/images/logo.png" width="4rem" height="2rem"></graphic>
-				<!--<div class="grid-block middle shrink logo-type">HBR<span>Dash</span></div>-->
-			</logo>
+			<!-- Logo Bar -->
+			<logo router.bind="router" auth.bind="auth" functions.bind="functions" class="grid-block shrink"></logo>
 
 			<!-- Sidebar -->
 			<div class="grid-block vertical hbrSidebar">

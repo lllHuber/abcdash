@@ -4,7 +4,7 @@
 
 // MYSQL
 $GLOBALS['mdbHost'] = 'localhost';
-$GLOBALS['mdbPort'] = '3306';
+$GLOBALS['mdbPort'] = '8889';
 $GLOBALS['mdbUser'] = 'root';
 $GLOBALS['mdbPass'] = 'root';
 $GLOBALS['mdbName'] = 'abcdash';

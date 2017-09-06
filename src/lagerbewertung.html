@@ -18,6 +18,7 @@
 							<div class="th navOrder bezeichnung"><span class="arrowUpLight" click.delegate="functions.changeOrder('bezeichnung', 'bezeichnung')">Bezeichnung</span></div>
 							<div class="th navOrder lagerbestand"><span class="arrowUpLight" click.delegate="functions.changeOrder('lagerbestand', 'lagerbestand')">Bestand</span></div>
 							<div class="th navOrder lager"><span class="arrowUpLight" click.delegate="functions.changeOrder('lager', 'lager')">Lager</span></div>
+							<div class="th navOrder lieferant"><span class="arrowUpLight" click.delegate="functions.changeOrder('lieferant', 'lieferant')">Lieferant</span></div>
 							<div class="th navOrder letzterverkauf nowrap"><span class="arrowUpLight" click.delegate="functions.changeOrder('letzterverkauf', 'letzterverkauf')">Letzter Verkauf</span></div>
 							<div class="th"><span>Wareneingänge</span></div>
 							<div class="th navOrder netto nowrap"><span class="arrowUpLight align-right" click.delegate="functions.changeOrder('netto', 'vknetto')">Preis (netto)</span></div>
@@ -38,6 +39,7 @@
 							<div class="td schcode">${item.bezeichnung}</div>
 							<div class="td series">${item.lagerbestand}</div>
 							<div class="td series nowrap">${item.lager}</div>
+							<div class="td series nowrap">${item.lieferant}</div>
 							<div class="td series">${item.letzterverkauf}</div>
 							<div class="td title nowrap">
 								<ul class="small-list">

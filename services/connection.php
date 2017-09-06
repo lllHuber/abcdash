@@ -38,7 +38,7 @@ if ($PDOM) {
 
 $PDOF = '';
 try {
-    $PDOF = new PDO("odbc:Amicron-Alt");    
+    $PDOF = new PDO("odbc:Amicron");    
     $PDOerrorInfo = $PDOF->errorInfo();
 } catch (Exception $e){
     //catch errors    

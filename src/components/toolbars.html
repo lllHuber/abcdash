@@ -56,6 +56,16 @@
 							<input type="text" name="article.letzterverkauf" id="article.letzterverkauf" placeholder="Letzter Verkauf ..." value.bind="article.letzterverkauf.value" keyup.delegate="functions.updateFilter('article.letzterverkauf', article.letzterverkauf.value)">
 						</div>
 					</div>
+					<!-- LIEFERANT -->
+					<div class="row">
+						<label class="three columns" for="article.lieferant">Lieferant:</label>
+						<div class="nine columns">
+							<select name="article.lieferant" id="article.lieferant" ref="article.lieferant" change.delegate="functions.updateFilter('article.lieferant', article.lieferant.value)">
+								<option value="">Alle Lieferanten</option>
+								<option repeat.for="vendor of functions.$D.allVendors" value.bind="vendor.lieferant">${vendor.lieferant}</option>	
+							</select>
+						</div>
+					</div>
 				</div>
 			</div>
 			
@@ -133,7 +143,7 @@
 					<div class="row">
 						<label class="three columns" for="sale.letzterverkauf">Shop:</label>
 						<div class="nine columns">
-							<input type="text" name="sale.shop" id="sale.shop" placeholder="Shop ..." value.bind="sale.shop.value" keyup.delegate="functions.updateFilter('sale.shop', sale.shop.value)">
+							<input type="text" name="sale.shop" id="sale.shop" placeholder="Shop 1, Shop 2, ..." value.bind="sale.shop.value" keyup.delegate="functions.updateFilter('sale.shop', sale.shop.value)">
 						</div>
 					</div>
 					<!-- LAGER -->
@@ -211,7 +221,7 @@
 					<div class="row">
 						<label class="three columns" for="sale.letzterverkauf">Shop:</label>
 						<div class="nine columns">
-							<input type="text" name="sale.shop" id="sale.shop" placeholder="Shop ..." value.bind="sale.shop.value" keyup.delegate="functions.updateFilter('sale.shop', sale.shop.value)">
+							<input type="text" name="sale.shop" id="sale.shop" placeholder="Shop 1, Shop 2, ..." value.bind="sale.shop.value" keyup.delegate="functions.updateFilter('sale.shop', sale.shop.value)">
 						</div>
 					</div>
 					<!-- LIEFERANT -->
