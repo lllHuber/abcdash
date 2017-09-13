@@ -5,6 +5,19 @@ require_once('connection.php');
 require_once('functions.php');
 require_once('classes/class.lstv.php');
 
+
+if (isset($_POST['ws']) && $_POST['ws'] != ""  ) {
+	switch ($_POST['ws']) {
+	case 'add_chapter':
+			echo add_chapter();
+			break;
+		default:
+			break;
+	}
+}
+
+
+
 if (isset($_GET['ws']) && $_GET['ws'] != ""  ) {
 	switch ($_GET['ws']) {
 		case 'web_service':
@@ -27,6 +40,15 @@ if (isset($_GET['ws']) && $_GET['ws'] != ""  ) {
 			break;
 		case 'get_all_commissions':
 			echo get_all_commissions($_GET['startdate'], $_GET['enddate']);
+			break;
+		case 'get_all_taxes':
+			echo get_all_taxes();
+			break;
+		case 'get_handbook':
+			echo get_handbook();
+			break;
+		case 'delete_chapter':
+			echo delete_chapter($_GET['id']);
 			break;
 		default:
 			break;
@@ -172,7 +194,7 @@ function get_all_items($enddate = false) {
 				// Hörbücher zählen zu Büchern -> inkludieren
 				if(!preg_match("/Hörbuch/i", trim($artikel['BEZEICHNUNG'])) &&
 				   !preg_match("/Hörbücher/i", trim($artikel['BEZEICHNUNG']))) {
-					$artikel['GRUPPE'] = 'DVDs, CDs, MP3s, Hörspiele';
+					$artikel['GRUPPE'] = '2'; // DVDs, CDs, MP3s, Hörspiele
 				}
 			}
 			
@@ -180,13 +202,13 @@ function get_all_items($enddate = false) {
 			if (!preg_match("/DVD/i", trim($artikel['BEZEICHNUNG'])) &&
 				!preg_match("/CD/i", trim($artikel['BEZEICHNUNG'])) &&
 				!preg_match("/MP3/i", trim($artikel['BEZEICHNUNG']))) {
-				$artikel['GRUPPE'] = 'Bücher, Hörbücher';
+				$artikel['GRUPPE'] = '1'; // Bücher, Hörbücher
 			} else
 			
 			// Hörbücher zählen zu Büchern -> exkludieren
 			if(preg_match("/Hörbuch/i", trim($artikel['BEZEICHNUNG'])) ||
 			   preg_match("/Hörbücher/i", trim($artikel['BEZEICHNUNG']))) {
-				$artikel['GRUPPE'] = 'Bücher, Hörbücher';
+				$artikel['GRUPPE'] = '1'; // Bücher, Hörbücher
 			}
 			
 			
@@ -532,7 +554,108 @@ function get_sales_by_item($startdate = false, $enddate = false) {
 	
 }
 
+function get_all_taxes() {
+	global $PDOF;
+	$resultArray = array('status' => 'error');
+	
+	$stmt = $PDOF->query("
+		SELECT
+			STEUERSATZ as id,
+			BEZEICHNUNG as label
+		FROM
+			STSATZ
+	");
+	
+	if($stmt->execute()) {
+		$allTaxes = $stmt->fetchAll(PDO::FETCH_ASSOC);
+		
+		// Trim Whitespace
+		for ( $i = 0; $i < count($allTaxes); $i++ ) {
+			$allTaxes[$i]['ID'] = trim($allTaxes[$i]['ID']);			
+		}
+				
+		$resultArray['data'] = $allTaxes;
+		$resultArray['status'] = 'success';
+		$resultArray['message'] = 'All taxes were loaded succefully.';
+	}	
 
+	echo json_encode($resultArray);
+}
+
+function get_handbook() {
+	global $PDOM;
+	$resultArray = array('status' => 'error');
+
+	$stmtCategories = $PDOM->query("SELECT id, title FROM	handbook_categories	WHERE	active = 1");
+	$stmtChapters = $PDOM->query("SELECT category_id, title, id, pdf FROM	handbook_chapters	WHERE	active = 1");
+	
+	if( $stmtCategories->execute() && $stmtChapters->execute() ) {
+		
+		$categories = $stmtCategories->fetchAll(PDO::FETCH_ASSOC);
+		$chapters = $stmtChapters->fetchAll(PDO::FETCH_ASSOC);
+		
+		$resultArray['status'] = 'success';
+		$resultArray['message'] = 'The handbook was loaded successfully';
+		$resultArray['categories'] = $categories;
+		$resultArray['chapters'] = $chapters;
+	}
+	echo json_encode($resultArray);
+}
+
+function delete_chapter($id) {
+	global $PDOM;
+	$resultArray = array('status' => 'error');
+	
+	if($id) {
+		$stmt = $PDOM->prepare("
+			UPDATE
+				handbook_chapters
+			SET
+				active = 0
+			WHERE
+				id = :id
+		");
+		$stmt->bindParam(':id', $id, PDO::PARAM_INT);
+		
+		if( $stmt->execute() ) {
+			$resultArray['status'] = 'success';
+			$resultArray['message'] = 'Das Kapitel wurde erfolgreich gelöscht';
+		}
+	}
+	echo json_encode($resultArray);
+}
+
+/*
+function add_chapter($chapter) {
+	global $PDOM;
+	$resultArray = array('status' => 'error');
+	
+	$data = array();
+
+	if(isset($chapter) {  
+			$error = false;
+			$files = array();
+	
+			$uploaddir = './application/assets/files/pdf-handbuch/';
+			foreach($_FILES as $file) {
+					if(move_uploaded_file($file['tmp_name'], $uploaddir .basename($file['name']))) {
+							$files[] = $uploaddir .$file['name'];
+					} else {
+							$error = true;
+					}
+			}
+			$data = ($error) ? array('error' => 'There was an error uploading your files') : array('files' => $files);
+	}
+	else {
+			$data = array('success' => 'Form was submitted', 'formData' => $_POST);
+	}
+	
+	echo json_encode($data);
+	
+	
+	//echo json_encode($resultArray);
+}
+*/
 
 
 /*
@@ -762,8 +885,6 @@ function valueInArray(array $array, $key, $value) {
     }
     return false;
 }
-
-
 
 
 

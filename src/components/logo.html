@@ -1,4 +1,4 @@
-<template bindable="auth, functions">
+<template bindable="router, auth, functions">
 	
 	<div class="grid-block horizontal">
 		
@@ -11,14 +11,22 @@
 		<div class="grid-block shrink">
 			<nav>
 				<ul>
-					
-					<!-- HILFE -->
-					<li if.bind="auth.isAuthenticated">
-						<a>
-							<icon icon="info"></icon>Hilfe
+
+					<li if.bind="auth.isAuthenticated" class="iconLink ${router.history.fragment == '/handbuch' ? 'active' : ''}">
+						<a href="#/handbuch">
+							<icon icon="book"></icon>
 						</a>
 					</li>
-					
+
+					<!--
+					<li class="${router.navigation[3].isActive ? 'active' : ''}">
+					<!-- Set Correct Content For Toolbar -->
+					<!--
+					${router.navigation[3].isActive ? functions.setToolbarContent(router.navigation[3].title) : ''}
+					<a href.bind="router.navigation[3].href" mousedown.delegate="functions.resetFilter()"><icon if.bind="router.navigation[3].settings.icon" icon="${router.navigation[3].settings.icon}"></icon>${router.navigation[3].title}</a>
+				</li>
+				-->
+								
 				</ul>
 			</nav>
 		</div>

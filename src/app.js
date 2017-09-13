@@ -53,7 +53,7 @@ export class App {
 			{ route: ['kommission', 'kommission'], name: 'kommission', moduleId: 'kommission', nav: true, title: 'Kommission',
 				settings: { icon: 'clipboard' }
 			},
-			{ route: ['handbuch', 'handbuch'], name: 'handbuch', moduleId: 'handbuch', nav: true, title: 'Handbuch',
+			{ route: ['handbuch', 'handbuch'], name: 'handbuch', moduleId: 'handbuch', nav: false, title: 'Handbuch',
 				settings: { icon: 'lightbulb-alt-on' }
 			},
 			/*
@@ -68,5 +68,7 @@ export class App {
 			{ route: ['', 'dashboard'], name: 'dashboard', moduleId: 'dashboard', nav: false, title: 'Dashboard' }
 		]);
 		this.router = router;
-	}	
+	}
+	
+
 }

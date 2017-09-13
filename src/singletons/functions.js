@@ -62,7 +62,10 @@ export default class Functions {
 		// Store Temp Data For Editing
 		this.$T = {
 			"article": {},
-			"amount": 0
+			"amount": 0,
+			"edit": {
+				"status": false
+			}
 		};
 		this.resetObjects();
 		
@@ -75,15 +78,8 @@ export default class Functions {
 			"allSales"				: this.allSales,
 			"allCommissions"	: this.allCommissions,
 			"salesByItem"			: this.salesByItem,
-			"allTaxes"				: [
-									{ "id" : "0", "label" : "0 - Gutscheine (0%)" },
-									{ "id" : "1", "label" : "1 - Österreich regulär (20%)" },
-									{ "id" : "2", "label"  : "2 - Österreich ermäßigt (10%)" },
-									{ "id" : "3", "label"  : "3 - Deutschland ermäßigt (7%)" },
-									{ "id" : "4", "label"  : "4 - Deutschland regulär (19%)" },
-									{ "id" : "10", "label"  : "10 - Innergemeintschaftlich (0%)" },
-									{ "id" : "20", "label"  : "20 - Export (0%)" }				
-								  ]
+			"allTaxes"				: this.allTaxes,
+			"handbook"				: this.handbook
 		};
 		
 		
@@ -177,6 +173,7 @@ export default class Functions {
 			$("#hbrLoader").hide();
 			if(response.status === 'success') {
 				this.$D.allItems = response.data;
+				console.log(response.data);
 			}
 		}, "json");
 	}
@@ -224,6 +221,33 @@ export default class Functions {
 			}
 		}, "json");
 	}
+	
+	get allTaxes() {
+		this.url = this.config.serviceUrl + `?ws=get_all_taxes`;
+		$("#hbrLoader").show();
+		$.get(this.url, response => {
+			$("#hbrLoader").hide();
+			if(response.status === 'success') {
+				this.$D.allTaxes = response.data;
+			}
+		}, "json");
+	}
+	
+	get handbook() {
+		this.url = this.config.serviceUrl + `?ws=get_handbook`;
+		$("#hbrLoader").show();
+		$.get(this.url, response => {
+			$("#hbrLoader").hide();
+			if(response.status === 'success') {
+				this.$D.handbook = {
+					categories: response.categories,
+					chapters: response.chapters
+				};
+			}
+		}, "json");
+	}
+	
+
 	
 	// --------------------------------------------------
 	// TOOLBARS
@@ -386,105 +410,63 @@ export default class Functions {
 		// ADD OBSERVERS
 
 	}
-	
-	edit(type, object) {
-		this.$T[type] = object;
-		this.$T[type].crud = true;
 		
-		if (type === "program") {
-			this.updateFilter("program.seriesID", object.seriesID);
-			this.router.navigate("programs");
-			this.checkProgramRequirements(object);
-		} else
-		
-		if(type === "season") {
-			this.router.navigate("seasons");
-			this.updateFilter("season.seriesID", object.seriesID);
-			this.triggerFilter();
-		} else
-		
-		if (type === "series") {
-			this.router.navigate("series");
-		}
-		this.addProgramRequirementsObserver();
+	deleteChapter(id) {
+		var removeIndex = '';
+		$.each(this.$D.handbook.chapters, function(key, chapter) {
+			if(chapter.id == id) {
+				removeIndex = key;
+				return false;
+			}			
+		});
+		this.$D.handbook.chapters.splice(removeIndex, 1);
+		this.apiDeleteChapter(id);
 	}
 	
-	add(type, route) {
-		this.resetObjects();
-		this.$T[type].crud = true;
-		this.router.navigate(route);
-	}
-
-	create(type, object) {
-		let dataArray = [];
-		if(type === "program")	dataArray = this.$D.allPrograms;
-		if(type === "season")	dataArray = this.$D.allSeasons;
-		if(type === "series")	dataArray = this.$D.allSeries;
-		
-		if(this.validateForm("#crud")) {
-			this.url = this.config.serviceUrl + `?ws=create_${type}&item=${JSON.stringify(object)}`;
-			$("#lstvLoader").show();
-			$.get(this.url, response => {
-				$("#lstvLoader").hide();
-				if(response.status === "success") {
-					dataArray.unshift(response.data);
-					this.resetObjects();
-					this.removeStatusClasses();
-				}
-				this.showNotification(response.status, response.msg);
-				
-			}, "json");
-		}
+	addChapter(category, title, input) {
+		var chapter = {
+			"category": category,
+			"title": title,
+			"input": input
+		};
+		this.apiAddChapter(chapter);
 	}
 	
-	trash(type, id) {
-		let dataArray = [];
-		if(type === "program")	dataArray = this.$D.allPrograms;
-		if(type === "season")	dataArray = this.$D.allSeasons;
-		if(type === "series")	dataArray = this.$D.allSeries;
-		
-		this.url = this.config.serviceUrl + `?ws=trash_${type}&id=${id}`;
-		this.closeAllModals();
-		$("#lstvLoader").show();
+	apiDeleteChapter(id) {
+		this.url = this.config.serviceUrl + `?ws=delete_chapter&id=${id}`;
 		$.get(this.url, response => {
-			$("#lstvLoader").hide();
-			if(response.status === "success") {
-				$.each(dataArray, (index, item) => {
-					if(item && item[`${type}ID`] == response.id) {
-						dataArray.splice(index, 1);
-						this.scrollTop();
-					}
-				});
-				this.resetObjects();
-				this.removeStatusClasses();
+			if(response.status === 'success') {
+				console.log(response.message);
 			}
-			this.showNotification(response.status, response.msg);
 		}, "json");
 	}
 	
-	update(type, object) {
-		let dataArray = [];
-		if(type === "program")	dataArray = this.$D.allPrograms;
-		if(type === "season")	dataArray = this.$D.allSeasons;
-		if(type === "series")	dataArray = this.$D.allSeries;
+	apiAddChapter(chapter) {
+		var pdf = $(chapter.input)[0].files[0];
+		var formData = new FormData();
+				formData.append("category", chapter.category);
+				formData.append("title", chapter.title);
+				formData.append("pdf", pdf);
 		
-		if(this.validateForm("#crud")) {
-			this.url = this.config.serviceUrl + `?ws=update_${type}&item=${JSON.stringify(object)}`;
-			console.log(this.url);
-			$("#lstvLoader").show();
-			$.get(this.url, response => {
-				$("#lstvLoader").hide();
-				if(response.status === "success") {
-					this.scrollTop();
-					//this.resetObjects();
-					//this.removeStatusClasses();
-				}
-				this.showNotification(response.status, response.msg);
-			}, "json");
-		}
-	}
+		$.ajax({
+			url: this.config.uploadUrl,
+			type: 'POST',
+			data: formData,
+			cache: false,
+			contentType: false,
+			processData: false,
+			success: result => {
+				var data = JSON.parse(result);
+				this.$D.handbook.chapters.push(data.chapter);
+				this.closeModal("#addChapter");
+				$("#addChapterForm")[0].reset();
+			}
+		});
+  }
 	
 	
+
+
 	// --------------------------------------------------
 	// FUNCTIONS
 	// --------------------------------------------------

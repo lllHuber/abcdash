@@ -249,6 +249,9 @@
 	right: 0;
 	background: rgba(0, 0, 0, 0.5);
 	z-index: 999999999;
+	h1 {
+		margin: 1.5rem .25rem;
+	}
 	.modal {
 		display: block;
 		background: $white;
@@ -296,9 +299,13 @@
 	background: $gray;
 	border-right: 1px solid $charcoal;
 	width: 22.5rem;
-	h1 {
+	h1, h2 {
 		color: $lightgray;
 		font-weight: 300;
+		//text-transform: uppercase;
+	}
+	h2 {
+		margin: calc( #{$contentPadding} / 2 ) 0 calc( #{$contentPadding} / 3 ) 0;
 	}
 	ul {
 		list-style-type: none;
@@ -306,6 +313,7 @@
 		color: darken($lightgray, 20%);
 		li {
 			margin: 1rem 0;
+			min-height: 1.15rem;
 			&:first-child {
 				margin-top: 0;
 			}
@@ -315,6 +323,15 @@
 				margin-top: 2rem;
 				&.dashed {
 					border-style: dashed hidden hidden hidden;
+				}
+			}
+			a {
+				&:before {
+					
+				}
+				&:hover {
+					color: $lightgray;
+					cursor: pointer;
 				}
 			}
 		}
@@ -366,16 +383,16 @@
 		padding: 0;
 		margin: 0;
 		font-size: .9rem;
-		border-bottom: 1px solid transparent;
-		width: 2rem;
+		//width: 2rem;
 		font-family: "Graphik";
+		letter-spacing: inherit;
 		&:hover {
 			cursor: pointer;
-			border-bottom: 1px solid darken($lightgray, 20%);
+			color: $highlight;
 		}
-		&:focus {
+		&:focus, &:active {
 			background: none;
-			border-bottom: 1px solid darken($lightgray, 20%);
+			color: $highlight;
 		}
 	}
 }
@@ -408,4 +425,26 @@
 	&:hover {
 		cursor: pointer;
 	}
+}
+
+.hbrEditBar {
+	margin: 0 $contentPadding;
+	div:first-child {
+		border-top: 1px solid $mediumgray;
+	}
+	ul {
+		position: relative;
+		li {
+			position: relative;
+			display: inline-block;
+			margin: 0 .5rem 1rem !important;
+			&:first-child {
+				margin-left: 0 !important;
+			}
+			icon {
+				padding: 0;
+			}
+		}
+	}
+
 }

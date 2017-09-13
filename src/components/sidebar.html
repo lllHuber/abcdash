@@ -11,6 +11,12 @@
 			<li>Exemplare: <span class="value exemplare"></span></li>
 			<li class="lineAbove">Gesamtwert €: <span class="value totalValue"></span></li>
 		</ul>
+		
+		<h1>Anleitung</h1>
+		<ol>
+			<li class="">Stichtag auswählen</li>
+			<li class="">Daten aktualisieren</li>
+		</ol>
 	</div>
 	
 	<!-- VERKAUF -->
@@ -43,7 +49,7 @@
 			<li class="lineAbove">Gesamt-EK €: <span class="value gesamtEK"></span></li>
 		</ul>
 		
-		<h1>Abrechnung</h1>
+		<h1>Anleitung</h1>
 		<ol>
 			<li class="">Zeitraum auswählen</li>
 			<li class="">Filtern</li>
@@ -52,13 +58,34 @@
 			<!--<li class="">Gruppieren</li>-->
 			<li class="">Exportieren</li>
 		</ol>
-		<!--
-		<div class="grid-block horizontal shrink">
-			<a class="grid-block button small">Zurück</a>
-			<span class="shrink">&nbsp;&nbsp;</span>
-			<a class="grid-block button small">Weiter</a>
+	</div>
+	
+	<!-- HANDBUCH -->
+	<div class="grid-content vertical" id="handbuch" if.bind="router.history.fragment == '/handbuch'">
+		<div class="grid-block vertical">
+			<div class="grid-block vertical shrink" repeat.for="category of functions.$D.handbook.categories">
+				<h2>${category.title}</h2>
+				<ul>
+					<li repeat.for="chapter of functions.$D.handbook.chapters" if.bind="chapter.category_id == category.id" id="${chapter.id}" title="${chapter.title} entfernen">
+						<icon icon="trash" click.trigger="functions.deleteChapter(chapter.id)" if.bind="functions.$T.edit.status" class="deleteButton" data-category="category.id"></icon>
+						<a click.delegate="functions.$D.handbook.currentPDF = chapter.pdf">${chapter.title}</a>
+						<!--
+						<modal title="Wirklich löschen?" size="small" id="hcrud-${chapter.id}" icon="warning">
+							<p>Sind Sie sich sicher, dass sie das Kapitel ${chapter.title} wirklich löschen wollen?</p>
+						</modal>
+						-->
+					</li>
+				</ul>
+			</div>
 		</div>
-		-->
+		
+		
+		
+		
+			
+			
+		
+		
 		
 	</div>
 	

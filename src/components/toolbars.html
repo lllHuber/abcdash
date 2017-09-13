@@ -41,8 +41,8 @@
 						<div class="nine columns">
 							<select name="article.gruppe" id="article.gruppe" ref="article.gruppe" change.delegate="functions.updateFilter('article.gruppe', article.gruppe.value)">
 								<option value="">Alle Formate</option>
-								<option value="Bücher, Hörbücher">Bücher, Hörbücher</option>
-								<option value="DVDs, CDs, MP3s, Hörspiele">DVDs, CDs, MP3s, Hörspiele</option>
+								<option value="1">Bücher, Hörbücher</option>
+								<option value="2">DVDs, CDs, MP3s, Hörspiele</option>
 							</select>
 						</div>
 					</div>
@@ -132,7 +132,7 @@
 						<div class="nine columns">
 							<select name="sale.steuersatz" id="sale.steuersatz" ref="sale.steuersatz" change.delegate="functions.updateFilter('sale.steuersatz', sale.steuersatz.value)">
 								<option value="">Alle Steuersätze</option>
-								<option repeat.for="tax of functions.$D.allTaxes" value.bind="tax.id">${tax.label}</option>
+								<option repeat.for="tax of functions.$D.allTaxes" value.bind="tax.ID">${tax.LABEL}</option>
 							</select>
 						</div>
 					</div>

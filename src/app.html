@@ -3,12 +3,13 @@
 	<require from="components/footer.html"></require>
 	<require from="components/toolbars.html"></require>
 	<require from="components/sidebar.html"></require>
+	<require from="components/editbar.html"></require>
 	<require from="components/logo.html"></require>
 	
 	<!-- Custom UI Elements -->
 	<loader></loader>
 	<notification></notification>
-	
+			
 	<!-- Main Content -->
 	<div class="wrapper horizontal" css="overflow: hidden">
 		
@@ -20,6 +21,7 @@
 			<!-- Sidebar -->
 			<div class="grid-block vertical hbrSidebar">
 				<sidebar class="grid-block" data.bind="$D" functions.bind="functions" router.bind="router"></sidebar>
+				<editbar class="grid-block shrink" data.bind="$D" functions.bind="functions" router.bind="router"></editbar>
 			</div>
 			
 			<!-- Bottom -->
@@ -47,5 +49,31 @@
 			<footer year.bind="currentYear" class="grid-block shrink"></footer>
 		</div>
 	</div>
+	
+	
+	
+	<!-- MODALS -->
+	
+	<!-- Add Chapter -->
+		<modal title="Kapitel hinzufügen" icon="book" size="medium" id="addChapter" functions.bind="functions">
+			<form id="addChapterForm">
+			<select id="selectChapter" value.bind="chapter.category">
+				<option value="-1">Kategorie auswählen</option>
+				<option repeat.for="category of functions.$D.handbook.categories" value="${category.id}" name="categoryID">${category.title}</option>
+			</select>
+			
+			<input type="text" id="chapterTitle" name="chapterTitle" value.bind="chapter.title" placeholder="Titel des Kapitels ..." />
+			<div class="grid-block horizontal">
+				<input type="file" id="chapterPDF" value.bind="fileName" class="hide" />
+				<input type="text" value.bind="fileName" disabled />
+				<label class="fileLabel shrink" for="chapterPDF">PDF auswählen</label>
+			</div>
+			
+			<button class="primary padding" click.trigger="functions.addChapter(chapter.category, chapter.title, '#chapterPDF')">
+				<icon icon="check" color="#FFF"></icon>Kapitel erstellen
+			</button>
+			</form>
+
+		</modal>
 	
 </template>

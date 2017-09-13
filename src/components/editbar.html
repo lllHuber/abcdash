@@ -1,0 +1,24 @@
+<template bindable="data, functions, router" class="hbrEditBar">
+	
+	<!-- HANDBUCH -->
+	<div class="grid-block horizontal" if.bind="router.history.fragment == '/handbuch'">
+		<ul>
+			
+			<!-- EDIT -->
+			<li>
+				<icon icon="cog" click.delegate="functions.$T.edit.status == true ? functions.$T.edit.status = false : functions.$T.edit.status = true" color="${functions.$T.edit.status == true ? '#f08a24' : 'inherit'}" class="hoverPointer" title="Kapitel bearbeiten"></icon>
+			</li>
+			
+			<!-- ADD CHAPTER -->
+			<li if.bind="functions.$T.edit.status">
+				<icon icon="plus" class="addButton" data-category="category.id" title="Kapitel hinzufügen" click.trigger="functions.openModal('#addChapter')"></icon>
+			</li>
+			
+		</ul>
+		
+		
+	</div>
+	
+
+		
+</template>

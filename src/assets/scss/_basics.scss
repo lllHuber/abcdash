@@ -195,7 +195,7 @@ bottom {
 	a {
 		color: $topBarActiveColor !important;
 	}
-	&:after {
+	&:not(.iconLink)::after {
 		content: "";
 		position: absolute;
 		bottom: 0;
@@ -242,6 +242,10 @@ button {
     -moz-box-sizing: border-box;
     box-sizing: border-box;  
 	transition: all #{$transition};
+	&.padding {
+		padding-top: .75rem !important;
+		padding-bottom: .75rem !important;
+	}
 	&:focus {
 		outline:0;
 		border-bottom: 1px solid $gray;
@@ -685,4 +689,31 @@ nav icon {
 			color: $highlight !important;
 		}
 	}
+}
+
+.hoverPointer:hover {
+	cursor: pointer !important;
+}
+
+.deleteButton:hover {
+	color: $crimson;
+	cursor: pointer;
+}
+
+.addButton:hover {
+	color: $success;
+	cursor: pointer;
+}
+
+.fileLabel {
+	display: inline-block;
+	width: initial;
+	background: lighten($primary, 63%);
+	color: $primary;
+	border: 1px solid $secondary;
+	padding: .5rem;
+	font-size: .75rem;
+	font-size: 13.33333px;
+	margin: .25rem 0;
+	
 }
